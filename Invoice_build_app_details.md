@@ -303,7 +303,7 @@ At the PostgreSQL prompt:
 CREATE DATABASE rudys_db;
 
 -- Create a user
-CREATE USER rudys_kfz_mesto WITH PASSWORD 'KFZ_woo_$!921199';
+CREATE USER rudys_user WITH PASSWORD 'KFZ_woo_$!921199';
 
 -- Grant privileges
 GRANT ALL PRIVILEGES ON DATABASE rudys_db TO rudys_user;

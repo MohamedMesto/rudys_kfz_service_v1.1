@@ -17,7 +17,7 @@ class InvoiceItemInline(admin.TabularInline):
     extra = 1
     fields = (
         "invoice_item_pos",
-        "invoice_item_diagnose_id",
+        "invoice_item_diagnose_id",   # shows a select box (by __str__ of Diagnose)
         "invoice_item_diagnose_text",
         "invoice_item_quantity",
         "invoice_item_unit_price",

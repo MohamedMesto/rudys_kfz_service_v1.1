@@ -58,7 +58,7 @@ class Customer(models.Model):
 # Diagnose Table
 # -----------------------
 class Diagnose(models.Model):
-    diagnose_title = models.CharField(max_length=255)
+    diagnose_title = models.CharField(max_length=255, unique=True)
     diagnose_default_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     diagnose_created_at = models.DateTimeField(auto_now_add=True)
     diagnose_updated_at = models.DateTimeField(auto_now=True)
