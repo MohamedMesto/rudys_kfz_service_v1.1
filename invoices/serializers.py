@@ -147,7 +147,7 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
 class InvoiceSerializer(serializers.ModelSerializer):
     items = InvoiceItemSerializer(many=True, write_only=True)
     items_read = InvoiceItemSerializer(many=True, read_only=True, source='items')
-    invoice_customer_id = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all(), source='invoice_customer_id')
+    invoice_customer_id = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all())
 
     class Meta:
         model = Invoice
