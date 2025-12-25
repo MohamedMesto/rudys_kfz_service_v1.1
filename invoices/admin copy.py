@@ -11,65 +11,6 @@ from .models import (
 )
 
 
-# -----------------------------
-# InvoiceItem Inline for Invoice
-# -----------------------------
-
-
-
- 
-
-class InvoiceItemInline(admin.TabularInline):
-    model = InvoiceItem
-    extra = 0
-
-    # SHOW ONLY WHAT USER SHOULD SEE
-    fields = (
-        'invoice_item_pos',
-        'invoice_item_diagnose_id',  # 👈 dropdown
-        'invoice_item_quantity',
-        'invoice_item_unit_price',
-        'invoice_item_line_total',
-    )
-
-    readonly_fields = ('invoice_item_line_total',)
-
-    # UX improvement
-    autocomplete_fields = ('invoice_item_diagnose_id',)
-
-    def get_formset(self, request, obj=None, **kwargs):
-        formset = super().get_formset(request, obj, **kwargs)
-        # Rename the FK field label
-        formset.form.base_fields[
-            'invoice_item_diagnose_id'
-        ].label = "Diagnose Text"
-        return formset
-
-
-# @admin.register(Invoice)
-# class InvoiceAdmin(admin.ModelAdmin):
-#     inlines = [InvoiceItemInline]
-#     list_display = ('invoice_no', 'invoice_customer_id', 'invoice_total')
-
-
-
-
-
-
-# class InvoiceItemInline(admin.TabularInline):
-#     model = InvoiceItem
-#     extra = 1
-#     fields = (
-#         "invoice_item_pos",
-#         "invoice_item_diagnose_text",
-#         "invoice_item_diagnose_id",   # shows a select box (by __str__ of Diagnose)
-
-#         "invoice_item_quantity",
-#         "invoice_item_unit_price",
-#         "invoice_item_line_total",
-#     )
-#     readonly_fields = ("invoice_item_line_total",)
-
 
 # -----------------------------
 # Company Admin
@@ -131,6 +72,98 @@ class DiagnoseAdmin(admin.ModelAdmin):
     readonly_fields = ("diagnose_created_at", "diagnose_updated_at")
 
 
+class InvoiceItemAdminForm(forms.ModelForm):
+    diagnose_dropdown = forms.ModelChoiceField(
+        queryset=Diagnose.objects.all(),
+        required=False,
+        label="Diagnose",
+        empty_label="--- Diagnose auswählen ---"
+    )
+
+    class Meta:
+        model = InvoiceItem
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Preselect diagnose
+        if self.instance.pk and self.instance.invoice_item_diagnose_id:
+            self.fields["diagnose_dropdown"].initial = self.instance.invoice_item_diagnose_id
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        diagnose = self.cleaned_data.get("diagnose_dropdown")
+        if diagnose:
+            instance.invoice_item_diagnose_id = diagnose
+            instance.invoice_item_diagnose_text = diagnose.diagnose_title
+
+        if commit:
+            instance.save()
+        return instance
+
+
+@admin.register(InvoiceItem)
+class InvoiceItemAdmin(admin.ModelAdmin):
+    form = InvoiceItemAdminForm
+
+    list_display = (
+        'invoice_item_invoice_id',
+        'invoice_item_pos',
+        'invoice_item_diagnose_text',
+        'invoice_item_quantity',
+        'invoice_item_unit_price',
+        'invoice_item_line_total',
+    )
+
+    readonly_fields = (
+        'invoice_item_line_total',
+    )
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                'invoice_item_invoice_id',
+                'invoice_item_pos',
+                'diagnose_dropdown',           # 👈 USER SELECTS THIS
+                'invoice_item_diagnose_text', # auto-filled
+                'invoice_item_diagnose_id',   # internal
+                'invoice_item_quantity',
+                'invoice_item_unit_price',
+                'invoice_item_line_total',
+            )
+        }),
+    )
+
+# -----------------------------
+# InvoiceItem Inline for Invoice
+# -----------------------------
+
+class InvoiceItemInline(admin.TabularInline):
+    model = InvoiceItem
+    form = InvoiceItemAdminForm   # 🔥 THIS WAS MISSING
+    extra = 1
+
+    fields = (
+        "invoice_item_pos",
+        "diagnose_dropdown",            # ✅ dropdown here
+        "invoice_item_diagnose_text",   # auto-filled
+        "invoice_item_diagnose_id",     # internal
+        "invoice_item_quantity",
+        "invoice_item_unit_price",
+        "invoice_item_line_total",
+    )
+
+    readonly_fields = (
+        "invoice_item_line_total",
+        "invoice_item_diagnose_id",     # make it internal
+        "invoice_item_diagnose_text",   # prevent manual typing
+    )
+
+
+
+
 # -----------------------------
 # Invoice Admin
 # -----------------------------
@@ -175,6 +208,5 @@ class InvoiceAdmin(admin.ModelAdmin):
             )
         }),
     )
-
 
 

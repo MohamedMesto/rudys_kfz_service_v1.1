@@ -1,6 +1,8 @@
 # invoices/models.py
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
+
 
 # -----------------------
 # Company Table
@@ -16,6 +18,9 @@ class Company(models.Model):
     company_tax_number = models.CharField(max_length=64, blank=True, null=True)
     company_created_at = models.DateTimeField(auto_now_add=True)
     company_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Companie"
 
     def __str__(self):
         return self.company_name
@@ -58,6 +63,7 @@ class Customer(models.Model):
 # Diagnose Table
 # -----------------------
 class Diagnose(models.Model):
+    diagnose_id = models.AutoField(primary_key=True)  # explicit primary key
     diagnose_title = models.CharField(max_length=255, unique=True)
     diagnose_default_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     diagnose_created_at = models.DateTimeField(auto_now_add=True)
@@ -98,29 +104,130 @@ class Invoice(models.Model):
 
 # -----------------------
 # InvoiceItem Table
-# -----------------------
+# # -----------------------
+
+
+
+
+
 class InvoiceItem(models.Model):
-    invoice_item_invoice_id = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="items")
+    invoice_item_invoice_id = models.ForeignKey(
+        'Invoice',
+        on_delete=models.CASCADE,
+        related_name='items'
+    )
+
     invoice_item_pos = models.PositiveIntegerField()
-    invoice_item_diagnose_id = models.ForeignKey(Diagnose, null=True, blank=True, on_delete=models.SET_NULL)
-    invoice_item_diagnose_text = models.CharField(max_length=512)
+
+    # THIS IS THE DROPDOWN (FK)
+    invoice_item_diagnose_id = models.ForeignKey(
+        'Diagnose',
+        on_delete=models.PROTECT,
+        verbose_name="Diagnose Text",
+        help_text="Select diagnose from predefined list"
+    )
+
+    # OPTIONAL snapshot text (for invoices / PDF safety)
+    invoice_item_diagnose_text = models.CharField(
+        max_length=255,
+        editable=False
+    )
+
     invoice_item_quantity = models.PositiveIntegerField(default=1)
     invoice_item_unit_price = models.DecimalField(max_digits=10, decimal_places=2)
-    invoice_item_line_total = models.DecimalField(max_digits=12, decimal_places=2)
+    invoice_item_line_total = models.DecimalField(max_digits=10, decimal_places=2)
     invoice_item_created_at = models.DateTimeField(auto_now_add=True)
     invoice_item_updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        unique_together = (('invoice_item_invoice_id', 'invoice_item_pos'),)
-        ordering = ['invoice_item_pos']
-
     def save(self, *args, **kwargs):
-        self.invoice_item_line_total = round(float(self.invoice_item_quantity) * float(self.invoice_item_unit_price), 2)
-        if not self.invoice_item_diagnose_text and self.invoice_item_diagnose_id:
-            self.invoice_item_diagnose_text = self.invoice_item_diagnose_id.diagnose_title
+        # snapshot diagnose text
+        self.invoice_item_diagnose_text = self.invoice_item_diagnose_id.diagnose_title
+        self.invoice_item_line_total = (
+            self.invoice_item_quantity * self.invoice_item_unit_price
+        )
         super().save(*args, **kwargs)
-        # Recalculate parent invoice totals
-        self.invoice_item_invoice_id.recalc_totals()
 
     def __str__(self):
         return f"{self.invoice_item_pos} - {self.invoice_item_diagnose_text}"
+
+
+
+
+
+
+
+
+
+
+# class InvoiceItem(models.Model):
+#     invoice_item_invoice_id = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="items")
+#     invoice_item_pos = models.PositiveIntegerField(default=1)
+#     invoice_item_diagnose_id = models.ForeignKey(Diagnose, null=True, blank=True, on_delete=models.SET_NULL)
+#     invoice_item_diagnose_text = models.CharField(max_length=255, blank=True)
+#     invoice_item_quantity = models.PositiveIntegerField(default=1)
+#     invoice_item_unit_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+#     invoice_item_line_total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+#     invoice_item_created_at = models.DateTimeField(auto_now_add=True)
+#     invoice_item_updated_at = models.DateTimeField(auto_now=True)
+
+#     class Meta:
+#         unique_together = (('invoice_item_invoice_id', 'invoice_item_pos'),)
+#         ordering = ['invoice_item_pos']
+
+#     def save(self, *args, **kwargs):
+#         self.invoice_item_line_total = round(float(self.invoice_item_quantity) * float(self.invoice_item_unit_price), 2)
+#         if not self.invoice_item_diagnose_text and self.invoice_item_diagnose_id:
+#             self.invoice_item_diagnose_text = self.invoice_item_diagnose_id.diagnose_title
+#         super().save(*args, **kwargs)
+#         # Recalculate parent invoice totals
+#         self.invoice_item_invoice_id.recalc_totals()
+
+#     def __str__(self):
+#         return f"{self.invoice_item_pos} - {self.invoice_item_diagnose_text}"
+############################################ 
+
+# class InvoiceItem(models.Model):
+#     invoice_item_invoice_id = models.ForeignKey(
+#         Invoice, on_delete=models.CASCADE, related_name="items"
+#     )
+#     invoice_item_pos = models.PositiveIntegerField(default=1)
+
+#     # FOREIGN KEY - hidden from the user
+#     invoice_item_diagnose_id = models.ForeignKey(
+#         Diagnose, null=True, blank=True, on_delete=models.SET_NULL, editable=False
+#     )
+
+#     # USER-FACING FIELD (dropdown list)
+#     invoice_item_diagnose_text = models.CharField(max_length=255, blank=True)
+
+#     invoice_item_quantity = models.PositiveIntegerField(default=1) # diagnose_no = models.AutoField(primary_key=True)
+#     invoice_item_unit_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+#     invoice_item_line_total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+#     invoice_item_created_at = models.DateTimeField(auto_now_add=True)
+#     invoice_item_updated_at = models.DateTimeField(auto_now=True)
+
+#     class Meta:
+#         unique_together = (('invoice_item_invoice_id', 'invoice_item_pos'),)
+#         ordering = ['invoice_item_pos']
+
+#     def save(self, *args, **kwargs):
+#         # Calculate line total
+#         self.invoice_item_line_total = round(
+#             float(self.invoice_item_quantity) * float(self.invoice_item_unit_price), 2
+#         )
+
+#         # Auto-set FK from dropdown text (if text exists and matches an entry)
+#         if self.invoice_item_diagnose_text:
+#             try:
+#                 diagnose_obj = Diagnose.objects.get(diagnose_title=self.invoice_item_diagnose_text)
+#                 self.invoice_item_diagnose_id = diagnose_obj
+#             except Diagnose.DoesNotExist:
+#                 self.invoice_item_diagnose_id = None
+
+#         super().save(*args, **kwargs)
+
+#         # Recalculate parent invoice totals
+#         self.invoice_item_invoice_id.recalc_totals()
+
+#     def __str__(self):
+#         return f"{self.invoice_item_pos} - {self.invoice_item_diagnose_text}"

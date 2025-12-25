@@ -49,7 +49,7 @@ class DiagnoseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Diagnose
         fields = [
-            'id',
+            'diagnose_id',
             'diagnose_title',
             'diagnose_default_price',
             'diagnose_created_at',
@@ -80,48 +80,44 @@ class CustomerSerializer(serializers.ModelSerializer):
 # InvoiceItem Serializer (nested)
 # -----------------------------
 class InvoiceItemSerializer(serializers.ModelSerializer):
-    # store / accept the FK as an integer id
     # allow client to send diagnose by id or provide diagnose_text and unit_price
     invoice_item_diagnose_id = serializers.PrimaryKeyRelatedField(
         queryset=Diagnose.objects.all(),
         allow_null=True,
         required=False
     )
-    # expose the diagnose title (read-only) for convenience
-    diagnose_title = serializers.CharField(
-        source='invoice_item_diagnose_id.diagnose_title',
-        read_only=True
-    )
+
     class Meta:
         model = InvoiceItem
         fields = [
             'id',
             'invoice_item_pos',
-            'invoice_item_diagnose_id',   # numeric FK in requests/responses
-            'diagnose_title',             # read-only convenience field
+            'invoice_item_diagnose_id',
             'invoice_item_diagnose_text',
             'invoice_item_quantity',
             'invoice_item_unit_price',
             'invoice_item_line_total',
         ]
-        read_only_fields = ('invoice_item_line_total', 'diagnose_title')
-        
+        read_only_fields = ('invoice_item_line_total',)
+
     def validate(self, attrs):
         qty = attrs.get('invoice_item_quantity', 1)
         price = attrs.get('invoice_item_unit_price', None)
         diag = attrs.get('invoice_item_diagnose_id', None)
         # if price not provided but diagnose exists, use default price
         if price is None and diag is not None:
-            attrs['invoice_item_unit_price'] = diag.diagnose_default_price
-        if attrs.get('invoice_item_unit_price') is None:
+            price = diag.diagnose_default_price
+            attrs['invoice_item_unit_price'] = price
+        if price is None:
             raise serializers.ValidationError("invoice_item_unit_price is required if diagnose default price is not available.")
         return attrs
 
     def create(self, validated_data):
+        # compute line total
         qty = validated_data.get('invoice_item_quantity', 1)
         price = quantize_currency(validated_data.get('invoice_item_unit_price'))
         validated_data['invoice_item_line_total'] = quantize_currency(Decimal(qty) * price)
-        # fill diagnose_text if absent
+        # ensure diagnose_text
         diag = validated_data.get('invoice_item_diagnose_id', None)
         if diag and not validated_data.get('invoice_item_diagnose_text'):
             validated_data['invoice_item_diagnose_text'] = diag.diagnose_title
@@ -129,16 +125,18 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         qty = validated_data.get('invoice_item_quantity', instance.invoice_item_quantity)
-        price = quantified = quantize_currency(validated_data.get('invoice_item_unit_price', instance.invoice_item_unit_price))
+        price = validated_data.get('invoice_item_unit_price', instance.invoice_item_unit_price)
+        price = quantize_currency(price)
         instance.invoice_item_quantity = qty
-        instance.invoice_item_unit_price = quantified
+        instance.invoice_item_unit_price = price
         diag = validated_data.get('invoice_item_diagnose_id', instance.invoice_item_diagnose_id)
         instance.invoice_item_diagnose_id = diag
+        # diagnose_text fallback
         instance.invoice_item_diagnose_text = validated_data.get(
             'invoice_item_diagnose_text',
             instance.invoice_item_diagnose_text or (diag.diagnose_title if diag else '')
         )
-        instance.invoice_item_line_total = quantize_currency(Decimal(qty) * quantified)
+        instance.invoice_item_line_total = quantize_currency(Decimal(qty) * price)
         instance.save()
         return instance
 
