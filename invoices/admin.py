@@ -25,14 +25,16 @@ class InvoiceItemInline(admin.TabularInline):
 
     # SHOW ONLY WHAT USER SHOULD SEE
     fields = (
-        # 'invoice_item_pos', hidden
+        'invoice_item_pos',
         'invoice_item_diagnose_id',  # 👈 dropdown
         'invoice_item_quantity',
         'invoice_item_unit_price',
         'invoice_item_line_total',
     )
 
-    readonly_fields = ('invoice_item_line_total',)
+    readonly_fields = (
+        'invoice_item_pos',           # 👈 read-only
+        'invoice_item_line_total',)
 
     # UX improvement
     autocomplete_fields = ('invoice_item_diagnose_id',)
