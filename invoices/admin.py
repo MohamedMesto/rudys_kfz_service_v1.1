@@ -25,7 +25,7 @@ class InvoiceItemInline(admin.TabularInline):
 
     # SHOW ONLY WHAT USER SHOULD SEE
     fields = (
-        'invoice_item_pos',
+        # 'invoice_item_pos', hidden
         'invoice_item_diagnose_id',  # 👈 dropdown
         'invoice_item_quantity',
         'invoice_item_unit_price',
@@ -36,6 +36,7 @@ class InvoiceItemInline(admin.TabularInline):
 
     # UX improvement
     autocomplete_fields = ('invoice_item_diagnose_id',)
+    
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)

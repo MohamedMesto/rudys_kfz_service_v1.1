@@ -3,6 +3,112 @@ CREATE superUSER rudys_user WITH PASSWORD 'KFZ_Nice_work$$999';
 psql -U rotes_eu_2050 -d rudys_db
 
 
+we can change the model contents or anything but keep the db relational
+
+great
+ToDo:
+1- Invoice item pos field should be autoincreament 
+2- Profile role : in  Profile   should be one of # Admin, Mechanic, Accountant when adding new? or this come automatic after creating a group in group 
+
+
+# to chnage the view of a field 
+```
+    # THIS IS THE DROPDOWN (FK)
+    invoice_item_diagnose_id = models.ForeignKey(
+        'Diagnose',
+        on_delete=models.PROTECT,
+        verbose_name="Diagnose Text",
+        help_text="Select diagnose from predefined list"
+    )
+```
+
+
+invoice_item_diagnose_id
+
+invoice_item_diagnose_text
+
+
+
+# How the hiding actually works (mechanism)
+Django Admin rule (very important)
+
+If a field is not listed in fields, fieldsets, or exclude, it is NOT rendered.
+
+So we hide the snapshot field by simply not listing it.
+
+Concrete example (your case)
+InvoiceItemInline
+class InvoiceItemInline(admin.TabularInline):
+    model = InvoiceItem
+    extra = 0
+
+    fields = (
+        'invoice_item_pos',
+        'invoice_item_diagnose_id',  # 👈 shown (dropdown)
+        'invoice_item_quantity',
+        'invoice_item_unit_price',
+        'invoice_item_line_total',
+    )
+
+    readonly_fields = ('invoice_item_line_total',)
+
+What happens?
+Model field	In fields?	Visible?
+invoice_item_diagnose_id	✅ Yes	✅ Shown
+invoice_item_diagnose_text	❌ No	❌ Hidden
+invoice_item_pos	✅ Yes	✅ Shown
+invoice_item_line_total	✅ Yes (readonly)	✅ Shown
+
+✔ Hidden means:
+
+Not rendered
+
+Not editable
+
+Not visible
+
+Still saved automatically
+
+Why verbose_name still matters
+
+This line:
+
+invoice_item_diagnose_id = models.ForeignKey(
+    Diagnose,
+    on_delete=models.PROTECT,
+    verbose_name="Diagnose Text",
+    help_text="Select diagnose from predefined list"
+)
+
+
+Does only one thing:
+
+➡️ It changes how the FK dropdown is labeled
+➡️ It does NOT affect visibility
+➡️ It does NOT hide anything
+
+So the user sees:
+
+Diagnose Text
+(Select diagnose from predefined list)
+
+Which is exactly what you want.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 sudo -i -u postgres
 
