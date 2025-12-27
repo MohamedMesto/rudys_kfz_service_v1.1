@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Diagnosen - Rudy's KFZ Service{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Diagnosen</h2>
+    {% if user.is_superuser %}
+        <a href="{% url 'diagnoses:create' %}" class="btn btn-primary">
+            Neue Diagnose anlegen
+        </a>
+    {% endif %}
+</div>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Bezeichnung</th>
+            <th>Standardpreis (€)</th>
+            <th>Erstellt am</th>
+            <th>Aktualisiert am</th>
+            <th>Aktionen</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for diagnosis in diagnoses %}
+        <tr>
+            <td>{{ diagnosis.diagnosis_id }}</td>
+            <td>{{ diagnosis.diagnosis_title }}</td>
+            <td>{{ diagnosis.diagnosis_default_price }}</td>
+            <td>{{ diagnosis.diagnosis_created_at }}</td>
+            <td>{{ diagnosis.diagnosis_updated_at }}</td>
+            <td>
+                <a href="{% url 'diagnoses:update' diagnosis.pk %}" class="btn btn-sm btn-warning">Bearbeiten</a>
+                <a href="{% url 'diagnoses:delete' diagnosis.pk %}" class="btn btn-sm btn-danger">Löschen</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">Keine Diagnosen gefunden.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

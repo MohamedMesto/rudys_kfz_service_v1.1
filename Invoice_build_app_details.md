@@ -112,7 +112,7 @@ DELETE FROM django_migrations WHERE app = 'invoices';
 
 DROP TABLE IF EXISTS invoices_invoiceitem CASCADE;
 DROP TABLE IF EXISTS invoices_invoice CASCADE;
-DROP TABLE IF EXISTS invoices_diagnose CASCADE;
+DROP TABLE IF EXISTS invoices_diagnosis CASCADE;
 DROP TABLE IF EXISTS invoices_customer CASCADE;
 DROP TABLE IF EXISTS invoices_profile CASCADE;
 DROP TABLE IF EXISTS invoices_company CASCADE;

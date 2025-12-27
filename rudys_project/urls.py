@@ -29,4 +29,5 @@ urlpatterns = [
     path('invoices/', include('invoices.urls')),          # optional frontend views
     path('companies/', include('invoices.urls_companies', namespace='companies')),
     path('customers/', include('invoices.urls_customers', namespace='customers')),
+    path('diagnoses/', include('invoices.urls_diagnoses', namespace='diagnoses')),
 ]
