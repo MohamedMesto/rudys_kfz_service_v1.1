@@ -27,5 +27,6 @@ urlpatterns = [
     path('', home_view, name='home'),
     path('api/', include('invoices.api_urls')),  # <--- API endpoints
     path('invoices/', include('invoices.urls')),          # optional frontend views
-    # path('', home, name='home'),
+    path('companies/', include('invoices.urls_companies', namespace='companies')),
+    path('customers/', include('invoices.urls_customers', namespace='customers')),
 ]

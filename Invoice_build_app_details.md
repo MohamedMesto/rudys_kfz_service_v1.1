@@ -3135,9 +3135,59 @@ class InvoiceItem(models.Model):
     #     return f"{self.invoice_item_pos} - {self.invoice_item_diagnose_text}"
 
 
-
-
-
+ 
  
 
 ```
+
+
+
+
+{% extends "base.html" %}
+
+{% block title %}Rechnung erstellen{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'invoices/css/invoice.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Neue Rechnung</h1>
+...
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'invoices/js/invoice_form.js' %}"></script>
+{% endblock %}
+---
+
+
+
+
+
+in Home.html
+
+{% block content %}
+<div class="text-center mt-5 mb-5">
+    <h1>Willkommen bei Rudy's KFZ Service</h1>
+    <p class="text-muted">Bitte wählen Sie eine Option aus</p>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <a href="{% url 'customers:list' %}" class="btn btn-primary w-100 py-4">👤 Kunden</a>
+    </div>
+    <div class="col-md-4">
+        <a href="{% url 'invoices:list' %}" class="btn btn-success w-100 py-4">🧾 Rechnungen</a>
+    </div>
+    <div class="col-md-4">
+        <a href="{% url 'diagnoses:list' %}" class="btn btn-warning w-100 py-4">🔧 Diagnosen</a>
+    </div>
+    <div class="col-md-4">
+        <a href="{% url 'companies:list' %}" class="btn btn-dark w-100 py-4">🏢 Firma</a>
+    </div>
+    <div class="col-md-4">
+        <a href="{% url 'profiles:list' %}" class="btn btn-secondary w-100 py-4">👥 Profile</a>
+    </div>
+</div>
+{% endblock %}
