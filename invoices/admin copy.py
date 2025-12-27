@@ -5,7 +5,7 @@ from .models import (
     Company,
     Profile,
     Customer,
-    Diagnose,
+    Diagnosis,
     Invoice,
     InvoiceItem,
 )
@@ -63,21 +63,21 @@ class CustomerAdmin(admin.ModelAdmin):
 
 
 # -----------------------------
-# Diagnose Admin
+# Diagnosis Admin
 # -----------------------------
-@admin.register(Diagnose)
-class DiagnoseAdmin(admin.ModelAdmin):
-    list_display = ("diagnose_title", "diagnose_default_price")
-    search_fields = ("diagnose_title",)
-    readonly_fields = ("diagnose_created_at", "diagnose_updated_at")
+@admin.register(Diagnosis)
+class DiagnosisAdmin(admin.ModelAdmin):
+    list_display = ("diagnosis_title", "diagnosis_default_price")
+    search_fields = ("diagnosis_title",)
+    readonly_fields = ("diagnosis_created_at", "diagnosis_updated_at")
 
 
 class InvoiceItemAdminForm(forms.ModelForm):
-    diagnose_dropdown = forms.ModelChoiceField(
-        queryset=Diagnose.objects.all(),
+    diagnosis_dropdown = forms.ModelChoiceField(
+        queryset=Diagnosis.objects.all(),
         required=False,
-        label="Diagnose",
-        empty_label="--- Diagnose auswählen ---"
+        label="Diagnosis",
+        empty_label="--- Diagnosis auswählen ---"
     )
 
     class Meta:
@@ -87,17 +87,17 @@ class InvoiceItemAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Preselect diagnose
-        if self.instance.pk and self.instance.invoice_item_diagnose_id:
-            self.fields["diagnose_dropdown"].initial = self.instance.invoice_item_diagnose_id
+        # Preselect diagnosis
+        if self.instance.pk and self.instance.invoice_item_diagnosis_id:
+            self.fields["diagnosis_dropdown"].initial = self.instance.invoice_item_diagnosis_id
 
     def save(self, commit=True):
         instance = super().save(commit=False)
 
-        diagnose = self.cleaned_data.get("diagnose_dropdown")
-        if diagnose:
-            instance.invoice_item_diagnose_id = diagnose
-            instance.invoice_item_diagnose_text = diagnose.diagnose_title
+        diagnosis = self.cleaned_data.get("diagnosis_dropdown")
+        if diagnosis:
+            instance.invoice_item_diagnosis_id = diagnosis
+            instance.invoice_item_diagnosis_text = diagnosis.diagnosis_title
 
         if commit:
             instance.save()
@@ -111,7 +111,7 @@ class InvoiceItemAdmin(admin.ModelAdmin):
     list_display = (
         'invoice_item_invoice_id',
         'invoice_item_pos',
-        'invoice_item_diagnose_text',
+        'invoice_item_diagnosis_text',
         'invoice_item_quantity',
         'invoice_item_unit_price',
         'invoice_item_line_total',
@@ -126,9 +126,9 @@ class InvoiceItemAdmin(admin.ModelAdmin):
             'fields': (
                 'invoice_item_invoice_id',
                 'invoice_item_pos',
-                'diagnose_dropdown',           # 👈 USER SELECTS THIS
-                'invoice_item_diagnose_text', # auto-filled
-                'invoice_item_diagnose_id',   # internal
+                'diagnosis_dropdown',           # 👈 USER SELECTS THIS
+                'invoice_item_diagnosis_text', # auto-filled
+                'invoice_item_diagnosis_id',   # internal
                 'invoice_item_quantity',
                 'invoice_item_unit_price',
                 'invoice_item_line_total',
@@ -147,9 +147,9 @@ class InvoiceItemInline(admin.TabularInline):
 
     fields = (
         "invoice_item_pos",
-        "diagnose_dropdown",            # ✅ dropdown here
-        "invoice_item_diagnose_text",   # auto-filled
-        "invoice_item_diagnose_id",     # internal
+        "diagnosis_dropdown",            # ✅ dropdown here
+        "invoice_item_diagnosis_text",   # auto-filled
+        "invoice_item_diagnosis_id",     # internal
         "invoice_item_quantity",
         "invoice_item_unit_price",
         "invoice_item_line_total",
@@ -157,8 +157,8 @@ class InvoiceItemInline(admin.TabularInline):
 
     readonly_fields = (
         "invoice_item_line_total",
-        "invoice_item_diagnose_id",     # make it internal
-        "invoice_item_diagnose_text",   # prevent manual typing
+        "invoice_item_diagnosis_id",     # make it internal
+        "invoice_item_diagnosis_text",   # prevent manual typing
     )
 
 

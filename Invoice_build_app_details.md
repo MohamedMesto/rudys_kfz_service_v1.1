@@ -1,6 +1,7 @@
 CREATE superUSER un2050_kfz_mesto WITH PASSWORD 'KFZ_Nice_work$$999';
 
-psql -U rotes_eu_2050 -d rudys_db
+
+
 
 
 from django.contrib.auth import get_user_model
@@ -60,6 +61,7 @@ This is the **correct dev workflow**.
 
 ## Step 1: Switch to postgres Linux user
 
+111111
 ```bash
 sudo -i -u postgres
 ```
@@ -81,6 +83,26 @@ psql -U rudys_kfz_mesto -d rudys_db
 This **will now work**.
 
 ---
+
+
+
+## 2.3 display all table 
+
+```
+SELECT tablename FROM pg_tables WHERE schemaname='public';
+```
+
+
+💡 Quick check: After fix, run:
+
+11111
+```
+\d invoices_diagnosis
+
+```
+in psql to verify the table exists.
+
+
 
 ## Step 3: Do your cleanup
 
@@ -3191,3 +3213,229 @@ in Home.html
     </div>
 </div>
 {% endblock %}
+
+
+
+
+
+
+
+
+Perfect, thanks for pasting **models + admin** — this makes the problem 100% clear 👍
+You are **very close**, this is a classic Django rename/migration issue.
+
+---
+
+# ❌ The real problem (root cause)
+
+Error:
+
+```
+relation "invoices_diagnosis" does not exist
+```
+
+This means:
+
+👉 **Django thinks the table `invoices_diagnosis` exists**
+👉 **PostgreSQL says it does NOT**
+
+So Django Admin tries to run:
+
+```sql
+SELECT COUNT(*) FROM invoices_diagnosis;
+```
+
+…but that table is missing.
+
+---
+
+# 🧠 Why this happened
+
+You **renamed** something like this at some point:
+
+* Old model: `Diagnose`
+* New model: `Diagnosis`
+
+BUT:
+
+❌ The **database table was never renamed**
+❌ Django migrations were not created/applied for this rename
+
+So now you have:
+
+| Django model | DB table                     |
+| ------------ | ---------------------------- |
+| `Diagnosis`  | ❌ missing                    |
+| old table    | probably `invoices_diagnose` |
+
+---
+
+# 🔍 Confirm the situation (important)
+
+Run this in **PostgreSQL** (psql or pgAdmin):
+
+```sql
+\d
+```
+
+or:
+
+```sql
+SELECT tablename FROM pg_tables WHERE schemaname='public';
+```
+
+You will probably see something like:
+
+```
+invoices_diagnose
+```
+
+but **NOT**:
+
+```
+invoices_diagnosis
+```
+
+---
+
+# ✅ CORRECT FIX (SAFE, PROFESSIONAL WAY)
+
+We will **rename the table properly using migrations**
+➡️ data will be preserved
+➡️ admin will work immediately
+
+---
+
+## ✅ Step 1: Create an empty migration
+
+```bash
+python manage.py makemigrations invoices --empty -n rename_diagnose_to_diagnosis
+```
+
+This creates a file like:
+
+```
+invoices/migrations/00XX_rename_diagnose_to_diagnosis.py
+```
+
+---
+
+## ✅ Step 2: Edit the migration file
+
+Open the file and **replace content** with:
+
+```python
+from django.db import migrations
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ("invoices", "00XX_previous_migration"),
+    ]
+
+    operations = [
+        migrations.RenameModel(
+            old_name="Diagnose",
+            new_name="Diagnosis",
+        ),
+    ]
+```
+
+⚠️ Replace `00XX_previous_migration` with the actual last migration name.
+
+---
+
+## ✅ Step 3: Apply migration
+
+```bash
+python manage.py migrate
+```
+
+Django will now run:
+
+```sql
+ALTER TABLE invoices_diagnose RENAME TO invoices_diagnosis;
+```
+
+✔ No data loss
+✔ Admin fixed
+✔ Foreign keys fixed
+
+---
+
+# 🚨 If you NEVER had a Diagnose model before
+
+If this is a **fresh project** and you don’t care about old data:
+
+### Nuclear option (DEV ONLY ❗)
+
+```bash
+python manage.py migrate invoices zero
+python manage.py makemigrations
+python manage.py migrate
+```
+
+⚠️ This deletes invoice-related tables.
+
+---
+
+# ✅ Why admin fails specifically
+
+Admin loads this model:
+
+```python
+@admin.register(Diagnosis)
+class DiagnosisAdmin(admin.ModelAdmin):
+```
+
+Which executes:
+
+```python
+Diagnosis.objects.count()
+```
+
+➡️ Django ORM expects `invoices_diagnosis`
+➡️ PostgreSQL can’t find it
+➡️ 💥 crash
+
+---
+
+# ✅ Your models are OTHERWISE EXCELLENT 👍
+
+✔ Field naming rule respected
+✔ FK usage correct
+✔ Snapshot text in `InvoiceItem` = **very professional**
+✔ Inline admin setup = correct
+✔ VAT logic = correct
+
+Only issue was **model rename without migration**
+
+---
+
+# 🧪 Final verification (after migrate)
+
+```bash
+python manage.py shell
+```
+
+```python
+from invoices.models import Diagnosis
+Diagnosis.objects.all()
+```
+
+✔ No error
+✔ Admin `/admin/invoices/diagnosis/` opens
+
+---
+
+# 🔜 What should we do next?
+
+I recommend **in this order**:
+
+1️⃣ Diagnosis CRUD views + templates
+2️⃣ Invoice create UI with JS rows
+3️⃣ PDF generation (WeasyPrint)
+4️⃣ Permissions by Profile role
+
+Tell me the number 👉
+

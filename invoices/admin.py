@@ -5,7 +5,7 @@ from .models import (
     Company,
     Profile,
     Customer,
-    Diagnose,
+    Diagnosis,
     Invoice,
     InvoiceItem,
 )
@@ -22,7 +22,7 @@ class InvoiceItemInline(admin.TabularInline):
     # SHOW ONLY WHAT USER SHOULD SEE
     fields = (
         'invoice_item_pos',
-        'invoice_item_diagnose_id',  # 👈 dropdown
+        'invoice_item_diagnosis_id',  # 👈 dropdown
         'invoice_item_quantity',
         'invoice_item_unit_price',
         'invoice_item_line_total',
@@ -33,15 +33,15 @@ class InvoiceItemInline(admin.TabularInline):
         'invoice_item_line_total',)
 
     # UX improvement
-    autocomplete_fields = ('invoice_item_diagnose_id',)
+    autocomplete_fields = ('invoice_item_diagnosis_id',)
     
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
         # Rename the FK field label
         formset.form.base_fields[
-            'invoice_item_diagnose_id'
-        ].label = "Diagnose Text"
+            'invoice_item_diagnosis_id'
+        ].label = "Diagnosis Text"
         return formset
 
  
@@ -97,13 +97,13 @@ class CustomerAdmin(admin.ModelAdmin):
 
 
 # -----------------------------
-# Diagnose Admin
+# Diagnosis Admin
 # -----------------------------
-@admin.register(Diagnose)
-class DiagnoseAdmin(admin.ModelAdmin):
-    list_display = ("diagnose_title", "diagnose_default_price")
-    search_fields = ("diagnose_title",)
-    readonly_fields = ("diagnose_created_at", "diagnose_updated_at")
+@admin.register(Diagnosis)
+class DiagnosisAdmin(admin.ModelAdmin):
+    list_display = ("diagnosis_title", "diagnosis_default_price")
+    search_fields = ("diagnosis_title",)
+    readonly_fields = ("diagnosis_created_at", "diagnosis_updated_at")
 
 
 # -----------------------------

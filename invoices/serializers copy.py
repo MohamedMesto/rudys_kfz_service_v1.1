@@ -5,7 +5,7 @@ from django.db import transaction
 from .models import (
     Company,
     Customer,
-    Diagnose,
+    Diagnosis,
     Invoice,
     InvoiceItem,
 )
@@ -43,19 +43,19 @@ class CompanySerializer(serializers.ModelSerializer):
         read_only_fields = ('company_created_at', 'company_updated_at')
 
 # # -----------------------------
-# # Diagnose Serializer
+# # Diagnosis Serializer
 # # -----------------------------
-# class DiagnoseSerializer(serializers.ModelSerializer):
+# class DiagnosisSerializer(serializers.ModelSerializer):
 #     class Meta:
-#         model = Diagnose
+#         model = Diagnosis
 #         fields = [
 #             'id',
-#             'diagnose_title',
-#             'diagnose_default_price',
-#             'diagnose_created_at',
-#             'diagnose_updated_at',
+#             'diagnosis_title',
+#             'diagnosis_default_price',
+#             'diagnosis_created_at',
+#             'diagnosis_updated_at',
 #         ]
-#         read_only_fields = ('diagnose_created_at', 'diagnose_updated_at')
+#         read_only_fields = ('diagnosis_created_at', 'diagnosis_updated_at')
 
 # -----------------------------
 # Customer Serializer
@@ -82,14 +82,14 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 # class InvoiceItemSerializer(serializers.ModelSerializer):
 #     # FK by ID
-#     invoice_item_diagnose_id = serializers.PrimaryKeyRelatedField(
-#         queryset=Diagnose.objects.all(),
+#     invoice_item_diagnosis_id = serializers.PrimaryKeyRelatedField(
+#         queryset=Diagnosis.objects.all(),
 #         allow_null=True,
 #         required=False
 #     )
 #     # read-only convenience field
-#     diagnose_title = serializers.CharField(
-#         source='invoice_item_diagnose_id.diagnose_title',
+#     diagnosis_title = serializers.CharField(
+#         source='invoice_item_diagnosis_id.diagnosis_title',
 #         read_only=True
 #     )
 
@@ -98,33 +98,33 @@ class CustomerSerializer(serializers.ModelSerializer):
 #         fields = [
 #             'id',
 #             'invoice_item_pos',
-#             'invoice_item_diagnose_id',   # numeric FK, editable
-#             'diagnose_title',             # read-only
-#             'invoice_item_diagnose_text', # editable text
+#             'invoice_item_diagnosis_id',   # numeric FK, editable
+#             'diagnosis_title',             # read-only
+#             'invoice_item_diagnosis_text', # editable text
 #             'invoice_item_quantity',
 #             'invoice_item_unit_price',
 #             'invoice_item_line_total',
 #         ]
-#         read_only_fields = ('invoice_item_line_total', 'diagnose_title')
+#         read_only_fields = ('invoice_item_line_total', 'diagnosis_title')
 
 #     def create(self, validated_data):
-#         diag = validated_data.get('invoice_item_diagnose_id', None)
-#         # If diagnose_text is empty, fill with title
-#         if diag and not validated_data.get('invoice_item_diagnose_text'):
-#             validated_data['invoice_item_diagnose_text'] = diag.diagnose_title
+#         diag = validated_data.get('invoice_item_diagnosis_id', None)
+#         # If diagnosis_text is empty, fill with title
+#         if diag and not validated_data.get('invoice_item_diagnosis_text'):
+#             validated_data['invoice_item_diagnosis_text'] = diag.diagnosis_title
 #         qty = validated_data.get('invoice_item_quantity', 1)
 #         price = quantize_currency(validated_data.get('invoice_item_unit_price', 0))
 #         validated_data['invoice_item_line_total'] = quantize_currency(qty * price)
 #         return super().create(validated_data)
 
 #     def update(self, instance, validated_data):
-#         diag = validated_data.get('invoice_item_diagnose_id', instance.invoice_item_diagnose_id)
-#         instance.invoice_item_diagnose_id = diag
+#         diag = validated_data.get('invoice_item_diagnosis_id', instance.invoice_item_diagnosis_id)
+#         instance.invoice_item_diagnosis_id = diag
 #         # Only fill text if empty
-#         if diag and not validated_data.get('invoice_item_diagnose_text') and not instance.invoice_item_diagnose_text:
-#             instance.invoice_item_diagnose_text = diag.diagnose_title
+#         if diag and not validated_data.get('invoice_item_diagnosis_text') and not instance.invoice_item_diagnosis_text:
+#             instance.invoice_item_diagnosis_text = diag.diagnosis_title
 #         # allow user to override text
-#         instance.invoice_item_diagnose_text = validated_data.get('invoice_item_diagnose_text', instance.invoice_item_diagnose_text)
+#         instance.invoice_item_diagnosis_text = validated_data.get('invoice_item_diagnosis_text', instance.invoice_item_diagnosis_text)
 #         instance.invoice_item_quantity = validated_data.get('invoice_item_quantity', instance.invoice_item_quantity)
 #         instance.invoice_item_unit_price = quantize_currency(validated_data.get('invoice_item_unit_price', instance.invoice_item_unit_price))
 #         instance.invoice_item_line_total = quantize_currency(instance.invoice_item_quantity * instance.invoice_item_unit_price)
@@ -133,13 +133,13 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 # class InvoiceItemSerializer(serializers.ModelSerializer):
-#     invoice_item_diagnose_id = serializers.PrimaryKeyRelatedField(
-#         queryset=Diagnose.objects.all(),
+#     invoice_item_diagnosis_id = serializers.PrimaryKeyRelatedField(
+#         queryset=Diagnosis.objects.all(),
 #         allow_null=True,
 #         required=False
 #     )
-#     diagnose_title = serializers.CharField(
-#         source='invoice_item_diagnose_id.diagnose_title',
+#     diagnosis_title = serializers.CharField(
+#         source='invoice_item_diagnosis_id.diagnosis_title',
 #         read_only=True
 #     )
 
@@ -148,28 +148,28 @@ class CustomerSerializer(serializers.ModelSerializer):
 #         fields = [
 #             'id',
 #             'invoice_item_pos',
-#             'invoice_item_diagnose_id',   # numeric FK
-#             'diagnose_title',             # read-only convenience
-#             'invoice_item_diagnose_text', # pre-filled from FK
+#             'invoice_item_diagnosis_id',   # numeric FK
+#             'diagnosis_title',             # read-only convenience
+#             'invoice_item_diagnosis_text', # pre-filled from FK
 #             'invoice_item_quantity',
 #             'invoice_item_unit_price',
 #             'invoice_item_line_total',
 #         ]
-#         read_only_fields = ('invoice_item_line_total', 'diagnose_title')
+#         read_only_fields = ('invoice_item_line_total', 'diagnosis_title')
 
 #     def create(self, validated_data):
-#         diag = validated_data.get('invoice_item_diagnose_id')
-#         if diag and not validated_data.get('invoice_item_diagnose_text'):
-#             validated_data['invoice_item_diagnose_text'] = diag.diagnose_title
+#         diag = validated_data.get('invoice_item_diagnosis_id')
+#         if diag and not validated_data.get('invoice_item_diagnosis_text'):
+#             validated_data['invoice_item_diagnosis_text'] = diag.diagnosis_title
 #         return super().create(validated_data)
 
 #     def update(self, instance, validated_data):
-#         diag = validated_data.get('invoice_item_diagnose_id', instance.invoice_item_diagnose_id)
-#         instance.invoice_item_diagnose_id = diag
+#         diag = validated_data.get('invoice_item_diagnosis_id', instance.invoice_item_diagnosis_id)
+#         instance.invoice_item_diagnosis_id = diag
 #         # auto-fill text if blank
-#         if diag and not validated_data.get('invoice_item_diagnose_text') and not instance.invoice_item_diagnose_text:
-#             instance.invoice_item_diagnose_text = diag.diagnose_title
-#         instance.invoice_item_diagnose_text = validated_data.get('invoice_item_diagnose_text', instance.invoice_item_diagnose_text)
+#         if diag and not validated_data.get('invoice_item_diagnosis_text') and not instance.invoice_item_diagnosis_text:
+#             instance.invoice_item_diagnosis_text = diag.diagnosis_title
+#         instance.invoice_item_diagnosis_text = validated_data.get('invoice_item_diagnosis_text', instance.invoice_item_diagnosis_text)
 #         instance.invoice_item_quantity = validated_data.get('invoice_item_quantity', instance.invoice_item_quantity)
 #         instance.invoice_item_unit_price = validated_data.get('invoice_item_unit_price', instance.invoice_item_unit_price)
 #         instance.invoice_item_line_total = round(float(instance.invoice_item_quantity) * float(instance.invoice_item_unit_price), 2)
@@ -178,19 +178,19 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 # -----------------------------
-# Diagnose Serializer
+# Diagnosis Serializer
 # -----------------------------
-class DiagnoseSerializer(serializers.ModelSerializer):
+class DiagnosisSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Diagnose
+        model = Diagnosis
         fields = [
             'id',
-            'diagnose_title',
-            'diagnose_default_price',
-            'diagnose_created_at',
-            'diagnose_updated_at',
+            'diagnosis_title',
+            'diagnosis_default_price',
+            'diagnosis_created_at',
+            'diagnosis_updated_at',
         ]
-        read_only_fields = ('diagnose_created_at', 'diagnose_updated_at')
+        read_only_fields = ('diagnosis_created_at', 'diagnosis_updated_at')
 
 
 # -----------------------------
@@ -198,43 +198,43 @@ class DiagnoseSerializer(serializers.ModelSerializer):
 # -----------------------------
 class InvoiceItemSerializer(serializers.ModelSerializer):
     # Dynamic dropdown for API
-    invoice_item_diagnose_text = serializers.ChoiceField(
-        choices=[(d.diagnose_title, d.diagnose_title) for d in Diagnose.objects.all()]
+    invoice_item_diagnosis_text = serializers.ChoiceField(
+        choices=[(d.diagnosis_title, d.diagnosis_title) for d in Diagnosis.objects.all()]
     )
 
     class Meta:
         model = InvoiceItem
         fields = [
             'invoice_item_pos',
-            'invoice_item_diagnose_text',
+            'invoice_item_diagnosis_text',
             'invoice_item_quantity',
             'invoice_item_unit_price',
         ]
 
     def create(self, validated_data):
-        diagnose_text = validated_data.get('invoice_item_diagnose_text')
+        diagnosis_text = validated_data.get('invoice_item_diagnosis_text')
         try:
-            diag = Diagnose.objects.get(diagnose_title=diagnose_text)
-            validated_data['invoice_item_diagnose_id'] = diag
-            validated_data['invoice_item_unit_price'] = diag.diagnose_default_price
-        except Diagnose.DoesNotExist:
-            validated_data['invoice_item_diagnose_id'] = None
+            diag = Diagnosis.objects.get(diagnosis_title=diagnosis_text)
+            validated_data['invoice_item_diagnosis_id'] = diag
+            validated_data['invoice_item_unit_price'] = diag.diagnosis_default_price
+        except Diagnosis.DoesNotExist:
+            validated_data['invoice_item_diagnosis_id'] = None
 
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        diagnose_text = validated_data.get(
-            'invoice_item_diagnose_text',
-            instance.invoice_item_diagnose_text
+        diagnosis_text = validated_data.get(
+            'invoice_item_diagnosis_text',
+            instance.invoice_item_diagnosis_text
         )
         try:
-            diag = Diagnose.objects.get(diagnose_title=diagnose_text)
-            instance.invoice_item_diagnose_id = diag
-            instance.invoice_item_unit_price = diag.diagnose_default_price
-        except Diagnose.DoesNotExist:
-            instance.invoice_item_diagnose_id = None
+            diag = Diagnosis.objects.get(diagnosis_title=diagnosis_text)
+            instance.invoice_item_diagnosis_id = diag
+            instance.invoice_item_unit_price = diag.diagnosis_default_price
+        except Diagnosis.DoesNotExist:
+            instance.invoice_item_diagnosis_id = None
 
-        instance.invoice_item_diagnose_text = diagnose_text
+        instance.invoice_item_diagnosis_text = diagnosis_text
         instance.invoice_item_quantity = validated_data.get(
             'invoice_item_quantity', instance.invoice_item_quantity
         )

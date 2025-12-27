@@ -3,11 +3,11 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
-from .models import Company, Customer, Diagnose, Invoice, InvoiceItem
+from .models import Company, Customer, Diagnosis, Invoice, InvoiceItem
 from .serializers import (
     CompanySerializer,
     CustomerSerializer,
-    DiagnoseSerializer,
+    DiagnosisSerializer,
     InvoiceSerializer,
     InvoiceItemSerializer
 )
@@ -31,11 +31,11 @@ class CompanyViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 # -----------------------------
-# Diagnose ViewSet
+# Diagnosis ViewSet
 # -----------------------------
-class DiagnoseViewSet(viewsets.ModelViewSet):
-    queryset = Diagnose.objects.all().order_by('diagnose_title')
-    serializer_class = DiagnoseSerializer
+class DiagnosisViewSet(viewsets.ModelViewSet):
+    queryset = Diagnosis.objects.all().order_by('diagnosis_title')
+    serializer_class = DiagnosisSerializer
     permission_classes = [IsAuthenticated]
 
 # -----------------------------

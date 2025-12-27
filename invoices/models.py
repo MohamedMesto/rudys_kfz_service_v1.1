@@ -60,17 +60,20 @@ class Customer(models.Model):
 
 
 # -----------------------
-# Diagnose Table
+# Diagnosis Table
 # -----------------------
-class Diagnose(models.Model):
-    diagnose_id = models.AutoField(primary_key=True)  # explicit primary key
-    diagnose_title = models.CharField(max_length=255, unique=True)
-    diagnose_default_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    diagnose_created_at = models.DateTimeField(auto_now_add=True)
-    diagnose_updated_at = models.DateTimeField(auto_now=True)
+class Diagnosis(models.Model):
+    diagnosis_id = models.AutoField(primary_key=True)  # explicit primary key
+    diagnosis_title = models.CharField(max_length=255, unique=True)
+    diagnosis_default_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    diagnosis_created_at = models.DateTimeField(auto_now_add=True)
+    diagnosis_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "diagnose"
 
     def __str__(self):
-        return self.diagnose_title
+        return self.diagnosis_title
 
 
 # -----------------------
@@ -120,15 +123,15 @@ class InvoiceItem(models.Model):
     invoice_item_pos = models.PositiveIntegerField(editable=False)
 
     # THIS IS THE DROPDOWN (FK)
-    invoice_item_diagnose_id = models.ForeignKey(
-        'Diagnose',
+    invoice_item_diagnosis_id = models.ForeignKey(
+        'Diagnosis',
         on_delete=models.PROTECT,
-        verbose_name="Diagnose Text",
-        help_text="Select diagnose from predefined list"
+        verbose_name="Diagnosis Text",
+        help_text="Select diagnosis from predefined list"
     )
 
     # OPTIONAL snapshot text (for invoices / PDF safety)
-    invoice_item_diagnose_text = models.CharField(
+    invoice_item_diagnosis_text = models.CharField(
         max_length=255,
         editable=False
     )
@@ -151,8 +154,8 @@ class InvoiceItem(models.Model):
             )
             self.invoice_item_pos = (last_pos or 0) + 1
 
-        # Snapshot diagnose text
-        self.invoice_item_diagnose_text = self.invoice_item_diagnose_id.diagnose_title
+        # Snapshot diagnosis text
+        self.invoice_item_diagnosis_text = self.invoice_item_diagnosis_id.diagnosis_title
 
         # Calculate line total
         self.invoice_item_line_total = (
@@ -166,15 +169,15 @@ class InvoiceItem(models.Model):
 
         
     # def save(self, *args, **kwargs):
-    #     # snapshot diagnose text
-    #     self.invoice_item_diagnose_text = self.invoice_item_diagnose_id.diagnose_title
+    #     # snapshot diagnosis text
+    #     self.invoice_item_diagnosis_text = self.invoice_item_diagnosis_id.diagnosis_title
     #     self.invoice_item_line_total = (
     #         self.invoice_item_quantity * self.invoice_item_unit_price
     #     )
     #     super().save(*args, **kwargs)
 
     # def __str__(self):
-    #     return f"{self.invoice_item_pos} - {self.invoice_item_diagnose_text}"
+    #     return f"{self.invoice_item_pos} - {self.invoice_item_diagnosis_text}"
 
 
 

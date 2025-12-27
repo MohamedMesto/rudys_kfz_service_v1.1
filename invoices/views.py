@@ -1,7 +1,7 @@
 # invoices/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Company, Diagnose, Invoice, Customer
+from .models import Company, Diagnosis, Invoice, Customer
 
 @login_required
 def home_view(request):
@@ -11,10 +11,10 @@ def home_view(request):
 def invoice_create_view(request):
     # We will let the frontend call the API to create (DRF).
     company = Company.objects.first()
-    diagnoses = Diagnose.objects.all()
+    diagnosiss = Diagnosis.objects.all()
     context = {
         'company': company,
-        'diagnoses': diagnoses,
+        'diagnosiss': diagnosiss,
     }
     return render(request, 'invoices/invoice_form.html', context)
 

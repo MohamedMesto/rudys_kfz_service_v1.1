@@ -5,7 +5,7 @@ from django.db import transaction
 from .models import (
     Company,
     Customer,
-    Diagnose,
+    Diagnosis,
     Invoice,
     InvoiceItem,
 )
@@ -43,19 +43,19 @@ class CompanySerializer(serializers.ModelSerializer):
         read_only_fields = ('company_created_at', 'company_updated_at')
 
 # -----------------------------
-# Diagnose Serializer
+# Diagnosis Serializer
 # -----------------------------
-class DiagnoseSerializer(serializers.ModelSerializer):
+class DiagnosisSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Diagnose
+        model = Diagnosis
         fields = [
-            'diagnose_id',
-            'diagnose_title',
-            'diagnose_default_price',
-            'diagnose_created_at',
-            'diagnose_updated_at',
+            'diagnosis_id',
+            'diagnosis_title',
+            'diagnosis_default_price',
+            'diagnosis_created_at',
+            'diagnosis_updated_at',
         ]
-        read_only_fields = ('diagnose_created_at', 'diagnose_updated_at')
+        read_only_fields = ('diagnosis_created_at', 'diagnosis_updated_at')
 
 # -----------------------------
 # Customer Serializer
@@ -80,9 +80,9 @@ class CustomerSerializer(serializers.ModelSerializer):
 # InvoiceItem Serializer (nested)
 # -----------------------------
 class InvoiceItemSerializer(serializers.ModelSerializer):
-    # allow client to send diagnose by id or provide diagnose_text and unit_price
-    invoice_item_diagnose_id = serializers.PrimaryKeyRelatedField(
-        queryset=Diagnose.objects.all(),
+    # allow client to send diagnosis by id or provide diagnosis_text and unit_price
+    invoice_item_diagnosis_id = serializers.PrimaryKeyRelatedField(
+        queryset=Diagnosis.objects.all(),
         allow_null=True,
         required=False
     )
@@ -92,8 +92,8 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'invoice_item_pos',
-            'invoice_item_diagnose_id',
-            'invoice_item_diagnose_text',
+            'invoice_item_diagnosis_id',
+            'invoice_item_diagnosis_text',
             'invoice_item_quantity',
             'invoice_item_unit_price',
             'invoice_item_line_total',
@@ -103,13 +103,13 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         qty = attrs.get('invoice_item_quantity', 1)
         price = attrs.get('invoice_item_unit_price', None)
-        diag = attrs.get('invoice_item_diagnose_id', None)
-        # if price not provided but diagnose exists, use default price
+        diag = attrs.get('invoice_item_diagnosis_id', None)
+        # if price not provided but diagnosis exists, use default price
         if price is None and diag is not None:
-            price = diag.diagnose_default_price
+            price = diag.diagnosis_default_price
             attrs['invoice_item_unit_price'] = price
         if price is None:
-            raise serializers.ValidationError("invoice_item_unit_price is required if diagnose default price is not available.")
+            raise serializers.ValidationError("invoice_item_unit_price is required if diagnosis default price is not available.")
         return attrs
 
     def create(self, validated_data):
@@ -117,10 +117,10 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
         qty = validated_data.get('invoice_item_quantity', 1)
         price = quantize_currency(validated_data.get('invoice_item_unit_price'))
         validated_data['invoice_item_line_total'] = quantize_currency(Decimal(qty) * price)
-        # ensure diagnose_text
-        diag = validated_data.get('invoice_item_diagnose_id', None)
-        if diag and not validated_data.get('invoice_item_diagnose_text'):
-            validated_data['invoice_item_diagnose_text'] = diag.diagnose_title
+        # ensure diagnosis_text
+        diag = validated_data.get('invoice_item_diagnosis_id', None)
+        if diag and not validated_data.get('invoice_item_diagnosis_text'):
+            validated_data['invoice_item_diagnosis_text'] = diag.diagnosis_title
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
@@ -129,12 +129,12 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
         price = quantize_currency(price)
         instance.invoice_item_quantity = qty
         instance.invoice_item_unit_price = price
-        diag = validated_data.get('invoice_item_diagnose_id', instance.invoice_item_diagnose_id)
-        instance.invoice_item_diagnose_id = diag
-        # diagnose_text fallback
-        instance.invoice_item_diagnose_text = validated_data.get(
-            'invoice_item_diagnose_text',
-            instance.invoice_item_diagnose_text or (diag.diagnose_title if diag else '')
+        diag = validated_data.get('invoice_item_diagnosis_id', instance.invoice_item_diagnosis_id)
+        instance.invoice_item_diagnosis_id = diag
+        # diagnosis_text fallback
+        instance.invoice_item_diagnosis_text = validated_data.get(
+            'invoice_item_diagnosis_text',
+            instance.invoice_item_diagnosis_text or (diag.diagnosis_title if diag else '')
         )
         instance.invoice_item_line_total = quantize_currency(Decimal(qty) * price)
         instance.save()
