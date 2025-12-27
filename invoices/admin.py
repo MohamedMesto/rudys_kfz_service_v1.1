@@ -15,10 +15,6 @@ from .models import (
 # InvoiceItem Inline for Invoice
 # -----------------------------
 
-
-
- 
-
 class InvoiceItemInline(admin.TabularInline):
     model = InvoiceItem
     extra = 0
@@ -48,32 +44,8 @@ class InvoiceItemInline(admin.TabularInline):
         ].label = "Diagnose Text"
         return formset
 
-
-# @admin.register(Invoice)
-# class InvoiceAdmin(admin.ModelAdmin):
-#     inlines = [InvoiceItemInline]
-#     list_display = ('invoice_no', 'invoice_customer_id', 'invoice_total')
-
-
-
-
-
-
-# class InvoiceItemInline(admin.TabularInline):
-#     model = InvoiceItem
-#     extra = 1
-#     fields = (
-#         "invoice_item_pos",
-#         "invoice_item_diagnose_text",
-#         "invoice_item_diagnose_id",   # shows a select box (by __str__ of Diagnose)
-
-#         "invoice_item_quantity",
-#         "invoice_item_unit_price",
-#         "invoice_item_line_total",
-#     )
-#     readonly_fields = ("invoice_item_line_total",)
-
-
+ 
+ 
 # -----------------------------
 # Company Admin
 # -----------------------------

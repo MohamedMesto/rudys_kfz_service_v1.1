@@ -163,6 +163,8 @@ class InvoiceItem(models.Model):
 
     class Meta:
         ordering = ['invoice_item_pos']
+
+        
     # def save(self, *args, **kwargs):
     #     # snapshot diagnose text
     #     self.invoice_item_diagnose_text = self.invoice_item_diagnose_id.diagnose_title

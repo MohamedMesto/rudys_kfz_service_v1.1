@@ -20,12 +20,12 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-# from invoices.views import home
+from invoices.views import home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
+    path('', home_view, name='home'),
     path('api/', include('invoices.api_urls')),  # <--- API endpoints
-    path('', include('invoices.urls')),          # optional frontend views
+    path('invoices/', include('invoices.urls')),          # optional frontend views
     # path('', home, name='home'),
 ]

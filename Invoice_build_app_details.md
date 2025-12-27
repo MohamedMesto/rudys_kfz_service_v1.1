@@ -1,6 +1,15 @@
-CREATE superUSER rudys_user WITH PASSWORD 'KFZ_Nice_work$$999';
+CREATE superUSER un2050_kfz_mesto WITH PASSWORD 'KFZ_Nice_work$$999';
 
 psql -U rotes_eu_2050 -d rudys_db
+
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+user = User.objects.get(username="un2050_kfz_mesto")
+user.set_password("KFZ_Nice_work$$999")
+user.save()
+
 
 
 we can change the model contents or anything but keep the db relational
@@ -11,103 +20,10 @@ ToDo:
 2- Profile role : in  Profile   should be one of # Admin, Mechanic, Accountant when adding new? or this come automatic after creating a group in group 
 
 
-# to chnage the view of a field 
-```
-    # THIS IS THE DROPDOWN (FK)
-    invoice_item_diagnose_id = models.ForeignKey(
-        'Diagnose',
-        on_delete=models.PROTECT,
-        verbose_name="Diagnose Text",
-        help_text="Select diagnose from predefined list"
-    )
-```
-
-
-invoice_item_diagnose_id
-
-invoice_item_diagnose_text
 
 
 
-# How the hiding actually works (mechanism)
-Django Admin rule (very important)
-
-If a field is not listed in fields, fieldsets, or exclude, it is NOT rendered.
-
-So we hide the snapshot field by simply not listing it.
-
-Concrete example (your case)
-InvoiceItemInline
-class InvoiceItemInline(admin.TabularInline):
-    model = InvoiceItem
-    extra = 0
-
-    fields = (
-        'invoice_item_pos',
-        'invoice_item_diagnose_id',  # 👈 shown (dropdown)
-        'invoice_item_quantity',
-        'invoice_item_unit_price',
-        'invoice_item_line_total',
-    )
-
-    readonly_fields = ('invoice_item_line_total',)
-
-What happens?
-Model field	In fields?	Visible?
-invoice_item_diagnose_id	✅ Yes	✅ Shown
-invoice_item_diagnose_text	❌ No	❌ Hidden
-invoice_item_pos	✅ Yes	✅ Shown
-invoice_item_line_total	✅ Yes (readonly)	✅ Shown
-
-✔ Hidden means:
-
-Not rendered
-
-Not editable
-
-Not visible
-
-Still saved automatically
-
-Why verbose_name still matters
-
-This line:
-
-invoice_item_diagnose_id = models.ForeignKey(
-    Diagnose,
-    on_delete=models.PROTECT,
-    verbose_name="Diagnose Text",
-    help_text="Select diagnose from predefined list"
-)
-
-
-Does only one thing:
-
-➡️ It changes how the FK dropdown is labeled
-➡️ It does NOT affect visibility
-➡️ It does NOT hide anything
-
-So the user sees:
-
-Diagnose Text
-(Select diagnose from predefined list)
-
-Which is exactly what you want.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 sudo -i -u postgres
@@ -2421,3 +2337,807 @@ Do you want me to do that next?
 If you want, I can now give the **exact folder structure + invoices app ready to hold all models, admin, templates, and Bootstrap forms** for your invoice system. This will fully integrate PostgreSQL with Django and Bootstrap.
 
 Do you want me to do that next?
+
+
+
+
+
+# ##################################
+
+
+
+
+
+
+
+
+
+
+
+# Switch between invoice_item_diagnose_id and invoice_item_diagnose_text
+# to chnage the view of a field in Model.py
+```
+    # THIS IS THE DROPDOWN (FK)
+    invoice_item_diagnose_id = models.ForeignKey(
+        'Diagnose',
+        on_delete=models.PROTECT,
+        verbose_name="Diagnose Text",
+        help_text="Select diagnose from predefined list"
+    )
+```
+# in Admin.py
+
+```
+# -----------------------------
+# InvoiceItem Inline for Invoice
+# -----------------------------
+
+class InvoiceItemInline(admin.TabularInline):
+    model = InvoiceItem
+    extra = 0
+
+    # SHOW ONLY WHAT USER SHOULD SEE
+    fields = (
+        'invoice_item_pos',
+        'invoice_item_diagnose_id',  # 👈 dropdown
+        'invoice_item_quantity',
+        'invoice_item_unit_price',
+        'invoice_item_line_total',
+    )
+
+    readonly_fields = (
+        'invoice_item_pos',           # 👈 read-only
+        'invoice_item_line_total',)
+
+    # UX improvement
+    autocomplete_fields = ('invoice_item_diagnose_id',)
+    
+
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+        # Rename the FK field label
+        formset.form.base_fields[
+            'invoice_item_diagnose_id'
+        ].label = "Diagnose Text"
+        return formset
+```
+
+
+
+
+
+# How the hiding actually works (mechanism)
+Django Admin rule (very important)
+
+If a field is not listed in fields, fieldsets, or exclude, it is NOT rendered.
+
+So we hide the snapshot field by simply not listing it.
+
+Concrete example (your case)
+InvoiceItemInline
+class InvoiceItemInline(admin.TabularInline):
+    model = InvoiceItem
+    extra = 0
+
+    fields = (
+        'invoice_item_pos',
+        'invoice_item_diagnose_id',  # 👈 shown (dropdown)
+        'invoice_item_quantity',
+        'invoice_item_unit_price',
+        'invoice_item_line_total',
+    )
+
+    readonly_fields = ('invoice_item_line_total',)
+
+What happens?
+Model field	In fields?	Visible?
+invoice_item_diagnose_id	✅ Yes	✅ Shown
+invoice_item_diagnose_text	❌ No	❌ Hidden
+invoice_item_pos	✅ Yes	✅ Shown
+invoice_item_line_total	✅ Yes (readonly)	✅ Shown
+
+✔ Hidden means:
+
+Not rendered
+
+Not editable
+
+Not visible
+
+Still saved automatically
+
+Why verbose_name still matters
+
+This line:
+
+invoice_item_diagnose_id = models.ForeignKey(
+    Diagnose,
+    on_delete=models.PROTECT,
+    verbose_name="Diagnose Text",
+    help_text="Select diagnose from predefined list"
+)
+
+
+Does only one thing:
+
+➡️ It changes how the FK dropdown is labeled
+➡️ It does NOT affect visibility
+➡️ It does NOT hide anything
+
+So the user sees:
+
+Diagnose Text
+(Select diagnose from predefined list)
+
+Which is exactly what you want.
+
+
+
+
+
+
+Got it 👍 — you want to **change a Django user password** (“pd” = password).
+Here are the **correct ways**, starting with the **BEST** one.
+
+---
+
+## ✅ Method 1 — Change password via Django shell (recommended)
+
+### 1️⃣ Open Django shell
+
+```bash
+python manage.py shell
+```
+
+### 2️⃣ Run this (replace `admin` with your username)
+
+```python
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+user = User.objects.get(username="admin")
+user.set_password("NEW_STRONG_PASSWORD")
+user.save()
+```
+
+✅ Password is now updated
+✅ Password is **hashed correctly** (important)
+
+---
+
+## ✅ Method 2 — Change password via Django Admin (GUI)
+
+1. Go to:
+
+   ```
+   http://127.0.0.1:8000/admin/
+   ```
+2. Login
+3. Users → select user
+4. Click **“change password”**
+5. Save
+
+✔️ Best for non-technical admins
+
+---
+
+## ✅ Method 3 — Reset your own password (CLI)
+
+If you are logged in on the server:
+
+```bash
+python manage.py changepassword admin
+```
+
+You’ll be prompted:
+
+```
+Changing password for user 'admin'
+New password:
+Confirm password:
+```
+
+✔️ Fast & safe
+
+---
+
+## ❌ What NOT to do
+
+❌ **Never** do this:
+
+```python
+user.password = "123456"
+user.save()
+```
+
+This will break login because Django stores **hashed passwords only**.
+
+---
+
+## 🔐 Password rules (important)
+
+Use:
+
+* At least **8 characters**
+* Upper + lower case
+* Numbers
+* Symbols
+
+Example:
+
+```
+Rudy@KFZ2025!
+```
+
+---
+
+## ✅ Verify password works
+
+After changing it:
+
+```bash
+python manage.py runserver
+```
+
+Login:
+
+```
+http://127.0.0.1:8000/admin/
+```
+
+---
+
+## 🚀 Next recommended step
+
+Now that your **superuser is confirmed and secured**, we can:
+
+* 🔐 Add **role-based permissions** (Admin / Mechanic / Accountant)
+* 🏢 Build **Companies CRUD (Admin only)**
+* 🧾 Continue **Invoices UI + JS dynamic rows**
+
+Just say:
+👉 **“Continue with Companies CRUD”**
+or
+👉 **“Continue full system step by step”**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sure 👍
+Here are the **correct and safe ways to check the superuser in your Django + PostgreSQL setup**, step by step.
+
+---
+
+## ✅ 1️⃣ Check Django superusers (recommended way)
+
+### ▶️ Option A: Django shell (BEST)
+
+Run this in your project root (where `manage.py` is):
+
+```bash
+python manage.py shell
+```
+
+Then run:
+
+```python
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+User.objects.filter(is_superuser=True).values("id", "username", "email", "is_active")
+```
+
+### ✔ Output example:
+
+```python
+<QuerySet [
+ {'id': 1, 'username': 'admin', 'email': 'admin@example.com', 'is_active': True}
+]>
+```
+
+➡️ This tells you **which Django users are superusers**.
+
+---
+
+### ▶️ Option B: Django Admin Panel
+
+1. Open:
+
+   ```
+   http://127.0.0.1:8000/admin/
+   ```
+2. Login
+3. Go to **Users**
+4. Look for users with:
+
+   * ✅ *Staff status*
+   * ✅ *Superuser status*
+
+---
+
+## ✅ 2️⃣ Check PostgreSQL database user (DB-level superuser)
+
+This is **NOT the same** as Django superuser.
+This checks **PostgreSQL roles**.
+
+### ▶️ Enter PostgreSQL shell
+
+```bash
+sudo -u postgres psql
+```
+
+Then run:
+
+```sql
+\du
+```
+
+### ✔ Output example:
+
+```
+ Role name |  Attributes                       | Member of
+-----------+----------------------------------+-----------
+ postgres  | Superuser, Create role, Create DB | {}
+ rudys_db  |                                  | {}
+```
+
+➡️ `postgres` is the **PostgreSQL superuser**
+➡️ `rudys_db` is a normal DB user
+
+---
+
+## ✅ 3️⃣ Check which DB user Django is using
+
+Open `settings.py`:
+
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'rudys_db',
+        'USER': 'rudys_user',
+        'PASSWORD': '********',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+```
+
+➡️ Django connects as **`rudys_user`**, NOT as `postgres` (this is correct and secure).
+
+---
+
+## ✅ 4️⃣ If you don’t have a Django superuser
+
+Create one:
+
+```bash
+python manage.py createsuperuser
+```
+
+Follow prompts:
+
+```
+Username:
+Email:
+Password:
+```
+
+---
+
+## ✅ 5️⃣ Verify superuser has Profile (IMPORTANT)
+
+Because you use a **Profile model**, check if the superuser has one:
+
+```python
+from invoices.models import Profile
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+user = User.objects.get(username="admin")  # replace name
+Profile.objects.filter(profile_user_id=user)
+```
+
+### If NOT exists → create it:
+
+```python
+Profile.objects.create(
+    profile_user_id=user,
+    profile_role="Admin"
+)
+```
+
+---
+
+## 🔐 Best Practice Summary
+
+| Layer        | Superuser                             |
+| ------------ | ------------------------------------- |
+| Django       | `is_superuser=True`                   |
+| Django Admin | Staff + Superuser                     |
+| PostgreSQL   | `postgres` role                       |
+| Production   | ❌ Never use `postgres` user in Django |
+
+---
+
+## 🚀 Next logical step
+
+Now that superuser is confirmed, we can safely:
+
+👉 Build **Companies CRUD (Admin-only)**
+👉 Lock Diagnose CRUD to Admin
+👉 Allow Mechanics to create Invoices
+
+Just tell me one of these:
+
+* **"Continue with Companies CRUD"**
+* **"Add role-based permissions"**
+* **"Continue full system step by step"**
+
+
+
+## ############################ 
+
+2025.12
+
+# 111 Admin.py
+
+```
+# invoices/admin.py
+from django.contrib import admin
+from django import forms
+from .models import (
+    Company,
+    Profile,
+    Customer,
+    Diagnose,
+    Invoice,
+    InvoiceItem,
+)
+
+
+# -----------------------------
+# InvoiceItem Inline for Invoice
+# -----------------------------
+
+class InvoiceItemInline(admin.TabularInline):
+    model = InvoiceItem
+    extra = 0
+
+    # SHOW ONLY WHAT USER SHOULD SEE
+    fields = (
+        'invoice_item_pos',
+        'invoice_item_diagnose_id',  # 👈 dropdown
+        'invoice_item_quantity',
+        'invoice_item_unit_price',
+        'invoice_item_line_total',
+    )
+
+    readonly_fields = (
+        'invoice_item_pos',           # 👈 read-only
+        'invoice_item_line_total',)
+
+    # UX improvement
+    autocomplete_fields = ('invoice_item_diagnose_id',)
+    
+
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+        # Rename the FK field label
+        formset.form.base_fields[
+            'invoice_item_diagnose_id'
+        ].label = "Diagnose Text"
+        return formset
+
+ 
+ 
+# -----------------------------
+# Company Admin
+# -----------------------------
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ("company_name", "company_owner", "company_email")
+    readonly_fields = ("company_created_at", "company_updated_at")
+
+    fieldsets = (
+        ("Unternehmen", {
+            "fields": ("company_name", "company_owner")
+        }),
+        ("Kontakt", {
+            "fields": (
+                "company_address",
+                "company_phone",
+                "company_email",
+                "company_website",
+            )
+        }),
+        ("Finanzen", {
+            "fields": ("company_iban", "company_tax_number")
+        }),
+        ("System", {
+            "fields": ("company_created_at", "company_updated_at")
+        }),
+    )
+
+
+# -----------------------------
+# Profile Admin
+# -----------------------------
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("profile_user_id", "profile_role", "profile_phone")
+    search_fields = ("profile_user_id__username", "profile_role")
+    readonly_fields = ("profile_created_at", "profile_updated_at")
+
+
+# -----------------------------
+# Customer Admin
+# -----------------------------
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ("customer_number", "customer_name", "customer_license_plate")
+    search_fields = ("customer_number", "customer_name", "customer_license_plate")
+    list_filter = ("customer_vehicle",)
+    readonly_fields = ("customer_created_at", "customer_updated_at")
+
+
+# -----------------------------
+# Diagnose Admin
+# -----------------------------
+@admin.register(Diagnose)
+class DiagnoseAdmin(admin.ModelAdmin):
+    list_display = ("diagnose_title", "diagnose_default_price")
+    search_fields = ("diagnose_title",)
+    readonly_fields = ("diagnose_created_at", "diagnose_updated_at")
+
+
+# -----------------------------
+# Invoice Admin
+# -----------------------------
+@admin.register(Invoice)
+class InvoiceAdmin(admin.ModelAdmin):
+    list_display = ("invoice_no", "invoice_customer_id", "invoice_total", "invoice_order_date")
+    search_fields = ("invoice_no", "invoice_customer_id__customer_name")
+    list_filter = ("invoice_order_date", "invoice_service_date")
+    readonly_fields = (
+        "invoice_subtotal",
+        "invoice_vat_amount",
+        "invoice_total",
+        "invoice_created_at",
+        "invoice_updated_at",
+    )
+
+    inlines = [InvoiceItemInline]
+
+    fieldsets = (
+        ("Rechnungsdaten", {
+            "fields": (
+                "invoice_no",
+                "invoice_customer_id",
+                "invoice_order_date",
+                "invoice_service_date",
+            )
+        }),
+        ("Steuer & Summen", {
+            "fields": (
+                "invoice_subtotal",
+                "invoice_vat_percent",
+                "invoice_vat_amount",
+                "invoice_total",
+            )
+        }),
+        ("Sonstiges", {
+            "fields": (
+                "invoice_notes",
+                "invoice_created_by",
+                "invoice_created_at",
+                "invoice_updated_at",
+            )
+        }),
+    )
+
+```
+
+
+# Model.py
+
+```
+# invoices/models.py
+from django.db import models
+from django.conf import settings
+from django.utils import timezone
+
+
+# -----------------------
+# Company Table
+# -----------------------
+class Company(models.Model):
+    company_name = models.CharField(max_length=255)
+    company_address = models.TextField(blank=True, null=True)
+    company_phone = models.CharField(max_length=128, blank=True, null=True)
+    company_email = models.EmailField(blank=True, null=True)
+    company_website = models.CharField(max_length=255, blank=True, null=True)
+    company_owner = models.CharField(max_length=255, blank=True, null=True)
+    company_iban = models.CharField(max_length=64, blank=True, null=True)
+    company_tax_number = models.CharField(max_length=64, blank=True, null=True)
+    company_created_at = models.DateTimeField(auto_now_add=True)
+    company_updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Companie"
+
+    def __str__(self):
+        return self.company_name
+
+
+# -----------------------
+# Profile Table
+# -----------------------
+class Profile(models.Model):
+    profile_user_id = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    profile_role = models.CharField(max_length=32)  # Admin, Mechanic, Accountant
+    profile_phone = models.CharField(max_length=32, blank=True, null=True)
+    profile_address = models.TextField(blank=True, null=True)
+    profile_photo = models.ImageField(upload_to='profile_photos/', blank=True, null=True)
+    profile_created_at = models.DateTimeField(auto_now_add=True)
+    profile_updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.profile_user_id.username} ({self.profile_role})"
+
+
+# -----------------------
+# Customer Table
+# -----------------------
+class Customer(models.Model):
+    customer_number = models.CharField(max_length=64, unique=True)
+    customer_name = models.CharField(max_length=255)
+    customer_address = models.TextField(blank=True, null=True)
+    customer_vehicle = models.CharField(max_length=255, blank=True, null=True)
+    customer_license_plate = models.CharField(max_length=32, blank=True, null=True)
+    customer_kilometers = models.PositiveIntegerField(blank=True, null=True)
+    customer_created_at = models.DateTimeField(auto_now_add=True)
+    customer_updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.customer_name} ({self.customer_number})"
+
+
+# -----------------------
+# Diagnose Table
+# -----------------------
+class Diagnose(models.Model):
+    diagnose_id = models.AutoField(primary_key=True)  # explicit primary key
+    diagnose_title = models.CharField(max_length=255, unique=True)
+    diagnose_default_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    diagnose_created_at = models.DateTimeField(auto_now_add=True)
+    diagnose_updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.diagnose_title
+
+
+# -----------------------
+# Invoice Table
+# -----------------------
+class Invoice(models.Model):
+    invoice_no = models.CharField(max_length=64, unique=True)
+    invoice_customer_id = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name="invoices")
+    invoice_order_date = models.DateField()
+    invoice_service_date = models.DateField()
+    invoice_subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    invoice_vat_percent = models.DecimalField(max_digits=5, decimal_places=2, default=19.00)
+    invoice_vat_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    invoice_total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    invoice_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
+    invoice_notes = models.TextField(blank=True, null=True)
+    invoice_created_at = models.DateTimeField(auto_now_add=True)
+    invoice_updated_at = models.DateTimeField(auto_now=True)
+
+    def recalc_totals(self):
+        items = self.items.all()
+        subtotal = sum([item.invoice_item_line_total for item in items])
+        self.invoice_subtotal = round(subtotal, 2)
+        self.invoice_vat_amount = round(subtotal * (self.invoice_vat_percent / 100), 2)
+        self.invoice_total = round(self.invoice_subtotal + self.invoice_vat_amount, 2)
+        self.save()
+
+    def __str__(self):
+        return self.invoice_no
+
+
+# -----------------------
+# InvoiceItem Table
+# # -----------------------
+
+
+
+
+
+class InvoiceItem(models.Model):
+    invoice_item_invoice_id = models.ForeignKey(
+        'Invoice',
+        on_delete=models.CASCADE,
+        related_name='items'
+    )
+
+    invoice_item_pos = models.PositiveIntegerField(editable=False)
+
+    # THIS IS THE DROPDOWN (FK)
+    invoice_item_diagnose_id = models.ForeignKey(
+        'Diagnose',
+        on_delete=models.PROTECT,
+        verbose_name="Diagnose Text",
+        help_text="Select diagnose from predefined list"
+    )
+
+    # OPTIONAL snapshot text (for invoices / PDF safety)
+    invoice_item_diagnose_text = models.CharField(
+        max_length=255,
+        editable=False
+    )
+
+    invoice_item_quantity = models.PositiveIntegerField(default=1)
+    invoice_item_unit_price = models.DecimalField(max_digits=10, decimal_places=2)
+    invoice_item_line_total = models.DecimalField(max_digits=10, decimal_places=2)
+    invoice_item_created_at = models.DateTimeField(auto_now_add=True)
+    invoice_item_updated_at = models.DateTimeField(auto_now=True)
+
+
+    def save(self, *args, **kwargs):
+        # Auto position per invoice
+        if not self.invoice_item_pos:
+            last_pos = (
+                InvoiceItem.objects
+                .filter(invoice_item_invoice_id=self.invoice_item_invoice_id)
+                .aggregate(models.Max('invoice_item_pos'))
+                .get('invoice_item_pos__max')
+            )
+            self.invoice_item_pos = (last_pos or 0) + 1
+
+        # Snapshot diagnose text
+        self.invoice_item_diagnose_text = self.invoice_item_diagnose_id.diagnose_title
+
+        # Calculate line total
+        self.invoice_item_line_total = (
+            self.invoice_item_quantity * self.invoice_item_unit_price
+        )
+
+        super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['invoice_item_pos']
+
+        
+    # def save(self, *args, **kwargs):
+    #     # snapshot diagnose text
+    #     self.invoice_item_diagnose_text = self.invoice_item_diagnose_id.diagnose_title
+    #     self.invoice_item_line_total = (
+    #         self.invoice_item_quantity * self.invoice_item_unit_price
+    #     )
+    #     super().save(*args, **kwargs)
+
+    # def __str__(self):
+    #     return f"{self.invoice_item_pos} - {self.invoice_item_diagnose_text}"
+
+
+
+
+
+ 
+
+```
