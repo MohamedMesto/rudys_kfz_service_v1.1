@@ -25,9 +25,14 @@ from invoices.views import home_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
-    path('api/', include('invoices.api_urls')),  # <--- API endpoints
-    path('invoices/', include('invoices.urls')),          # optional frontend views
+
+    # <--- API endpoints
+    path('api/', include('invoices.api_urls')),  
+
+    # optional frontend views
     path('companies/', include('invoices.urls_companies', namespace='companies')),
     path('customers/', include('invoices.urls_customers', namespace='customers')),
     path('diagnoses/', include('invoices.urls_diagnoses', namespace='diagnoses')),
+    path("invoices/", include("invoices.urls_invoices", namespace="invoices")),
+
 ]

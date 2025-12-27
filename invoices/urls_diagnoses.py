@@ -1,5 +1,5 @@
 from django.urls import path
-from .views_diagnosis import (
+from .views_diagnoses import (
     DiagnosisListView,
     DiagnosisCreateView,
     DiagnosisUpdateView,

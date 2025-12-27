@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Firma{% endblock %}
+{% block title %}Diagnose{% endblock %}
 
 {% block content %}
-<h2>{% if object %}Firma bearbeiten{% else %}Neue Diagnose{% endif %}</h2>
+<h2>{% if object %}Diagnose bearbeiten{% else %}Neue Diagnose{% endif %}</h2>
 
 <form method="post" class="mt-3">
     {% csrf_token %}

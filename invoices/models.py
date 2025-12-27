@@ -71,6 +71,7 @@ class Diagnosis(models.Model):
 
     class Meta:
         verbose_name = "diagnose"
+        verbose_name_plural = "Diagnosen"
 
     def __str__(self):
         return self.diagnosis_title
@@ -81,9 +82,9 @@ class Diagnosis(models.Model):
 # -----------------------
 class Invoice(models.Model):
     invoice_no = models.CharField(max_length=64, unique=True)
-    invoice_customer_id = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name="invoices")
-    invoice_order_date = models.DateField()
-    invoice_service_date = models.DateField()
+    invoice_customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name="invoices")
+    invoice_order_date = models.DateField(default=timezone.now)
+    invoice_service_date = models.DateField(default=timezone.now)
     invoice_subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     invoice_vat_percent = models.DecimalField(max_digits=5, decimal_places=2, default=19.00)
     invoice_vat_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
@@ -95,11 +96,22 @@ class Invoice(models.Model):
 
     def recalc_totals(self):
         items = self.items.all()
-        subtotal = sum([item.invoice_item_line_total for item in items])
+        subtotal = sum(item.invoice_item_line_total for item in items)
+
         self.invoice_subtotal = round(subtotal, 2)
-        self.invoice_vat_amount = round(subtotal * (self.invoice_vat_percent / 100), 2)
-        self.invoice_total = round(self.invoice_subtotal + self.invoice_vat_amount, 2)
-        self.save()
+        self.invoice_vat_amount = round(
+            subtotal * (self.invoice_vat_percent / 100), 2
+        )
+        self.invoice_total = round(
+            self.invoice_subtotal + self.invoice_vat_amount, 2
+        )
+
+        Invoice.objects.filter(pk=self.pk).update(
+            invoice_subtotal=self.invoice_subtotal,
+            invoice_vat_amount=self.invoice_vat_amount,
+            invoice_total=self.invoice_total
+        )
+
 
     def __str__(self):
         return self.invoice_no
@@ -114,17 +126,17 @@ class Invoice(models.Model):
 
 
 class InvoiceItem(models.Model):
-    invoice_item_invoice_id = models.ForeignKey(
-        'Invoice',
+    invoice_item_invoice = models.ForeignKey(
+        Invoice,
         on_delete=models.CASCADE,
         related_name='items'
     )
 
-    invoice_item_pos = models.PositiveIntegerField(editable=False)
+    invoice_item_pos = models.PositiveIntegerField(editable=False, null=True)
 
     # THIS IS THE DROPDOWN (FK)
-    invoice_item_diagnosis_id = models.ForeignKey(
-        'Diagnosis',
+    invoice_item_diagnosis = models.ForeignKey(
+        Diagnosis,
         on_delete=models.PROTECT,
         verbose_name="Diagnosis Text",
         help_text="Select diagnosis from predefined list"
@@ -142,13 +154,15 @@ class InvoiceItem(models.Model):
     invoice_item_created_at = models.DateTimeField(auto_now_add=True)
     invoice_item_updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['invoice_item_pos']
 
     def save(self, *args, **kwargs):
         # Auto position per invoice
         if not self.invoice_item_pos:
             last_pos = (
                 InvoiceItem.objects
-                .filter(invoice_item_invoice_id=self.invoice_item_invoice_id)
+                .filter(invoice_item_invoice=self.invoice_item_invoice)
                 .aggregate(models.Max('invoice_item_pos'))
                 .get('invoice_item_pos__max')
             )
@@ -164,8 +178,8 @@ class InvoiceItem(models.Model):
 
         super().save(*args, **kwargs)
 
-    class Meta:
-        ordering = ['invoice_item_pos']
+        # Recalculate invoice totals AFTER saving item
+        self.invoice_item_invoice.recalc_totals()
 
         
     # def save(self, *args, **kwargs):
