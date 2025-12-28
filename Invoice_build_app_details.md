@@ -1,7 +1,4 @@
-CREATE superUSER un2050_kfz_mesto WITH PASSWORD 'KFZ_Nice_work$$999';
-
-
-
+ 
 
 
 from django.contrib.auth import get_user_model
@@ -3448,3 +3445,43 @@ python manage.py check
 
 ✔ No warnings
 ✔ No namespace conflicts
+
+
+# #####################################################################
+
+I added a button 
+                <li class="nav-item"><a class="nav-link" href="#">vollständige Rechnungen</a></li>
+ToDo: 
+uder this button we able to create vollständige Rechnungen . i.e.: 
+1- Invoice no:
+2-Invoice customer: dropdown from other table 
+3- Invoice order date: 
+4- Invoice service date:
+5- Tax & Totals (calculation from down)
+6- Invoice subtotal: 160.00
+7- Invoice vat percent: 19.00
+8- Invoice vat amount:30.40
+9- Invoice total: 190.40
+Sonstiges
+10- Invoice notes:
+11- Invoice created by: dropdown from other table
+12- Invoice created at: Automatic
+13- Invoice updated at:Automatic
+INVOICE ITEMS from INVOICE ITEMS table 
+
+we need here a js to create a new row 
+1-  INVOICE ITEM POS |  Diagnose( DIAGNOSIS TEXT dropdown from diagnose table ) |  Menge FE (INVOICE ITEM QUANTITY backend) | Einzelprei (€) INVOICE ITEM UNIT PRICE  |INVOICE ITEM LINE TOTAL  Summe (€)
+1-  1 |  	Zahnriemensatz wurde erneuert |  1|50  | 50
+1-  2 |  	Ölfilter / Motoröl 5 W 30/Kühlerfrostschutz 4 Liter | 2 | 50 |100
+1-  3 |  	Ventildeckel +Dichtungen /Kraftstoffleitung obere Instandgesetzt |  2 | 30 | 60
+ 
+ 
++ Add another Invoice item
+ 
+
+SAVE
+
+Save and add another
+
+Save and continue editing
+ 

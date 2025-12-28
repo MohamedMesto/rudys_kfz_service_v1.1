@@ -180,19 +180,7 @@ class InvoiceItem(models.Model):
 
         # Recalculate invoice totals AFTER saving item
         self.invoice_item_invoice.recalc_totals()
-
-        
-    # def save(self, *args, **kwargs):
-    #     # snapshot diagnosis text
-    #     self.invoice_item_diagnosis_text = self.invoice_item_diagnosis_id.diagnosis_title
-    #     self.invoice_item_line_total = (
-    #         self.invoice_item_quantity * self.invoice_item_unit_price
-    #     )
-    #     super().save(*args, **kwargs)
-
-    # def __str__(self):
-    #     return f"{self.invoice_item_pos} - {self.invoice_item_diagnosis_text}"
-
+ 
 
 
 

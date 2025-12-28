@@ -1,10 +1,3 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-
-@login_required
-def home_view(request):
-    return render(request, "invoices/home.html")
-
 # invoices/views_invoice_full.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
