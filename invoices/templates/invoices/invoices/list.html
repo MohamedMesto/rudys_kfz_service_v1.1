@@ -17,20 +17,34 @@
 <table class="table table-bordered table-striped">
     <thead class="table-dark">
         <tr>
-            <th>Nummer</th>
+            <th>Rechnungsnummer</th>
             <th>Kunde</th>
-            <th>Datum</th>
-            <th>Gesamt (€)</th>
+            <th>Auftragsdatum</th>
+            <th>Leistungsdatum</th>
+            <th>Gesamtbetrag (€)</th>
             <th>Aktionen</th>
         </tr>
     </thead>
     <tbody>
         {% for invoice in invoices %}
         <tr>
-            <td>{{ invoice.invoice_no }}</td>
-            <td>{{ invoice.invoice_customer_id }}</td>
-            <td>{{ invoice.invoice_order_date }}</td>
-            <td>{{ invoice.invoice_total }}</td>
+ <td>{{ invoice.invoice_no }}</td>
+
+        <td>
+            {{ invoice.invoice_customer.customer_name }}
+        </td>
+
+        <td>
+            {{ invoice.invoice_order_date|date:"d.m.Y" }}
+        </td>
+
+        <td>
+            {{ invoice.invoice_service_date|date:"d.m.Y" }}
+        </td>
+
+        <td>
+            {{ invoice.invoice_total }}
+        </td>
             <td>
                 <a href="{% url 'invoices:update' invoice.pk %}" class="btn btn-sm btn-warning">
                     Bearbeiten

@@ -15,34 +15,34 @@
         <!-- HEADER LEFT: COMPANY INFO -->
         <div class="col-md-6">
             {% if company %}
-                <strong>{{ company.company_name }}</strong><br>
-                {{ company.company_address }}<br>
+            <strong>{{ company.company_name }}</strong><br>
+            {{ company.company_address }}<br>
 
-                {% if company.company_phone %}
-                   <strong>Handy:</strong>  {{ company.company_phone }}<br>
-                {% endif %}
+            {% if company.company_phone %}
+            <strong>Handy:</strong> {{ company.company_phone }}<br>
+            {% endif %}
 
-                {% if company.company_email %}
-                  <strong>E-Mail:</strong>   {{ company.company_email }}<br>
-                {% endif %}
+            {% if company.company_email %}
+            <strong>E-Mail:</strong> {{ company.company_email }}<br>
+            {% endif %}
 
-                {% if company.company_website %}
-                  <strong>Webseite:</strong>  {{ company.company_website }}
+            {% if company.company_website %}
+            <strong>Webseite:</strong> {{ company.company_website }}
+            {% endif %}
+            {% else %}
+            <div class="alert alert-warning">
+                <strong>Keine Firma vorhanden.</strong><br>
+                Bitte legen Sie zuerst eine Firma an, um eine Rechnung erstellen zu können.
+                <br><br>
+                {% if user.is_superuser %}
+                <a href="{% url 'companies:create' %}" class="btn btn-sm btn-primary">
+                    Firma anlegen
+                </a>
+                {% else %}
+                <em>Bitte wenden Sie sich an einen Administrator.</em>
                 {% endif %}
-{% else %}
-    <div class="alert alert-warning">
-        <strong>Keine Firma vorhanden.</strong><br>
-        Bitte legen Sie zuerst eine Firma an, um eine Rechnung erstellen zu können.
-        <br><br>
-        {% if user.is_superuser %}
-            <a href="{% url 'companies:create' %}" class="btn btn-sm btn-primary">
-                Firma anlegen
-            </a>
-        {% else %}
-            <em>Bitte wenden Sie sich an einen Administrator.</em>
-        {% endif %}
-    </div>
-{% endif %}
+            </div>
+            {% endif %}
 
         </div>
 
