@@ -169,7 +169,7 @@ class InvoiceItem(models.Model):
             self.invoice_item_pos = (last_pos or 0) + 1
 
         # Snapshot diagnosis text
-        self.invoice_item_diagnosis_text = self.invoice_item_diagnosis_id.diagnosis_title
+        self.invoice_item_diagnosis_text = self.invoice_item_diagnosis.diagnosis_title
 
         # Calculate line total
         self.invoice_item_line_total = (

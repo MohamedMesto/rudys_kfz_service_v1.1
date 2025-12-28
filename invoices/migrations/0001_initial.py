@@ -89,7 +89,7 @@ class Migration(migrations.Migration):
                 ('invoice_item_line_total', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('invoice_item_created_at', models.DateTimeField(auto_now_add=True)),
                 ('invoice_item_updated_at', models.DateTimeField(auto_now=True)),
-                ('invoice_item_diagnosis_id', models.ForeignKey(help_text='Select diagnosis from predefined list', on_delete=django.db.models.deletion.PROTECT, to='invoices.diagnosis', verbose_name='Diagnosis Text')),
+                ('invoice_item_diagnosis', models.ForeignKey(help_text='Select diagnosis from predefined list', on_delete=django.db.models.deletion.PROTECT, to='invoices.diagnosis', verbose_name='Diagnosis Text')),
                 ('invoice_item_invoice_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='invoices.invoice')),
             ],
             options={

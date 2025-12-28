@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
         ),
         migrations.RenameField(
             model_name='invoiceitem',
-            old_name='invoice_item_diagnosis_id',
+            old_name='invoice_item_diagnosis',
             new_name='invoice_item_diagnosis',
         ),
         migrations.RenameField(

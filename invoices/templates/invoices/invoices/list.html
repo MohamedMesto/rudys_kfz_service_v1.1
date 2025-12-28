@@ -3,19 +3,19 @@
 {% block title %}Rechnungen - Rudy's KFZ Service{% endblock %}
 
 {% block content %}
- 
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Rechnungen</h2>
     {% if user.is_superuser %}
-        <a href="{% url 'invoices:create' %}" class="btn btn-primary">
-            Neue Rechnung anlegen
-        </a>
+    <a href="{% url 'invoices:create' %}" class="btn btn-primary">
+        Neue Rechnung anlegen
+    </a>
     {% endif %}
 </div>
 
 
-<table class="table table-striped">
-    <thead>
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
         <tr>
             <th>Nummer</th>
             <th>Kunde</th>
@@ -27,12 +27,12 @@
     <tbody>
         {% for invoice in invoices %}
         <tr>
-            <td>{{ invoice.invoice_number }}</td>
-            <td>{{ invoice.invoice_customer }}</td>
-            <td>{{ invoice.invoice_date }}</td>
-            <td>{{ invoice.invoice_total_gross }}</td>
+            <td>{{ invoice.invoice_no }}</td>
+            <td>{{ invoice.invoice_customer_id }}</td>
+            <td>{{ invoice.invoice_order_date }}</td>
+            <td>{{ invoice.invoice_total }}</td>
             <td>
-                <a href="{% url 'invoices:update' invoice.pk %}" class="btn btn-sm btn-primary">
+                <a href="{% url 'invoices:update' invoice.pk %}" class="btn btn-sm btn-warning">
                     Bearbeiten
                 </a>
                 <a href="{% url 'invoices:delete' invoice.pk %}" class="btn btn-sm btn-danger">

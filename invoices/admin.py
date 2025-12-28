@@ -22,7 +22,7 @@ class InvoiceItemInline(admin.TabularInline):
     # SHOW ONLY WHAT USER SHOULD SEE
     fields = (
         'invoice_item_pos',
-        'invoice_item_diagnosis_id',  # 👈 dropdown
+        'invoice_item_diagnosis',  # 👈 dropdown
         'invoice_item_quantity',
         'invoice_item_unit_price',
         'invoice_item_line_total',
@@ -33,14 +33,14 @@ class InvoiceItemInline(admin.TabularInline):
         'invoice_item_line_total',)
 
     # UX improvement
-    autocomplete_fields = ('invoice_item_diagnosis_id',)
+    autocomplete_fields = ('invoice_item_diagnosis',)
     
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
         # Rename the FK field label
         formset.form.base_fields[
-            'invoice_item_diagnosis_id'
+            'invoice_item_diagnosis'
         ].label = "Diagnosis Text"
         return formset
 
@@ -111,8 +111,8 @@ class DiagnosisAdmin(admin.ModelAdmin):
 # -----------------------------
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
-    list_display = ("invoice_no", "invoice_customer_id", "invoice_total", "invoice_order_date")
-    search_fields = ("invoice_no", "invoice_customer_id__customer_name")
+    list_display = ("invoice_no", "invoice_customer", "invoice_total", "invoice_order_date")
+    search_fields = ("invoice_no", "invoice_customer__customer_name")
     list_filter = ("invoice_order_date", "invoice_service_date")
     readonly_fields = (
         "invoice_subtotal",
@@ -128,7 +128,7 @@ class InvoiceAdmin(admin.ModelAdmin):
         ("Rechnungsdaten", {
             "fields": (
                 "invoice_no",
-                "invoice_customer_id",
+                "invoice_customer",
                 "invoice_order_date",
                 "invoice_service_date",
             )

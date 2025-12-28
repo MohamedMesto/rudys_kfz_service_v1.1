@@ -3439,3 +3439,12 @@ I recommend **in this order**:
 
 Tell me the number 👉
 
+🧪 Verification Checklist
+
+Run:
+```
+python manage.py check
+```
+
+✔ No warnings
+✔ No namespace conflicts

@@ -34,5 +34,4 @@ urlpatterns = [
     path('customers/', include('invoices.urls_customers', namespace='customers')),
     path('diagnoses/', include('invoices.urls_diagnoses', namespace='diagnoses')),
     path("invoices/", include("invoices.urls_invoices", namespace="invoices")),
-
 ]
