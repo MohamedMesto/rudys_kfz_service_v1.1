@@ -1,0 +1,11 @@
+table {
+    table-layout: auto;
+}
+
+
+
+td { 
+    white-space: nowrap;  /* Keep content in one line */
+    overflow: hidden;     /* Hide overflow */
+    text-overflow: ellipsis; /* Show ... if too long */
+}

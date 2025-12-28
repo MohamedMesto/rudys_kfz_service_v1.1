@@ -1,4 +1,7 @@
- 
+CREATE superUSER un2050_kfz_mesto WITH PASSWORD 'KFZ_Nice_work$$999';
+
+
+
 
 
 from django.contrib.auth import get_user_model

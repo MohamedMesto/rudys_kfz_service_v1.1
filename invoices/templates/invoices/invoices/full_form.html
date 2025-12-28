@@ -1,80 +1,64 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}Vollständige Rechnung{% endblock %}
+{% block title %}Rechnung{% endblock %}
 
 {% block content %}
-<h2>Vollständige Rechnung erstellen</h2>
 
-<form method="post">
+<form method="post" class="mt-3">
     {% csrf_token %}
-    <fieldset class="mb-3">
-        {{ form.as_p }}
-    </fieldset>
 
-    <h4>Rechnungspositionen</h4>
-    <table class="table" id="invoice-items-table">
-        <thead>
-            <tr>
-                <th>POS</th>
-                <th>Diagnose</th>
-                <th>Menge</th>
-                <th>Einzelpreis (€)</th>
-                <th>Summe (€)</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for form in formset %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ form.invoice_item_diagnosis }}</td>
-                <td>{{ form.invoice_item_quantity }}</td>
-                <td>{{ form.invoice_item_unit_price }}</td>
-                <td class="line-total">0.00</td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm remove-row">-</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <!-- ========================= -->
+    <!-- HEADER – LEVEL 1          -->
+    <!-- ========================= -->
+    <div class="row mb-4">
+        <!-- HEADER LEFT: COMPANY INFO -->
+        <div class="col-md-6">
+            {% if company %}
+                <strong>{{ company.company_name }}</strong><br>
+                {{ company.company_address }}<br>
 
-    <button type="button" class="btn btn-secondary" id="add-item">+ Add another Invoice item</button>
+                {% if company.company_phone %}
+                    Handy: {{ company.company_phone }}<br>
+                {% endif %}
 
-    <div class="mt-3">
-        <button type="submit" class="btn btn-primary">Save</button>
+                {% if company.company_email %}
+                    E-Mail: {{ company.company_email }}<br>
+                {% endif %}
+
+                {% if company.company_website %}
+                    {{ company.company_website }}
+                {% endif %}
+            {% else %}
+                <em>Keine Firma hinterlegt</em>
+            {% endif %}
+        </div>
+
+        <!-- HEADER RIGHT: INVOICE META (NEXT STEP) -->
+        <div class="col-md-6 text-end">
+            <!-- Step 2 will go here -->
+        </div>
     </div>
+
+    <!-- ========================= -->
+    <!-- HEADER – LEVEL 2          -->
+    <!-- CUSTOMER INFO (NEXT)      -->
+    <!-- ========================= -->
+
+    <!-- ========================= -->
+    <!-- CONTENT – LEVEL 1         -->
+    <!-- INVOICE ITEMS (EXISTING)  -->
+    <!-- ========================= -->
+
+    <!-- ========================= -->
+    <!-- CONTENT – LEVEL 2         -->
+    <!-- TOTALS / VAT              -->
+    <!-- ========================= -->
+
+    <!-- ========================= -->
+    <!-- FOOTER                    -->
+    <!-- NOTES / BANK / SIGNATURE  -->
+    <!-- ========================= -->
+
 </form>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const table = document.getElementById("invoice-items-table").querySelector("tbody");
-    const addBtn = document.getElementById("add-item");
-
-    addBtn.addEventListener("click", function() {
-        const newRow = document.createElement("tr");
-        const rowCount = table.rows.length + 1;
-        newRow.innerHTML = `
-            <td>${rowCount}</td>
-            <td><select name="invoiceitem-${rowCount}-invoice_item_diagnosis" class="form-select">
-                {% for d in diagnoses %}
-                <option value="{{ d.pk }}">{{ d.diagnosis_title }}</option>
-                {% endfor %}
-            </select></td>
-            <td><input type="number" name="invoiceitem-${rowCount}-invoice_item_quantity" class="form-control" value="1"></td>
-            <td><input type="number" step="0.01" name="invoiceitem-${rowCount}-invoice_item_unit_price" class="form-control" value="0"></td>
-            <td class="line-total">0.00</td>
-            <td><button type="button" class="btn btn-danger btn-sm remove-row">-</button></td>
-        `;
-        table.appendChild(newRow);
-    });
-
-    table.addEventListener("click", function(e) {
-        if(e.target.classList.contains("remove-row")) {
-            e.target.closest("tr").remove();
-        }
-    });
-});
-</script>
 
 {% endblock %}
