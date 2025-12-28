@@ -1,3 +1,4 @@
+<!-- rudys_kfz_service_v1.1/invoices/templates/invoices/invoices/full_form.html -->
 {% extends "base.html" %}
 
 {% block title %}Rechnung{% endblock %}
@@ -18,19 +19,31 @@
                 {{ company.company_address }}<br>
 
                 {% if company.company_phone %}
-                    Handy: {{ company.company_phone }}<br>
+                   <strong>Handy:</strong>  {{ company.company_phone }}<br>
                 {% endif %}
 
                 {% if company.company_email %}
-                    E-Mail: {{ company.company_email }}<br>
+                  <strong>E-Mail:</strong>   {{ company.company_email }}<br>
                 {% endif %}
 
                 {% if company.company_website %}
-                    {{ company.company_website }}
+                  <strong>Webseite:</strong>  {{ company.company_website }}
                 {% endif %}
-            {% else %}
-                <em>Keine Firma hinterlegt</em>
-            {% endif %}
+{% else %}
+    <div class="alert alert-warning">
+        <strong>Keine Firma vorhanden.</strong><br>
+        Bitte legen Sie zuerst eine Firma an, um eine Rechnung erstellen zu können.
+        <br><br>
+        {% if user.is_superuser %}
+            <a href="{% url 'companies:create' %}" class="btn btn-sm btn-primary">
+                Firma anlegen
+            </a>
+        {% else %}
+            <em>Bitte wenden Sie sich an einen Administrator.</em>
+        {% endif %}
+    </div>
+{% endif %}
+
         </div>
 
         <!-- HEADER RIGHT: INVOICE META (NEXT STEP) -->

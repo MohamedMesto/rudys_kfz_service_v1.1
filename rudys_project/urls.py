@@ -15,8 +15,7 @@ Including another URLconf
 """
  
  
-
- 
+#  rudys_kfz_service_v1.1/rudys_project/urls.py
 
 from django.contrib import admin
 from django.urls import path, include

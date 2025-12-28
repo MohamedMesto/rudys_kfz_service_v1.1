@@ -5,8 +5,7 @@ from .views_invoices import (
     InvoiceUpdateView,
     InvoiceDeleteView,
 )
-from .views import invoice_create_view
-
+from .views_invoice_full import invoice_create_view
 app_name = "invoices"
 
 urlpatterns = [
