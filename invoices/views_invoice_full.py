@@ -4,7 +4,12 @@ from django.contrib.auth.decorators import login_required
 from .models import Invoice, Company
 from .forms_invoice import InvoiceForm, InvoiceItemFormSet
 from django.contrib import messages
- 
+from django.http import JsonResponse
+
+
+
+
+
 @login_required
 def invoice_create_view(request):
     
@@ -37,3 +42,10 @@ def invoice_create_view(request):
     })
 
     
+@login_required
+def get_invoice_data(request, pk):
+    invoice = Invoice.objects.get(pk=pk)
+    return JsonResponse({
+        'invoice_order_date': invoice.invoice_order_date.strftime('%Y-%m-%d'),
+        'invoice_service_date': invoice.invoice_service_date.strftime('%Y-%m-%d'),
+    })

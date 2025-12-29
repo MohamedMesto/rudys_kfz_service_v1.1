@@ -45,30 +45,17 @@
             {% endif %}
 
         </div>
-        <!-- HEADER RIGHT: INVOICE META -->
-        <div class="col-md-6 d-flex justify-content-end">
-            <table class="table table-sm table-borderless w-auto">
-                <tr>
-                    <th class="text-end">Rechnungsnummer:</th>
-                    <td>{{ form.invoice_no }}</td>
-                </tr>
-                <tr>
-                    <th class="text-end">Auftragsdatum:</th>
-                    <td>{{ form.invoice_order_date }}</td>
-                </tr>
-                <tr>
-                    <th class="text-end">Leistungsdatum:</th>
-                    <td>{{ form.invoice_service_date }}</td>
-                </tr>
-                
-            </table>
-            <a href="{% url 'invoices:create' %}" class="btn btn-sm btn-primary mt-1">+ Neue Rechnung</a>
 
+        <!-- HEADER RIGHT: INVOICE META (NEXT STEP) -->
+        <div class="col-md-6 text-end">
+            <!-- Step 2 will go here -->
         </div>
+    </div>
 
-    </div> 
-
-
+    <!-- ========================= -->
+    <!-- HEADER – LEVEL 2          -->
+    <!-- CUSTOMER INFO (NEXT)      -->
+    <!-- ========================= -->
 
     <!-- ========================= -->
     <!-- CONTENT – LEVEL 1         -->
@@ -88,10 +75,3 @@
 </form>
 
 {% endblock %}
-
-
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="js/invoice_dropdown.js"></script> -->
- 

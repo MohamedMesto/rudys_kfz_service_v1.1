@@ -3,7 +3,20 @@ from django import forms
 from django.forms import inlineformset_factory
 from .models import Invoice, InvoiceItem
 
+      # -------------------------
+    # Make invoice_no a dropdown
+    # -------------------------
 class InvoiceForm(forms.ModelForm):
+    invoice_no = forms.ModelChoiceField(
+        queryset=Invoice.objects.all(),
+        empty_label="Rechnung auswählen",
+        required=False,
+        widget=forms.Select(attrs={
+            "id": "invoice-select",
+            "class": "form-select"
+        })
+    )
+
     class Meta:
         model = Invoice
         fields = [
@@ -16,10 +29,19 @@ class InvoiceForm(forms.ModelForm):
             "invoice_created_by",
         ]
         widgets = {
-            "invoice_order_date": forms.DateInput(attrs={"type": "date"}),
-            "invoice_service_date": forms.DateInput(attrs={"type": "date"}),
+            "invoice_order_date": forms.DateInput(attrs={
+                "type": "date",
+                "class": "form-control"
+            }),
+            "invoice_service_date": forms.DateInput(attrs={
+                "type": "date",
+                "class": "form-control"
+            }),
         }
 
+# -------------------------
+# Inline Formset for items
+# -------------------------
 InvoiceItemFormSet = inlineformset_factory(
     Invoice,
     InvoiceItem,

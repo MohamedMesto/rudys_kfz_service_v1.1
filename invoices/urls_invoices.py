@@ -1,3 +1,5 @@
+# rudys_kfz_service_v1.1/invoices/urls_invoices.py
+
 from django.urls import path
 from .views_invoices import (
     InvoiceListView,
@@ -5,7 +7,9 @@ from .views_invoices import (
     InvoiceUpdateView,
     InvoiceDeleteView,
 )
-from .views_invoice_full import invoice_create_view
+from .views_invoice_full import invoice_create_view,get_invoice_data
+ 
+
 app_name = "invoices"
 
 urlpatterns = [
@@ -15,5 +19,8 @@ urlpatterns = [
     path("<int:pk>/delete/", InvoiceDeleteView.as_view(), name="delete"),
     # invoices/urls_invoices.py
     path("full-create/", invoice_create_view, name="full_create"),
+
+    path('get-invoice-data/<int:pk>/', get_invoice_data, name='get_invoice_data'),
+
 
 ]
