@@ -7,7 +7,7 @@ from .views_invoices import (
     InvoiceUpdateView,
     InvoiceDeleteView,
 )
-from .views_invoice_full import invoice_create_view,get_invoice_data
+from .views_invoice_full import invoice_create_view,get_invoice_data,get_invoice_items
  
 
 app_name = "invoices"
@@ -17,10 +17,13 @@ urlpatterns = [
     path("create/", InvoiceCreateView.as_view(), name="create"),
     path("<int:pk>/update/", InvoiceUpdateView.as_view(), name="update"),
     path("<int:pk>/delete/", InvoiceDeleteView.as_view(), name="delete"),
-    # invoices/urls_invoices.py
+    # Full invoice UI
     path("full-create/", invoice_create_view, name="full_create"),
 
-    path('get-invoice-data/<int:pk>/', get_invoice_data, name='get_invoice_data'),
+
+    # AJAX
+    path("get-invoice-data/<int:pk>/", get_invoice_data, name="get_invoice_data"),
+    path("get-invoice-items/<int:pk>/", get_invoice_items, name="get_invoice_items"),
 
 
 ]
