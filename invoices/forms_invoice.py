@@ -1,7 +1,23 @@
 # invoices/forms_invoice.py
 from django import forms
 from django.forms import inlineformset_factory
-from .models import Invoice, InvoiceItem
+from .models import Invoice, InvoiceItem, Diagnosis
+
+  
+
+class InvoiceItemForm(forms.ModelForm):
+    class Meta:
+        model = InvoiceItem
+        fields = [
+            "invoice_item_diagnosis",
+            "invoice_item_quantity",
+            "invoice_item_unit_price",
+        ]
+        widgets = {
+            "invoice_item_diagnosis": forms.Select(attrs={'class': 'form-select diagnosis-select'}),
+            "invoice_item_quantity": forms.NumberInput(attrs={'class': 'form-control'}),
+            "invoice_item_unit_price": forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+        }
 
       # -------------------------
     # Make invoice_no a dropdown
@@ -53,3 +69,5 @@ InvoiceItemFormSet = inlineformset_factory(
     extra=1,
     can_delete=True
 )
+
+
