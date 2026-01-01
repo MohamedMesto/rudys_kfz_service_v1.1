@@ -15,7 +15,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const addButton = document.getElementById('add-item');
     const tableBody = document.getElementById('invoice-items-body');
     const totalFormsInput = document.querySelector('input[name$="TOTAL_FORMS"]');
-    const emptyRow = document.getElementById('empty-form-row');
+    const row = document.getElementById('empty-form-row').cloneNode(true);
+    row.classList.remove('d-none');
+    row.removeAttribute('id');
+
+    row.innerHTML = row.innerHTML.replace(/__prefix__/g, index);
+    tbody.appendChild(row);
+
 
     // -----------------------------------------------------
     // Initialize Select2 for diagnosis dropdowns

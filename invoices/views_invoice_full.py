@@ -5,7 +5,7 @@ from .models import Invoice, Company
 from .forms_invoice import InvoiceForm, InvoiceItemFormSet
 from django.contrib import messages
 from django.http import JsonResponse
-
+from decimal import Decimal
 
 @login_required
 def invoice_create_view(request):
@@ -41,14 +41,6 @@ def invoice_create_view(request):
     
 @login_required
 def get_invoice_data(request, pk):
-    invoice = Invoice.objects.get(pk=pk)
-    return JsonResponse({
-        'invoice_order_date': invoice.invoice_order_date.strftime('%Y-%m-%d'),
-        'invoice_service_date': invoice.invoice_service_date.strftime('%Y-%m-%d'),
-    })
-
-@login_required
-def get_invoice_data(request, pk):
     invoice = Invoice.objects.select_related("invoice_customer").get(pk=pk)
     customer = invoice.invoice_customer
 
@@ -66,26 +58,72 @@ def get_invoice_data(request, pk):
         "customer_kilometers": customer.customer_kilometers or "",
         "customer_created_at": customer.customer_created_at.strftime("%Y-%m-%d"),
         "customer_updated_at": customer.customer_updated_at.strftime("%Y-%m-%d"),
+
+        # totals
+        "subtotal": float(invoice.invoice_subtotal),
+        "vat_percent": float(invoice.invoice_vat_percent),
+        "vat_amount": float(invoice.invoice_vat_amount),
+        "grand_total": float(invoice.invoice_total),
     })
+
 
 @login_required
 def get_invoice_items(request, pk):
-    invoice = (
-        Invoice.objects
-        .prefetch_related("items__invoice_item_diagnosis")
-        .get(pk=pk)
-    )
+    invoice = Invoice.objects.prefetch_related(
+        "items__invoice_item_diagnosis"
+    ).get(pk=pk)
 
+    # ⚡ Ensure DB totals are fresh
+    invoice.recalc_totals()
     items_data = []
+   
+
     for item in invoice.items.all():
+        # line_total = float(item.invoice_item_quantity * item.invoice_item_unit_price)
+       
+
         items_data.append({
-            "diagnosis_id": item.invoice_item_diagnosis_id,
-            "diagnosis_text": item.invoice_item_diagnosis_text,
+            "diagnosis_id": item.invoice_item_diagnosis_id,     # ✅ KEEP
+            "diagnosis_text": item.invoice_item_diagnosis_text, # ✅ KEEP
             "quantity": item.invoice_item_quantity,
-            "unit_price": str(item.invoice_item_unit_price),
-            "line_total": str(item.invoice_item_line_total),
+            "unit_price": float(item.invoice_item_unit_price),
+            "line_total": float(item.invoice_item_line_total),
         })
 
+ 
+
     return JsonResponse({
-        "items": items_data
+        "items": items_data,
+        # ✅ USE DB FIELDS – NO CALCULATION
+
+
+        "subtotal": float(invoice.invoice_subtotal or 0),
+        "vat_percent": float(invoice.invoice_vat_percent or 0),
+        "vat_amount": float(invoice.invoice_vat_amount or 0),
+        "grand_total": float(invoice.invoice_total or 0),
+
     })
+
+
+
+# @login_required
+# def get_invoice_items(request, pk):
+#     invoice = (
+#         Invoice.objects
+#         .prefetch_related("items__invoice_item_diagnosis")
+#         .get(pk=pk)
+#     )
+
+#     items_data = []
+#     for item in invoice.items.all():
+#         items_data.append({
+#             "diagnosis_id": item.invoice_item_diagnosis_id,
+#             "diagnosis_text": item.invoice_item_diagnosis_text,
+#             "quantity": item.invoice_item_quantity,
+#             "unit_price": str(item.invoice_item_unit_price),
+#             "line_total": str(item.invoice_item_line_total),
+#         })
+
+#     return JsonResponse({
+#         "items": items_data
+#     })

@@ -3,7 +3,7 @@ from django import forms
 from django.forms import inlineformset_factory
 from .models import Invoice, InvoiceItem, Diagnosis
 
-  
+
 
 class InvoiceItemForm(forms.ModelForm):
     class Meta:
@@ -19,7 +19,7 @@ class InvoiceItemForm(forms.ModelForm):
             "invoice_item_unit_price": forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
         }
 
-      # -------------------------
+    # -------------------------
     # Make invoice_no a dropdown
     # -------------------------
 class InvoiceForm(forms.ModelForm):
@@ -61,6 +61,7 @@ class InvoiceForm(forms.ModelForm):
 InvoiceItemFormSet = inlineformset_factory(
     Invoice,
     InvoiceItem,
+    form=InvoiceItemForm,   # ✅ THIS IS THE KEY
     fields=[
         "invoice_item_diagnosis",
         "invoice_item_quantity",

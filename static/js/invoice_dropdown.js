@@ -31,24 +31,23 @@ $(document).ready(function () {
         if (!invoiceId) {
             lockInvoiceFields(false);
 
-            // Clear invoice items & unlock formset
             clearInvoiceItems();
             lockInvoiceItems(false);
 
-            // Clear dates
+            // 🔓 UNLOCK VAT FOR NEW INVOICE
+            $('#id_invoice_vat_percent').prop('disabled', false);
+
             $('#id_invoice_order_date').val('');
             $('#id_invoice_service_date').val('');
 
-            // Clear customer info
             $('#customer_number, #customer_name, #customer_address, #customer_vehicle, \
-               #customer_license_plate, #customer_kilometers, #customer_created_at, \
-               #customer_updated_at').text('—');
+                #customer_license_plate, #customer_kilometers, #customer_created_at, \
+                #customer_updated_at').text('—');
 
-            // Show add-row button again
             $('#add-item').show();
-
             return;
         }
+
 
         // ===============================
         // EXISTING INVOICE SELECTED
