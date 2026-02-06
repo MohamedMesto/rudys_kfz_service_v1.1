@@ -2,3 +2,10 @@ Invoice_project_build_details.md
 Invoice_build_app_details.md
 Invoice_details.md
 venv
+*.sqlite3
+*.pyc
+__pycache__
+env.py
+ec_products/fixtures
+commits_bk.txt
+Dealna_logo.png

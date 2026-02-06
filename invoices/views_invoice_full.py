@@ -104,26 +104,4 @@ def get_invoice_items(request, pk):
 
     })
 
-
-
-# @login_required
-# def get_invoice_items(request, pk):
-#     invoice = (
-#         Invoice.objects
-#         .prefetch_related("items__invoice_item_diagnosis")
-#         .get(pk=pk)
-#     )
-
-#     items_data = []
-#     for item in invoice.items.all():
-#         items_data.append({
-#             "diagnosis_id": item.invoice_item_diagnosis_id,
-#             "diagnosis_text": item.invoice_item_diagnosis_text,
-#             "quantity": item.invoice_item_quantity,
-#             "unit_price": str(item.invoice_item_unit_price),
-#             "line_total": str(item.invoice_item_line_total),
-#         })
-
-#     return JsonResponse({
-#         "items": items_data
-#     })
+ 
