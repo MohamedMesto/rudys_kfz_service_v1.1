@@ -1,5 +1,6 @@
 <!-- rudys_kfz_service_v1.1/templates/base.html -->
 {% load static %}
+{% load i18n %}
 <!doctype html>
 {% comment %}
 <html lang="de">
@@ -55,8 +56,7 @@
         crossorigin="anonymous"
       ></script>
 
-      <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>  -->
-
+ 
       {% block extra_js %}
       <script src="{% static 'js/invoice_dropdown.js' %}"></script>
       <script src="{% static 'js/invoice_calculation.js' %}"></script>
@@ -64,5 +64,4 @@
       <script src="{% static 'js/invoice_items_loader.js' %}"></script>
       {% endblock %}
     </body>
-  </html>
 </html>

@@ -1,6 +1,8 @@
 {% extends "base.html" %}
-
-{% block title %}{% trans "Diagnostics" %} {% endblock %}
+{% load i18n %}
+{% block title %}
+{% trans "Diagnostics" %} 
+{% endblock %}
 
 {% block content %}
 <h2>{% if object %}{% trans "Diagnostics" %} {% trans "Edit" %} {% else %} {% trans "New Diagnostics" %}{% endif %}</h2>

@@ -24,6 +24,7 @@ from invoices.views import home_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
+    path('', include('invoices.urls')),
 
     # <--- API endpoints
     path('api/', include('invoices.api_urls')),  
@@ -33,5 +34,6 @@ urlpatterns = [
     path('customers/', include('invoices.urls_customers', namespace='customers')),
     path('diagnoses/', include('invoices.urls_diagnoses', namespace='diagnoses')),
     path("invoices/", include("invoices.urls_invoices", namespace="invoices")),
+    path('i18n/', include('django.conf.urls.i18n')),   
     
 ]
