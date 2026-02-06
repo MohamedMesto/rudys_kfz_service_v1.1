@@ -16,8 +16,8 @@
     <!-- HEADER LEFT: COMPANY INFO -->
     <div class="card col-md-6">
       {% if company %}
-      <strong>{{ company.company_name }}</strong><br />
-      {{ company.company_address }}<br />
+      <strong>{% trans "Company Name:" %}</strong>{{ company.company_name }}<br />
+      <strong>{% trans "Company Adress:" %}</strong> {{ company.company_address }}<br />
 
       {% if company.company_phone %}
       <strong> {% trans "Mobile:" %}</strong> {{ company.company_phone }}<br />
@@ -89,7 +89,7 @@
 
       <div class="row mb-2">
         <div class="col-md-4">
-          <strong> {% trans "Adresse" %}</strong>
+          <strong> {% trans "Adress" %}</strong>
         </div>
         <div class="col-md-8" id="customer_address">—</div>
       </div>
