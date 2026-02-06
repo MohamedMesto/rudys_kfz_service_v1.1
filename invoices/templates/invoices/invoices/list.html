@@ -1,64 +1,57 @@
-{% extends 'base.html' %}
-
-{% block title %}Rechnungen - Rudy's KFZ Service{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% block title %}{% trans "Invoices - Rudy's KFZ
+Service" %} {% endblock %} {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Rechnungen</h2>
-    {% if user.is_superuser %}
-    <a href="{% url 'invoices:create' %}" class="btn btn-primary">
-        Neue Rechnung anlegen
-    </a>
-    {% endif %}
+  <h2>{% trans "Invoices" %}</h2>
+  {% if user.is_superuser %}
+  <a href="{% url 'invoices:create' %}" class="btn btn-primary">
+    {% trans "Create new invoice" %}
+  </a>
+  {% endif %}
 </div>
 
-
 <table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>Rechnungsnummer</th>
-            <th>Kunde</th>
-            <th>Auftragsdatum</th>
-            <th>Leistungsdatum</th>
-            <th>Gesamtbetrag (€)</th>
-            <th>Aktionen</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for invoice in invoices %}
-        <tr>
- <td>{{ invoice.invoice_no }}</td>
+  <thead class="table-dark">
+    <tr>
+      <th>{% trans "Invoice number" %}</th>
+      <th>{% trans "Customer" %}</th>
+      <th>{% trans "Order date" %}</th>
+      <th>{% trans "Service date" %}</th>
+      <th>{% trans "Total amount (€)" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for invoice in invoices %}
+    <tr>
+      <td>{{ invoice.invoice_no }}</td>
 
-        <td>
-            {{ invoice.invoice_customer.customer_name }}
-        </td>
+      <td>{{ invoice.invoice_customer.customer_name }}</td>
 
-        <td>
-            {{ invoice.invoice_order_date|date:"d.m.Y" }}
-        </td>
+      <td>{{ invoice.invoice_order_date|date:"d.m.Y" }}</td>
 
-        <td>
-            {{ invoice.invoice_service_date|date:"d.m.Y" }}
-        </td>
+      <td>{{ invoice.invoice_service_date|date:"d.m.Y" }}</td>
 
-        <td>
-            {{ invoice.invoice_total }}
-        </td>
-            <td>
-                <a href="{% url 'invoices:update' invoice.pk %}" class="btn btn-sm btn-warning">
-                    Bearbeiten
-                </a>
-                <a href="{% url 'invoices:delete' invoice.pk %}" class="btn btn-sm btn-danger">
-                    Löschen
-                </a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5" class="text-center">Keine Rechnungen vorhanden.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+      <td>{{ invoice.invoice_total }}</td>
+      <td>
+        <a
+          href="{% url 'invoices:update' invoice.pk %}"
+          class="btn btn-sm btn-warning"
+        >
+          {% trans "Edit" %} 
+        </a>
+        <a
+          href="{% url 'invoices:delete' invoice.pk %}"
+          class="btn btn-sm btn-danger"
+        >
+          {% trans "Delete" %}
+        </a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="5" class="text-center">{% trans "No invoices found." %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 {% endblock %}

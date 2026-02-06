@@ -1,70 +1,75 @@
 <!-- rudys_kfz_service_v1.1/invoices/templates/invoices/companies/list.html -->
-{% extends "base.html" %}
-
-{% block title %}Firmen{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}{% trans "Companies - Rudy's KFZ Service" %}{% endblock %} {% block
+content %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Firmen</h2>
-    {% if user.is_superuser %}
-    <a href="{% url 'companies:create' %}" class="btn btn-primary">
-        Neue Firma
-    </a>
-    {% endif %}
+  <h2>{% trans "Companies" %}</h2>
+  {% if user.is_superuser %}
+  <a href="{% url 'companies:create' %}" class="btn btn-primary">
+    {% trans "New Company" %}
+  </a>
+  {% endif %}
 </div>
 
 <table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>Name</th>
-            <th>Inhaber</th>
-            <th>Adresse</th>
-            <th>E-Mail</th>
-            <th>Telefon</th>
-            <th>Website</th>
-            <th>IBAN</th>
-            <th>Steuernr.</th>
-            <th>Aktionen</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for company in companies %}
-        <tr>
-            <td>{{ company.company_name }}</td>
-            <td>{{ company.company_owner }}</td>
-            <td class="text-truncate" style="max-width: 200px;">
-                {{ company.company_address }}
-            </td>
-            <td>
-                <a href="mailto:{{ company.company_email }}">
-                    {{ company.company_email }}
-                </a>
-            </td>
-            <td>{{ company.company_phone }}</td>
-            <td>
-                {% if company.company_website %}
-                <a href="{{ company.company_website }}" target="_blank">
-                    {{ company.company_website }}
-                </a>
-                {% endif %}
-            </td>
-            <td>{{ company.company_iban }}</td>
-            <td>{{ company.company_tax_number }}</td>
-            <td>
-                {% if user.is_superuser %}
-                <a href="{% url 'companies:edit' company.id %}" class="btn btn-sm btn-warning">Bearbeiten</a>
-                <a href="{% url 'companies:delete' company.id %}" class="btn btn-sm btn-danger">Löschen</a>
-                {% else %}
-                —
-                {% endif %}
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5" class="text-center">Keine Firmen vorhanden.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+  <thead class="table-dark">
+    <tr>
+      <th>{% trans "Name" %}</th>
+      <th>{% trans "Owner" %}</th>
+      <th>{% trans "Address" %}</th>
+      <th>{% trans "Email" %}</th>
+      <th>{% trans "Phone" %}</th>
+      <th>{% trans "Website" %}</th>
+      <th>{% trans "IBAN" %}</th>
+      <th>{% trans "Tax ID" %}</th>
+      <th>{% trans "Actions" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for company in companies %}
+    <tr>
+      <td>{{ company.company_name }}</td>
+      <td>{{ company.company_owner }}</td>
+      <td class="text-truncate" style="max-width: 200px">
+        {{ company.company_address }}
+      </td>
+      <td>
+        <a href="mailto:{{ company.company_email }}">
+          {{ company.company_email }}
+        </a>
+      </td>
+      <td>{{ company.company_phone }}</td>
+      <td>
+        {% if company.company_website %}
+        <a href="{{ company.company_website }}" target="_blank">
+          {{ company.company_website }}
+        </a>
+        {% endif %}
+      </td>
+      <td>{{ company.company_iban }}</td>
+      <td>{{ company.company_tax_number }}</td>
+      <td>
+        {% if user.is_superuser %}
+        <a
+          href="{% url 'companies:edit' company.id %}"
+          class="btn btn-sm btn-warning"
+          >{% trans "Edit" %}
+        </a>
+        <a
+          href="{% url 'companies:delete' company.id %}"
+          class="btn btn-sm btn-danger"
+          >{% trans "delete" %}</a
+        >
+        {% else %} — {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="5" class="text-center">
+        {% trans "No companies listed." %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 {% endblock %}

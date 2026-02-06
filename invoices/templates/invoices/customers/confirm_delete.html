@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Firma löschen{% endblock %}
+{% block title %}{% trans "Customer Delete" %} {% endblock %}
 
 {% block content %}
-<h2>Firma löschen</h2>
+<h2>{% trans "Customer Delete" %} </h2>
 
-<p>Möchten Sie die Firma <strong>{{ object.customer_name }}</strong> wirklich löschen?</p>
+<p> {% trans "Are you sure you want to delete the Customer" %} <strong>{{ object.customer_name }}</strong> ?</p>
 
 <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Ja, löschen</button>
-    <a href="{% url 'customers:list' %}" class="btn btn-secondary">Abbrechen</a>
+    <button type="submit" class="btn btn-danger">{% trans "Yes, Delete" %}</button>
+    <a href="{% url 'customers:list' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
 </form>
 {% endblock %}

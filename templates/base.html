@@ -1,62 +1,68 @@
 <!-- rudys_kfz_service_v1.1/templates/base.html -->
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
+{% comment %}
 <html lang="de">
+  {% endcomment %}
+  <html
+    lang="{{ LANGUAGE_CODE }}"
+    dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}"
+  >
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>{% block title %}{% trans "Rudy's Auto Service" %}{% endblock %}</title>
+      <!-- Bootstrap -->
+      <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        crossorigin="anonymous"
+      />
+      <!-- Select2 CSS -->
+      <link
+        href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+        rel="stylesheet"
+      />
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Rudy's KFZ Service{% endblock %}</title>
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    crossorigin="anonymous">
-  <!-- Select2 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      />
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+      <!-- jQuery (required for Select2) -->
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+      <!-- Select2 JS -->
+      <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-  <!-- jQuery (required for Select2) -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <!-- Global CSS -->
+      <link rel="stylesheet" href="{% static 'css/base.css' %}" />
 
+      <!-- Page-specific HEAD additions -->
+      {% block extra_head %}{% endblock %}
+    </head>
 
-  <!-- Select2 JS -->
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <body>
+      <!-- Navbar include -->
+      {% include "includes/navbar.html" %}
 
-  <!-- Global CSS -->
-  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+      <!-- Main Content -->
+      <main class="container my-4">{% block content %}{% endblock %}</main>
 
+      <!-- JS -->
+      <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.4.0/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"
+      ></script>
 
-  <!-- Page-specific HEAD additions -->
-  {% block extra_head %}{% endblock %}
-</head>
+      <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>  -->
 
-<body>
-  <!-- Navbar include -->
-  {% include "includes/navbar.html" %}
-
-  <!-- Main Content -->
-  <main class="container my-4">
-    {% block content %}{% endblock %}
-  </main>
-
-  <!-- JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.4.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
-  </script>
-
-  <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>  -->
-
-
-
-  {% block extra_js %}
-  <script src="{% static 'js/invoice_dropdown.js' %}"></script>
-  <script src="{% static 'js/invoice_calculation.js' %}"></script>
-  <script src="{% static 'js/invoice_formset.js' %}"></script>
-  <script src="{% static 'js/invoice_items_loader.js' %}"></script>
-  {% endblock %}
-
-
- 
-</body>
-
+      {% block extra_js %}
+      <script src="{% static 'js/invoice_dropdown.js' %}"></script>
+      <script src="{% static 'js/invoice_calculation.js' %}"></script>
+      <script src="{% static 'js/invoice_formset.js' %}"></script>
+      <script src="{% static 'js/invoice_items_loader.js' %}"></script>
+      {% endblock %}
+    </body>
+  </html>
 </html>

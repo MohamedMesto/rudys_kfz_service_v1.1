@@ -1,246 +1,237 @@
 <!-- rudys_kfz_service_v1.1/invoices/templates/invoices/invoices/full_form.html -->
-{% extends "base.html" %}
-
-{% block title %}Rechnung{% endblock %}
-
+{% extends "base.html" %} {% block title %}{% trans "Invoices" %}{% endblock %}
 {% block content %}
 
 <form method="post" class="mt-3">
-    {% csrf_token %}
+  {% csrf_token %}
 
-    <!-- ========================= -->
-    <!-- HEADER – LEVEL 1          -->
-    <!-- ========================= -->
-    <div class="row mb-4">
-        <!-- HEADER LEFT: COMPANY INFO -->
-        <div class=" card col-md-6">
-            {% if company %}
-            <strong>{{ company.company_name }}</strong><br>
-            {{ company.company_address }}<br>
+  <!-- ========================= -->
+  <!-- HEADER – LEVEL 1          -->
+  <!-- ========================= -->
+  <div class="row mb-4">
+    <!-- HEADER LEFT: COMPANY INFO -->
+    <div class="card col-md-6">
+      {% if company %}
+      <strong>{{ company.company_name }}</strong><br />
+      {{ company.company_address }}<br />
 
-            {% if company.company_phone %}
-            <strong>Handy:</strong> {{ company.company_phone }}<br>
-            {% endif %}
-
-            {% if company.company_email %}
-            <strong>E-Mail:</strong> {{ company.company_email }}<br>
-            {% endif %}
-
-            {% if company.company_website %}
-            <strong>Webseite:</strong> {{ company.company_website }}
-            {% endif %}
-            {% else %}
-            <div class="alert alert-warning">
-                <strong>Keine Firma vorhanden.</strong><br>
-                Bitte legen Sie zuerst eine Firma an, um eine Rechnung erstellen zu können.
-                <br><br>
-                {% if user.is_superuser %}
-                <a href="{% url 'companies:create' %}" class="btn btn-sm btn-primary">
-                    Firma anlegen
-                </a>
-                {% else %}
-                <em>Bitte wenden Sie sich an einen Administrator.</em>
-                {% endif %}
-            </div>
-            {% endif %}
-
-        </div>
-        <!-- HEADER RIGHT: INVOICE META -->
-        <div class=" card col-md-6 d-flex justify-content-end">
-            <table class="table table-sm table-borderless w-auto">
-                <tr>
-                    <th class="text-end">Rechnungsnummer:</th>
-                    <td>{{ form.invoice_no }}</td>
-                </tr>
-                <tr>
-                    <th class="text-end">Auftragsdatum:</th>
-                    <td>{{ form.invoice_order_date }}</td>
-                </tr>
-                <tr>
-                    <th class="text-end">Leistungsdatum:</th>
-                    <td>{{ form.invoice_service_date }}</td>
-                </tr>
-
-            </table>
-            <a href="{% url 'invoices:create' %}" class="btn btn-sm btn-primary mt-1">+ Neue Rechnung</a>
-
-        </div>
-
+      {% if company.company_phone %}
+      <strong> {% trans "Mobile:" %}</strong> {{ company.company_phone }}<br />
+      {% endif %} {% if company.company_email %}
+      <strong>{% trans "Email:" %}</strong> {{ company.company_email }}<br />
+      {% endif %} {% if company.company_website %}
+      <strong> {% trans "Website:" %}</strong> {{ company.company_website }} {%
+      endif %} {% else %}
+      <div class="alert alert-warning">
+        <strong>Keine {% trans "No company found. " %} </strong><br />
+        {% trans "Please create a new company first to be able to create an
+        invoice!" %}
+        <br /><br />
+        {% if user.is_superuser %}
+        <a href="{% url 'companies:create' %}" class="btn btn-sm btn-primary">
+          {% trans " Create Company" %}
+        </a>
+        {% else %}
+        <em> {% trans "Please contact an administrator." %} </em>
+        {% endif %}
+      </div>
+      {% endif %}
     </div>
-
-    <!-- ========================= -->
-    <!-- HEADER – LEVEL 2 CUSTOMER -->
-    <!-- ========================= -->
-    <div class="card mb-4">
-        <div class="card-header bg-success p-2 text-white bg-opacity-90 fw-bold">
-            Kundendaten
-        </div>
-        <div class="card-body">
-            <div class="row mb-2">
-                <div class="col-md-4"><strong>Kundennummer:</strong></div>
-                <div class="col-md-8" id="customer_number">—</div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-md-4"><strong>Name:</strong></div>
-                <div class="col-md-8" id="customer_name">—</div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-md-4"><strong>Adresse:</strong></div>
-                <div class="col-md-8" id="customer_address">—</div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-md-4"><strong>Fahrzeug:</strong></div>
-                <div class="col-md-8" id="customer_vehicle">—</div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-md-4"><strong>Kennzeichen:</strong></div>
-                <div class="col-md-8" id="customer_license_plate">—</div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-md-4"><strong>Kilometerstand:</strong></div>
-                <div class="col-md-8" id="customer_kilometers">—</div>
-            </div>
-
-            <hr>
-
-            <div class="row mb-2">
-                <div class="col-md-4"><strong>Erstellt am:</strong></div>
-                <div class="col-md-8" id="customer_created_at">—</div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4"><strong>Aktualisiert am:</strong></div>
-                <div class="col-md-8" id="customer_updated_at">—</div>
-            </div>
-        </div>
+    <!-- HEADER RIGHT: INVOICE META -->
+    <div class="card col-md-6 d-flex justify-content-end">
+      <table class="table table-sm table-borderless w-auto">
+        <tr>
+          <th class="text-end">{% trans "Invoice Number:" %}</th>
+          <td>{{ form.invoice_no }}</td>
+        </tr>
+        <tr>
+          <th class="text-end">{% trans "Order Date:" %}</th>
+          <td>{{ form.invoice_order_date }}</td>
+        </tr>
+        <tr>
+          <th class="text-end">{% trans " Service Date:" %}</th>
+          <td>{{ form.invoice_service_date }}</td>
+        </tr>
+      </table>
+      <a href="{% url 'invoices:create' %}" class="btn btn-sm btn-primary mt-1"
+        >{% trans "+ New Invoice" %}
+      </a>
     </div>
+  </div>
 
-
-    <!-- ========================= -->
-    <!-- CONTENT – LEVEL 1         -->
-    <!-- INVOICE ITEMS (EXISTING)  -->
-    <!-- ========================= -->
-
-
-    <div class="card mb-4">
-        <div class="card-header bg-success p-2 text-white bg-opacity-90 fw-bold ">
-            Rechnungspositionen
-        </div>
-
-        <div class="card-body p-0">
-            {{ formset.management_form }}
-
-            <table class="table table-bordered table-striped mb-0 align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Diagnose / Leistung</th>
-                        <th class="text-center">Menge</th>
-                        <th class="text-end">Einzelpreis (€)</th>
-                        <th class="text-end">Gesamt (€)</th>
-                        <th class="text-center">Löschen</th>
-                    </tr>
-                </thead>
-
-                <tbody id="invoice-items-body">
-                    {% for item_form in formset %}
-                    <tr class="invoice-item-row">
-                        <td>{{ item_form.invoice_item_diagnosis }}</td>
-
-                        <td class="text-center">
-                            {{ item_form.invoice_item_quantity }}
-                        </td>
-
-                        <td class="text-end">
-                            {{ item_form.invoice_item_unit_price }}
-                        </td>
-
-                        <td class="text-end item-total">0.00 €</td>
-
-                        <td class="text-center">
-                            {% if item_form.instance.pk %}
-                            {{ item_form.DELETE }}
-                            {% endif %}
-                        </td>
-                    </tr>
-
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
+  <!-- ========================= -->
+  <!-- HEADER – LEVEL 2 CUSTOMER -->
+  <!-- ========================= -->
+  <div class="card mb-4">
+    <div class="card-header bg-success p-2 text-white bg-opacity-90 fw-bold">
+      {% trans "Customer Details" %}
     </div>
-
-    <!-- EMPTY FORM TEMPLATE (hidden) -->
-    <table style="display:none">
-        <tbody>
-            <tr id="empty-form-row" class="invoice-item-row d-none">
-                <td>{{ formset.empty_form.invoice_item_diagnosis }}</td>
-
-                <td class="text-center">
-                    {{ formset.empty_form.invoice_item_quantity }}
-                </td>
-
-                <td class="text-end">
-                    {{ formset.empty_form.invoice_item_unit_price }}
-                </td>
-
-                <td class="text-end item-total">0.00 €</td>
-
-                <td class="text-center">
-                    <!-- no delete checkbox for new rows -->
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="mt-2 text-end">
-        <button type="button" class="btn btn-sm btn-success" id="add-item">
-            ➕ Position hinzufügen
-        </button>
-    </div>
-    <!-- ========================= -->
-    <!-- CONTENT – LEVEL 2         -->
-    <!-- TOTALS / VAT              -->
-    <!-- ========================= -->
-
-    <div class="row justify-content-end mb-4">
+    <div class="card-body">
+      <div class="row mb-2">
         <div class="col-md-4">
-            <table class="table table-sm table-bordered">
-                <tr>
-                    <th>Zwischensumme</th>
-                    <td class="text-end" id="subtotal">0.00 €</td>
-                </tr>
-                <tr>
-                    <th>MwSt (%)</th>
-                    <td class="text-end">
-                        {{ form.invoice_vat_percent }}
-                    </td>
-                </tr>
-                <tr>
-                    <th>MwSt Betrag</th>
-                    <td class="text-end" id="vat-amount">0.00 €</td>
-                </tr>
-                <tr class="table-dark">
-                    <th>Gesamtbetrag</th>
-                    <td class="text-end fw-bold" id="grand-total">0.00 €</td>
-                </tr>
-            </table>
-
+          <strong> {% trans "Customer Number:" %}</strong>
         </div>
+        <div class="col-md-8" id="customer_number">—</div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <strong>{% trans "Name:" %}</strong>
+        </div>
+        <div class="col-md-8" id="customer_name">—</div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <strong> {% trans "Adresse" %}</strong>
+        </div>
+        <div class="col-md-8" id="customer_address">—</div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <strong> {% trans "Vehicle:" %}</strong>
+        </div>
+        <div class="col-md-8" id="customer_vehicle">—</div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <strong> {% trans "License Plate Number:" %}</strong>
+        </div>
+        <div class="col-md-8" id="customer_license_plate">—</div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <strong> {% trans "Mileage:" %}</strong>
+        </div>
+        <div class="col-md-8" id="customer_kilometers">—</div>
+      </div>
+
+      <hr />
+
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <strong> {% trans "Created on:" %}</strong>
+        </div>
+        <div class="col-md-8" id="customer_created_at">—</div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <strong> {% trans "Updated on:" %}</strong>
+        </div>
+        <div class="col-md-8" id="customer_updated_at">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================= -->
+  <!-- CONTENT – LEVEL 1         -->
+  <!-- INVOICE ITEMS (EXISTING)  -->
+  <!-- ========================= -->
+
+  <div class="card mb-4">
+    <div class="card-header bg-success p-2 text-white bg-opacity-90 fw-bold">
+   {% trans "Invoice Items" %}
     </div>
 
-    <!-- ========================= -->
-    <!-- FOOTER                    -->
-    <!-- NOTES / BANK / SIGNATURE  -->
-    <!-- ========================= -->
+    <div class="card-body p-0">
+      {{ formset.management_form }}
 
+      <table class="table table-bordered table-striped mb-0 align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>{% trans "Diagnosis / Service" %}</th>
+            <th class="text-center">{% trans "Quantity" %}</th>
+            <th class="text-end">{% trans "Unit Price (€)" %}</th>
+            <th class="text-end">{% trans "Total (€)" %}</th>
+            <th class="text-center">{% trans "Delete" %}</th>
+          </tr>
+        </thead>
+
+        <tbody id="invoice-items-body">
+          {% for item_form in formset %}
+          <tr class="invoice-item-row">
+            <td>{{ item_form.invoice_item_diagnosis }}</td>
+
+            <td class="text-center">{{ item_form.invoice_item_quantity }}</td>
+
+            <td class="text-end">{{ item_form.invoice_item_unit_price }}</td>
+
+            <td class="text-end item-total">0.00 €</td>
+
+            <td class="text-center">
+              {% if item_form.instance.pk %} {{ item_form.DELETE }} {% endif %}
+            </td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- EMPTY FORM TEMPLATE (hidden) -->
+  <table style="display: none">
+    <tbody>
+      <tr id="empty-form-row" class="invoice-item-row d-none">
+        <td>{{ formset.empty_form.invoice_item_diagnosis }}</td>
+
+        <td class="text-center">
+          {{ formset.empty_form.invoice_item_quantity }}
+        </td>
+
+        <td class="text-end">
+          {{ formset.empty_form.invoice_item_unit_price }}
+        </td>
+
+        <td class="text-end item-total">0.00 €</td>
+
+        <td class="text-center">
+          <!-- no delete checkbox for new rows -->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="mt-2 text-end">
+    <button type="button" class="btn btn-sm btn-success" id="add-item">
+      ➕  {% trans "Add Item" %}
+    </button>
+  </div>
+  <!-- ========================= -->
+  <!-- CONTENT – LEVEL 2         -->
+  <!-- TOTALS / VAT              -->
+  <!-- ========================= -->
+
+  <div class="row justify-content-end mb-4">
+    <div class="col-md-4">
+      <table class="table table-sm table-bordered">
+        <tr>
+          <th>{% trans "Subtotal" %}</th>
+          <td class="text-end" id="subtotal">0.00 €</td>
+        </tr>
+        <tr>
+          <th>{% trans "VAT (%)" %}</th>
+          <td class="text-end">{{ form.invoice_vat_percent }}</td>
+        </tr>
+        <tr>
+          <th>{% trans "VAT Amount" %}</th>
+          <td class="text-end" id="vat-amount">0.00 €</td>
+        </tr>
+        <tr class="table-dark">
+          <th>{% trans "Total" %}</th>
+          <td class="text-end fw-bold" id="grand-total">0.00 €</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========================= -->
+  <!-- FOOTER                    -->
+  <!-- NOTES / BANK / SIGNATURE  -->
+  <!-- ========================= -->
 </form>
-
-
-
 
 {% endblock %}

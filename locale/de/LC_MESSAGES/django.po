@@ -1,0 +1,464 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: invoices/templates/invoices/home.html:21
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-06 14:44+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: invoices/templates/invoices/companies/confirm_delete.html:4
+#: invoices/templates/invoices/companies/confirm_delete.html:7
+msgid "Company Delete"
+msgstr ""
+
+#: invoices/templates/invoices/companies/confirm_delete.html:9
+msgid "Are you sure you want to delete the Company"
+msgstr ""
+
+#: invoices/templates/invoices/companies/confirm_delete.html:13
+#: invoices/templates/invoices/customers/confirm_delete.html:12
+#: invoices/templates/invoices/diagnoses/confirm_delete.html:11
+#: invoices/templates/invoices/invoices/confirm_delete.html:13
+msgid "Yes, Delete"
+msgstr ""
+
+#: invoices/templates/invoices/companies/confirm_delete.html:14
+#: invoices/templates/invoices/companies/form.html:17
+#: invoices/templates/invoices/customers/confirm_delete.html:13
+#: invoices/templates/invoices/customers/form.html:16
+#: invoices/templates/invoices/diagnoses/confirm_delete.html:12
+#: invoices/templates/invoices/diagnoses/form.html:16
+#: invoices/templates/invoices/invoices/confirm_delete.html:16
+#: invoices/templates/invoices/invoices/form.html:16
+msgid "Cancel"
+msgstr ""
+
+#: invoices/templates/invoices/companies/form.html:4
+#: invoices/templates/invoices/companies/form.html:7
+#: invoices/templates/invoices/invoices/full_form_old2222.html:34
+#: invoices/templates/invoices/invoices/full_form_old2222.html:35
+#: invoices/templates/invoices/invoices/full_form_old2222.html:39
+msgid "Company"
+msgstr ""
+
+#: invoices/templates/invoices/companies/form.html:7
+#: invoices/templates/invoices/companies/list.html:56
+#: invoices/templates/invoices/customers/form.html:6
+#: invoices/templates/invoices/customers/list.html:42
+#: invoices/templates/invoices/diagnoses/form.html:6
+#: invoices/templates/invoices/diagnoses/list.html:35
+#: invoices/templates/invoices/invoices/form.html:6
+#: invoices/templates/invoices/invoices/list.html:40
+msgid "Edit"
+msgstr ""
+
+#: invoices/templates/invoices/companies/form.html:14
+#: invoices/templates/invoices/customers/form.html:13
+#: invoices/templates/invoices/diagnoses/form.html:13
+#: invoices/templates/invoices/invoices/form.html:13
+msgid "Save"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:2
+msgid "Companies - Rudy's KFZ Service"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:6
+#: invoices/templates/invoices/home.html:36 templates/includes/navbar.html:32
+msgid "Companies"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:9
+msgid "New Company"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:17
+msgid "Name"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:18
+msgid "Owner"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:19
+msgid "Address"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:20
+msgid "Email"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:21
+msgid "Phone"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:22
+msgid "Website"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:23
+msgid "IBAN"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:24
+msgid "Tax ID"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:25
+msgid "Actions"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:61
+#: invoices/templates/invoices/diagnoses/list.html:40
+msgid "delete"
+msgstr ""
+
+#: invoices/templates/invoices/companies/list.html:69
+msgid "No companies listed."
+msgstr ""
+
+#: invoices/templates/invoices/customers/confirm_delete.html:3
+#: invoices/templates/invoices/customers/confirm_delete.html:6
+msgid "Customer Delete"
+msgstr ""
+
+#: invoices/templates/invoices/customers/confirm_delete.html:8
+msgid "Are you sure you want to delete the Customer"
+msgstr ""
+
+#: invoices/templates/invoices/customers/form.html:3
+#: invoices/templates/invoices/customers/form.html:6
+#: invoices/templates/invoices/invoices/list.html:17
+msgid "Customer"
+msgstr ""
+
+#: invoices/templates/invoices/customers/form.html:6
+#: invoices/templates/invoices/customers/list.html:7
+msgid "New Customer"
+msgstr ""
+
+#: invoices/templates/invoices/customers/list.html:1
+#: templates/includes/navbar.html:37
+msgid "Customers"
+msgstr ""
+
+#: invoices/templates/invoices/customers/list.html:15
+msgid "Customer Number "
+msgstr ""
+
+#: invoices/templates/invoices/customers/list.html:16
+msgid "Customer Name "
+msgstr ""
+
+#: invoices/templates/invoices/customers/list.html:17
+msgid "Customer Address "
+msgstr ""
+
+#: invoices/templates/invoices/customers/list.html:18
+msgid "Vehicle "
+msgstr ""
+
+#: invoices/templates/invoices/customers/list.html:19
+msgid "License Plate Number "
+msgstr ""
+
+#: invoices/templates/invoices/customers/list.html:20
+msgid "Oilings "
+msgstr ""
+
+#: invoices/templates/invoices/customers/list.html:21
+#: invoices/templates/invoices/diagnoses/list.html:18
+msgid "Created on "
+msgstr ""
+
+#: invoices/templates/invoices/customers/list.html:22
+#: invoices/templates/invoices/diagnoses/list.html:19
+msgid "Updated on "
+msgstr ""
+
+#: invoices/templates/invoices/customers/list.html:23
+msgid "Actions "
+msgstr ""
+
+#: invoices/templates/invoices/customers/list.html:47
+#: invoices/templates/invoices/invoices/full_form.html:150
+#: invoices/templates/invoices/invoices/list.html:46
+msgid "Delete"
+msgstr ""
+
+#: invoices/templates/invoices/customers/list.html:54
+msgid "No customers found."
+msgstr ""
+
+#: invoices/templates/invoices/diagnoses/confirm_delete.html:3
+#: invoices/templates/invoices/diagnoses/confirm_delete.html:6
+msgid "Diagnostics Delete"
+msgstr ""
+
+#: invoices/templates/invoices/diagnoses/confirm_delete.html:7
+msgid " Are you sure you want to delete the Diagnostics"
+msgstr ""
+
+#: invoices/templates/invoices/diagnoses/form.html:3
+#: invoices/templates/invoices/diagnoses/form.html:6
+#: invoices/templates/invoices/diagnoses/list.html:5
+#: invoices/templates/invoices/home.html:31 templates/includes/navbar.html:42
+msgid "Diagnostics"
+msgstr ""
+
+#: invoices/templates/invoices/diagnoses/form.html:6
+msgid "New Diagnostics"
+msgstr ""
+
+#: invoices/templates/invoices/diagnoses/list.html:1
+msgid "Diagnostics - Rudy's KFZ Service"
+msgstr ""
+
+#: invoices/templates/invoices/diagnoses/list.html:8
+msgid "Create New Diagnosis"
+msgstr ""
+
+#: invoices/templates/invoices/diagnoses/list.html:15
+msgid "ID "
+msgstr ""
+
+#: invoices/templates/invoices/diagnoses/list.html:16
+msgid "Description "
+msgstr ""
+
+#: invoices/templates/invoices/diagnoses/list.html:17
+msgid "Standard Price (€) "
+msgstr ""
+
+#: invoices/templates/invoices/diagnoses/list.html:20
+msgid "Promotions "
+msgstr ""
+
+#: invoices/templates/invoices/diagnoses/list.html:46
+msgid "No diagnoses found."
+msgstr ""
+
+#: invoices/templates/invoices/home.html:5
+msgid "Homepage - Rudy's Auto Service"
+msgstr ""
+
+#: invoices/templates/invoices/home.html:9
+msgid "Willkommen bei Rudy's KFZ Service"
+msgstr ""
+
+#: invoices/templates/invoices/home.html:10
+msgid "Bitte wählen Sie eine Option aus"
+msgstr ""
+
+#: invoices/templates/invoices/home.html:16 templates/includes/navbar.html:55
+msgid "Complete Invoices"
+msgstr ""
+
+#: invoices/templates/invoices/home.html:26
+#: invoices/templates/invoices/invoices/form.html:3
+#: invoices/templates/invoices/invoices/form.html:6
+#: invoices/templates/invoices/invoices/full_form.html:2
+#: invoices/templates/invoices/invoices/full_form_old2222.html:4
+#: invoices/templates/invoices/invoices/list.html:5 templates/base copy.html:23
+#: templates/includes/navbar.html:47
+msgid "Invoices"
+msgstr ""
+
+#: invoices/templates/invoices/home.html:41 templates/base copy.html:24
+#: templates/includes/navbar.html:51
+msgid "Profiles"
+msgstr ""
+
+#: invoices/templates/invoices/home.html:46
+msgid "Über uns"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/confirm_delete.html:1
+#: invoices/templates/invoices/invoices/confirm_delete.html:3
+msgid "Invoices Delete"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/confirm_delete.html:6
+msgid " Are you sure you want to delete the Invoices"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/form.html:6
+msgid "New Invoices"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:19
+msgid "Mobile:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:21
+msgid "Email:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:23
+msgid "Website:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:26
+msgid "No company found. "
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:32
+msgid " Create Company"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:35
+msgid "Please contact an administrator."
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:44
+msgid "Invoice Number:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:48
+msgid "Order Date:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:52
+msgid " Service Date:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:57
+msgid "+ New Invoice"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:67
+msgid "Customer Details"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:72
+msgid "Customer Number:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:79
+msgid "Name:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:86
+msgid "Adresse"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:93
+msgid "Vehicle:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:100
+msgid "License Plate Number:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:107
+msgid "Mileage:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:116
+msgid "Created on:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:123
+msgid "Updated on:"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:137
+msgid "Invoice Items"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:146
+msgid "Diagnosis / Service"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:147
+msgid "Quantity"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:148
+msgid "Unit Price (€)"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:149
+msgid "Total (€)"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:200
+msgid "Add Item"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:212
+msgid "Subtotal"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:216
+#, python-format
+msgid "VAT (%%)"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:220
+msgid "VAT Amount"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/full_form.html:224
+msgid "Total"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/list.html:8
+msgid "Create new invoice"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/list.html:16
+msgid "Invoice number"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/list.html:18
+msgid "Order date"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/list.html:19
+msgid "Service date"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/list.html:20
+msgid "Total amount (€)"
+msgstr ""
+
+#: invoices/templates/invoices/invoices/list.html:52
+msgid "No invoices found."
+msgstr ""
+
+#: rudys_project/settings.py:160
+msgid "English"
+msgstr ""
+
+#: rudys_project/settings.py:161
+msgid "Deutsch"
+msgstr ""
+
+#: rudys_project/settings.py:162
+msgid "العربية"
+msgstr ""
+
+#: templates/base.html:15 templates/includes/navbar.html:18
+msgid "Rudy's Auto Service"
+msgstr ""
+
+#: templates/includes/navbar.html:62
+msgid "User is authenticated"
+msgstr ""
+
+#: templates/includes/navbar.html:66
+msgid "User is not authenticated"
+msgstr ""

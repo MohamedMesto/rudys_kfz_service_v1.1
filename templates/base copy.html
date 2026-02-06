@@ -17,11 +17,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'companies:list' %}">Firmen</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'customers:list' %}">Kunden</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'diagnosiss:list' %}">Diagnosen</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'invoices:list' %}">Rechnungen</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'profiles:list' %}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'companies:list' %}">Companies</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'customers:list' %}"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'diagnosiss:list' %}">Diagnostics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'invoices:list' %}">{% trans "Invoices" %}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'profiles:list' %}">{% trans "Profiles" %}</a></li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}

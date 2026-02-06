@@ -9,3 +9,18 @@ td {
     overflow: hidden;     /* Hide overflow */
     text-overflow: ellipsis; /* Show ... if too long */
 }
+
+/* For Ar, En,De Langs */
+[dir="rtl"] {
+    text-align: right;
+}
+
+[dir="rtl"] .me-2 {
+    margin-left: .5rem;
+    margin-right: 0;
+}
+
+[dir="rtl"] .navbar,
+[dir="rtl"] .container {
+    direction: rtl;
+}

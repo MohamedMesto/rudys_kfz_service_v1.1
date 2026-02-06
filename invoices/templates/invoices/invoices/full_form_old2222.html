@@ -1,7 +1,7 @@
 <!-- rudys_kfz_service_v1.1/invoices/templates/invoices/invoices/full_form.html -->
 {% extends "base.html" %}
 
-{% block title %}Rechnung{% endblock %}
+{% block title %}{% trans "Invoices" %} {% endblock %}
 
 {% block content %}
 
@@ -31,12 +31,12 @@
             {% endif %}
             {% else %}
             <div class="alert alert-warning">
-                <strong>Keine Firma vorhanden.</strong><br>
-                Bitte legen Sie zuerst eine Firma an, um eine Rechnung erstellen zu können.
+                <strong>Keine {% trans "Company" %} vorhanden.</strong><br>
+                Bitte legen Sie zuerst eine {% trans "Company" %} an, um eine Rechnung erstellen zu können.
                 <br><br>
                 {% if user.is_superuser %}
                 <a href="{% url 'companies:create' %}" class="btn btn-sm btn-primary">
-                    Firma anlegen
+                    {% trans "Company" %} anlegen
                 </a>
                 {% else %}
                 <em>Bitte wenden Sie sich an einen Administrator.</em>

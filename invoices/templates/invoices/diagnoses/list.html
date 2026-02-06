@@ -1,46 +1,51 @@
-{% extends 'base.html' %}
-
-{% block title %}Diagnosen - Rudy's KFZ Service{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% block title %}{% trans "Diagnostics - Rudy's KFZ Service" %}{%
+endblock %} {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Diagnosen</h2>
-    {% if user.is_superuser %}
-        <a href="{% url 'diagnoses:create' %}" class="btn btn-primary">
-            Neue Diagnose anlegen
-        </a>
-    {% endif %}
+  <h2>{% trans "Diagnostics" %}</h2>
+  {% if user.is_superuser %}
+  <a href="{% url 'diagnoses:create' %}" class="btn btn-primary">
+    {% trans "Create New Diagnosis" %}
+  </a>
+  {% endif %}
 </div>
 <table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Bezeichnung</th>
-            <th>Standardpreis (€)</th>
-            <th>Erstellt am</th>
-            <th>Aktualisiert am</th>
-            <th>Aktionen</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for diagnosis in diagnoses %}
-        <tr>
-            <td>{{ diagnosis.diagnosis_id }}</td>
-            <td>{{ diagnosis.diagnosis_title }}</td>
-            <td>{{ diagnosis.diagnosis_default_price }}</td>
-            <td>{{ diagnosis.diagnosis_created_at }}</td>
-            <td>{{ diagnosis.diagnosis_updated_at }}</td>
-            <td>
-                <a href="{% url 'diagnoses:update' diagnosis.pk %}" class="btn btn-sm btn-warning">Bearbeiten</a>
-                <a href="{% url 'diagnoses:delete' diagnosis.pk %}" class="btn btn-sm btn-danger">Löschen</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="6" class="text-center">Keine Diagnosen gefunden.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+  <thead class="table-dark">
+    <tr>
+      <th>{% trans "ID " %}</th>
+      <th>{% trans "Description " %}</th>
+      <th>{% trans "Standard Price (€) " %}</th>
+      <th>{% trans "Created on " %}</th>
+      <th>{% trans "Updated on " %}</th>
+      <th>{% trans "Promotions " %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for diagnosis in diagnoses %}
+    <tr>
+      <td>{{ diagnosis.diagnosis_id }}</td>
+      <td>{{ diagnosis.diagnosis_title }}</td>
+      <td>{{ diagnosis.diagnosis_default_price }}</td>
+      <td>{{ diagnosis.diagnosis_created_at }}</td>
+      <td>{{ diagnosis.diagnosis_updated_at }}</td>
+      <td>
+        <a
+          href="{% url 'diagnoses:update' diagnosis.pk %}"
+          class="btn btn-sm btn-warning"
+          >{% trans "Edit" %}
+        </a>
+        <a
+          href="{% url 'diagnoses:delete' diagnosis.pk %}"
+          class="btn btn-sm btn-danger"
+          >{% trans "delete" %}</a
+        >
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="6" class="text-center">{% trans "No diagnoses found." %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 {% endblock %}

@@ -1,20 +1,20 @@
 <!-- rudys_kfz_service_v1.1/invoices/templates/invoices/companies/form.html -->
 {% extends "base.html" %}
 
-{% block title %}Firma{% endblock %}
+{% block title %}{% trans "Company" %}{% endblock %}
 
 {% block content %}
-<h2>{% if object %}Firma bearbeiten{% else %}Neue Firma{% endif %}</h2>
+<h2>{% if object %}{% trans "Company" %} {% trans "Edit" %} {% else %}Neue {% trans "Company" %}{% endif %}</h2>
 
 <form method="post" class="mt-3">
     {% csrf_token %}
     {{ form.as_p }}
 
     <button type="submit" class="btn btn-success">
-        Speichern
+        {% trans "Save" %}
     </button>
     <a href="{% url 'companies:list' %}" class="btn btn-secondary">
-        Abbrechen
+        {% trans "Cancel" %}
     </a>
 </form>
 {% endblock %}

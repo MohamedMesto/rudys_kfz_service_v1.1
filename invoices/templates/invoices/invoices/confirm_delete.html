@@ -1,17 +1,19 @@
-{% extends 'base.html' %}
-
-{% block title %}Rechnung löschen{% endblock %}
-
-{% block content %}
-<h2>Rechnung löschen</h2>
+{% extends 'base.html' %} {% block title %}{% trans "Invoices Delete" %} {%
+endblock %} {% block content %}
+<h2>{% trans "Invoices Delete" %}</h2>
 
 <p>
-    Möchten Sie die Rechnung <strong>{{ object.invoice_number }}</strong> wirklich löschen?
+  {% trans " Are you sure you want to delete the Invoices" %}
+  <strong>{{ object.invoice_number }}</strong> ?
 </p>
 
 <form method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Ja, löschen</button>
-    <a href="{% url 'invoices:list' %}" class="btn btn-secondary">Abbrechen</a>
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">
+    {% trans "Yes, Delete" %}
+  </button>
+  <a href="{% url 'invoices:list' %}" class="btn btn-secondary"
+    >{% trans "Cancel" %}</a
+  >
 </form>
 {% endblock %}
