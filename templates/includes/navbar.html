@@ -1,15 +1,35 @@
 {% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
-<form action="{% url 'set_language' %}" method="post" class="d-flex">
+<form action="{% url 'set_language' %}" method="post" class="d-flex gap-1">
   {% csrf_token %}
-  <input name="next" type="hidden" value="{{ request.path }}" />
+  <input type="hidden" name="next" value="{{ request.get_full_path }}">
 
-  <select name="language" onchange="this.form.submit()" class="form-select">
-    <option value="en">🇬🇧 EN</option>
-    <option value="de">🇩🇪 DE</option>
-    <option value="ar">🇸🇦 AR</option>
-  </select>
+  <button
+    type="submit"
+    name="language"
+    value="en"
+    class="btn btn-sm {% if LANGUAGE_CODE == 'en' %}btn-light{% else %}btn-outline-light{% endif %}">
+    🇬🇧 EN
+  </button>
+
+  <button
+    type="submit"
+    name="language"
+    value="de"
+    class="btn btn-sm {% if LANGUAGE_CODE == 'de' %}btn-light{% else %}btn-outline-light{% endif %}">
+    🇩🇪 DE
+  </button>
+
+  <button
+    type="submit"
+    name="language"
+    value="ar"
+    class="btn btn-sm {% if LANGUAGE_CODE == 'ar' %}btn-light{% else %}btn-outline-light{% endif %}">
+    🇸🇦 AR
+  </button>
 </form>
+
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">

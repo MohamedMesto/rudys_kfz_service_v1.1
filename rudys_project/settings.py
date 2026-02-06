@@ -125,7 +125,19 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
+
+LANGUAGES = [
+    ("en", "English"),
+    ("de", "Deutsch"),
+    ("ar", "العربية"),
+]
+
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
 
 TIME_ZONE = 'UTC'
 
@@ -156,15 +168,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-LANGUAGES = [
-    ('en', _('English')),
-    ('de', _('Deutsch')),
-    ('ar', _('العربية')),
-]
-
-LOCALE_PATHS = [
-    BASE_DIR / 'locale',
-]
 
  
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
