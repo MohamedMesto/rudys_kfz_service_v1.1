@@ -1,14 +1,19 @@
-# rudys_kfz_service_v1.1/invoices/urls_invoices.py
-
+# invoices/urls_invoices.py
 from django.urls import path
 from .views_invoices import (
     InvoiceListView,
     InvoiceCreateView,
     InvoiceUpdateView,
     InvoiceDeleteView,
+    check_invoice_no,
 )
-from .views_invoice_full import invoice_create_view,get_invoice_data,get_invoice_items
- 
+from .views_invoice_full import (
+    invoice_create_view,
+    get_invoice_data,
+    get_invoice_items,
+    get_customer_data,
+    
+)
 
 app_name = "invoices"
 
@@ -17,13 +22,15 @@ urlpatterns = [
     path("create/", InvoiceCreateView.as_view(), name="create"),
     path("<int:pk>/update/", InvoiceUpdateView.as_view(), name="update"),
     path("<int:pk>/delete/", InvoiceDeleteView.as_view(), name="delete"),
+
     # Full invoice UI
     path("full-create/", invoice_create_view, name="full_create"),
 
-
-    # AJAX
-    path("get-invoice-data/<int:pk>/", get_invoice_data, name="get_invoice_data"),
-    path("get-invoice-items/<int:pk>/", get_invoice_items, name="get_invoice_items"),
-
+ 
+    # AJAX (keep underscore style to match your existing working links)
+    path("get_invoice_data/<int:pk>/", get_invoice_data, name="get_invoice_data"),
+    path("get_invoice_items/<int:pk>/", get_invoice_items, name="get_invoice_items"),
+    path("get_customer_data/<int:pk>/", get_customer_data, name="get_customer_data"),
+    path("check_invoice_no/", check_invoice_no, name="check_invoice_no"),
 
 ]

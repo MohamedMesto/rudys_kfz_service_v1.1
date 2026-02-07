@@ -1,11 +1,9 @@
-<!-- rudys_kfz_service_v1.1/invoices/templates/invoices/invoices/full_form.html -->
 {% extends "base.html" %}
- {% load i18n %} 
- {% block title %}
- {% trans "Invoices"%}
- {% endblock %}
- {% block content %}
+{% load i18n %}
 
+{% block title %}{% trans "Invoices" %}{% endblock %}
+
+{% block content %}
 <form method="post" class="mt-3">
   {% csrf_token %}
 
@@ -14,42 +12,62 @@
   <!-- ========================= -->
   <div class="row mb-4">
     <!-- HEADER LEFT: COMPANY INFO -->
-    <div class="card col-md-6">
+    <div class="card col-md-6 p-3">
       {% if company %}
-      <strong>{% trans "Company Name:" %}</strong>{{ company.company_name }}<br />
-      <strong>{% trans "Company Adress:" %}</strong> {{ company.company_address }}<br />
+        <strong>{% trans "Company Name:" %}</strong> {{ company.company_name }}<br />
+        <strong>{% trans "Company Adress:" %}</strong> {{ company.company_address }}<br />
 
-      {% if company.company_phone %}
-      <strong> {% trans "Mobile:" %}</strong> {{ company.company_phone }}<br />
-      {% endif %} {% if company.company_email %}
-      <strong>{% trans "Email:" %}</strong> {{ company.company_email }}<br />
-      {% endif %} {% if company.company_website %}
-      <strong> {% trans "Website:" %}</strong> {{ company.company_website }} 
-      {% endif %}
-      
-      {% else %}
-      <div class="alert alert-warning">
-        <strong>Keine {% trans "No company found. " %} </strong><br />
-        {% trans "Please create a new company first to be able to create an
-        invoice!" %}
-        <br /><br />
-        {% if user.is_superuser %}
-        <a href="{% url 'companies:create' %}" class="btn btn-sm btn-primary">
-          {% trans " Create Company" %}
-        </a>
-        {% else %}
-        <em> {% trans "Please contact an administrator." %} </em>
+        {% if company.company_phone %}
+          <strong>{% trans "Mobile:" %}</strong> {{ company.company_phone }}<br />
         {% endif %}
-      </div>
+        {% if company.company_email %}
+          <strong>{% trans "Email:" %}</strong> {{ company.company_email }}<br />
+        {% endif %}
+        {% if company.company_website %}
+          <strong>{% trans "Website:" %}</strong> {{ company.company_website }}<br />
+        {% endif %}
+      {% else %}
+        <div class="alert alert-warning m-0">
+          <strong>{% trans "No company found. " %}</strong><br />
+          {% trans "Please create a new company first to be able to create an invoice!" %}
+          <br /><br />
+          {% if user.is_superuser %}
+            <a href="{% url 'companies:create' %}" class="btn btn-sm btn-primary">
+              {% trans " Create Company" %}
+            </a>
+          {% else %}
+            <em>{% trans "Please contact an administrator." %}</em>
+          {% endif %}
+        </div>
       {% endif %}
     </div>
+
     <!-- HEADER RIGHT: INVOICE META -->
-    <div class="card col-md-6 d-flex justify-content-end">
-      <table class="table table-sm table-borderless w-auto">
+    <div class="card col-md-6 p-3">
+      <table class="table table-sm table-borderless w-100 mb-2">
         <tr>
-          <th class="text-end">{% trans "Invoice Number:" %}</th>
-          <td>{{ form.invoice_no }}</td>
+          <th class="text-end" style="width: 40%;">{% trans "Invoice Number:" %}</th>
+          <td>
+            <!-- SELECT existing invoice -->
+            <select id="invoice-select" class="form-select form-select-sm">
+              <option value="">{% trans "Select invoice" %}</option>
+              {% for inv in invoices %}
+                <option value="{{ inv.id }}">{{ inv.invoice_no }}</option>
+              {% endfor %}
+            </select>
+
+            <!-- INPUT new invoice number (create mode) -->
+            <input
+              type="text"
+              id="invoice-no-input"
+              name="invoice_no_new"
+              class="form-control form-control-sm mt-2 d-none"
+              placeholder="{% trans 'Enter new invoice number' %}"
+            />
+            <div class="form-text text-danger d-none" id="invoice-no-error"></div>
+          </td>
         </tr>
+
         <tr>
           <th class="text-end">{% trans "Order Date:" %}</th>
           <td>{{ form.invoice_order_date }}</td>
@@ -59,85 +77,94 @@
           <td>{{ form.invoice_service_date }}</td>
         </tr>
       </table>
-      <a href="{% url 'invoices:create' %}" class="btn btn-sm btn-primary mt-1"
-        >{% trans "+ New Invoice" %}
-      </a>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-sm btn-primary" id="new-invoice-btn">
+          {% trans "+ New Invoice" %}
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary d-none" id="cancel-new-invoice-btn">
+          {% trans "Cancel" %}
+        </button>
+      </div>
+
     </div>
   </div>
 
   <!-- ========================= -->
-  <!-- HEADER – LEVEL 2 CUSTOMER -->
+  <!-- CUSTOMER SELECT + DETAILS -->
   <!-- ========================= -->
   <div class="card mb-4">
     <div class="card-header bg-success p-2 text-white bg-opacity-90 fw-bold">
       {% trans "Customer Details" %}
     </div>
+
     <div class="card-body">
-      <div class="row mb-2">
+
+      <!-- Customer dropdown -->
+      <div class="row mb-3">
         <div class="col-md-4">
-          <strong> {% trans "Customer Number:" %}</strong>
+          <strong>{% trans "Select Customer" %}</strong>
         </div>
+        <div class="col-md-8">
+          <select id="customer-select" class="form-select">
+            <option value="">{% trans "Choose customer..." %}</option>
+            {% for c in customers %}
+              <option value="{{ c.id }}">{{ c.customer_number }} — {{ c.customer_name }}</option>
+            {% endfor %}
+          </select>
+
+          <!-- posted to server -->
+          <input type="hidden" name="customer_id" id="customer-id-hidden" />
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-4"><strong>{% trans "Customer Number:" %}</strong></div>
         <div class="col-md-8" id="customer_number">—</div>
       </div>
 
       <div class="row mb-2">
-        <div class="col-md-4">
-          <strong>{% trans "Name:" %}</strong>
-        </div>
+        <div class="col-md-4"><strong>{% trans "Name:" %}</strong></div>
         <div class="col-md-8" id="customer_name">—</div>
       </div>
 
       <div class="row mb-2">
-        <div class="col-md-4">
-          <strong> {% trans "Adress" %}</strong>
-        </div>
+        <div class="col-md-4"><strong>{% trans "Adress" %}</strong></div>
         <div class="col-md-8" id="customer_address">—</div>
       </div>
 
       <div class="row mb-2">
-        <div class="col-md-4">
-          <strong> {% trans "Vehicle:" %}</strong>
-        </div>
+        <div class="col-md-4"><strong>{% trans "Vehicle:" %}</strong></div>
         <div class="col-md-8" id="customer_vehicle">—</div>
       </div>
 
       <div class="row mb-2">
-        <div class="col-md-4">
-          <strong> {% trans "License Plate Number:" %}</strong>
-        </div>
+        <div class="col-md-4"><strong>{% trans "License Plate Number:" %}</strong></div>
         <div class="col-md-8" id="customer_license_plate">—</div>
       </div>
 
       <div class="row mb-2">
-        <div class="col-md-4">
-          <strong> {% trans "Mileage:" %}</strong>
-        </div>
+        <div class="col-md-4"><strong>{% trans "Mileage:" %}</strong></div>
         <div class="col-md-8" id="customer_kilometers">—</div>
       </div>
 
       <hr />
 
       <div class="row mb-2">
-        <div class="col-md-4">
-          <strong> {% trans "Created on:" %}</strong>
-        </div>
+        <div class="col-md-4"><strong>{% trans "Created on:" %}</strong></div>
         <div class="col-md-8" id="customer_created_at">—</div>
       </div>
 
       <div class="row">
-        <div class="col-md-4">
-          <strong> {% trans "Updated on:" %}</strong>
-        </div>
+        <div class="col-md-4"><strong>{% trans "Updated on:" %}</strong></div>
         <div class="col-md-8" id="customer_updated_at">—</div>
       </div>
     </div>
   </div>
 
   <!-- ========================= -->
-  <!-- CONTENT – LEVEL 1         -->
-  <!-- INVOICE ITEMS (EXISTING)  -->
+  <!-- INVOICE ITEMS             -->
   <!-- ========================= -->
-
   <div class="card mb-4">
     <div class="card-header bg-success p-2 text-white bg-opacity-90 fw-bold">
       {% trans "Invoice Items" %}
@@ -161,18 +188,13 @@
           {% for item_form in formset %}
           <tr class="invoice-item-row">
             <td>{{ item_form.invoice_item_diagnosis }}</td>
-
             <td class="text-center">{{ item_form.invoice_item_quantity }}</td>
-
             <td class="text-end">{{ item_form.invoice_item_unit_price }}</td>
-
             <td class="text-end item-total">0.00 €</td>
-
             <td class="text-center">
-              {% if item_form.instance.pk %} {{ item_form.DELETE }} {% endif %}
+              {% if item_form.instance.pk %}{{ item_form.DELETE }}{% endif %}
             </td>
           </tr>
-
           {% endfor %}
         </tbody>
       </table>
@@ -184,34 +206,24 @@
     <tbody>
       <tr id="empty-form-row" class="invoice-item-row d-none">
         <td>{{ formset.empty_form.invoice_item_diagnosis }}</td>
-
-        <td class="text-center">
-          {{ formset.empty_form.invoice_item_quantity }}
-        </td>
-
-        <td class="text-end">
-          {{ formset.empty_form.invoice_item_unit_price }}
-        </td>
-
+        <td class="text-center">{{ formset.empty_form.invoice_item_quantity }}</td>
+        <td class="text-end">{{ formset.empty_form.invoice_item_unit_price }}</td>
         <td class="text-end item-total">0.00 €</td>
-
-        <td class="text-center">
-          <!-- no delete checkbox for new rows -->
-        </td>
+        <td class="text-center"></td>
       </tr>
     </tbody>
   </table>
+
   <div class="mt-2 text-end">
     <button type="button" class="btn btn-sm btn-success" id="add-item">
       ➕ {% trans "Add Item" %}
     </button>
   </div>
+
   <!-- ========================= -->
-  <!-- CONTENT – LEVEL 2         -->
   <!-- TOTALS / VAT              -->
   <!-- ========================= -->
-
-  <div class="row justify-content-end mb-4">
+  <div class="row justify-content-end mb-4 mt-3">
     <div class="col-md-4">
       <table class="table table-sm table-bordered">
         <tr>
@@ -219,7 +231,7 @@
           <td class="text-end" id="subtotal">0.00 €</td>
         </tr>
         <tr>
-          <th>{% trans "VAT (%)" %}</th>
+          <th>{% trans "VAT (%%)" %}</th>
           <td class="text-end">{{ form.invoice_vat_percent }}</td>
         </tr>
         <tr>
@@ -234,10 +246,12 @@
     </div>
   </div>
 
-  <!-- ========================= -->
-  <!-- FOOTER                    -->
-  <!-- NOTES / BANK / SIGNATURE  -->
-  <!-- ========================= -->
-</form>
+  <!-- SAVE BUTTON -->
+  <div class="d-flex justify-content-end">
+    <button type="submit" class="btn btn-success">
+      {% trans "Save" %}
+    </button>
+  </div>
 
+</form>
 {% endblock %}

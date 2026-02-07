@@ -1,6 +1,5 @@
 <!-- rudys_kfz_service_v1.1/templates/base.html -->
-{% load static %}
-{% load i18n %}
+{% load static %} {% load i18n %}
 <!doctype html>
 {% comment %}
 <html lang="de">
@@ -12,7 +11,9 @@
     <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>{% block title %}{% trans "Rudy's Auto Service" %}{% endblock %}</title>
+      <title>
+        {% block title %}{% trans "Rudy's Auto Service" %}{% endblock %}
+      </title>
       <!-- Bootstrap -->
       <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -56,12 +57,15 @@
         crossorigin="anonymous"
       ></script>
 
- 
       {% block extra_js %}
       <script src="{% static 'js/invoice_dropdown.js' %}"></script>
+      <script src="{% static 'js/invoice_items_loader.js' %}"></script>
+      <script src="{% static 'js/invoice_create_mode.js' %}"></script>
+      <script src="{% static 'js/customer_select.js' %}"></script>
       <script src="{% static 'js/invoice_calculation.js' %}"></script>
       <script src="{% static 'js/invoice_formset.js' %}"></script>
-      <script src="{% static 'js/invoice_items_loader.js' %}"></script>
+
       {% endblock %}
     </body>
+  </html>
 </html>

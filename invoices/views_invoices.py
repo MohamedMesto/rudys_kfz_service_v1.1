@@ -1,8 +1,9 @@
+# invoices/views_invoices.py
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Invoice
-
+from django.http import JsonResponse
 
 class AdminOnlyMixin(UserPassesTestMixin):
     def test_func(self):
@@ -64,3 +65,7 @@ class InvoiceDeleteView(LoginRequiredMixin, AdminOnlyMixin, DeleteView):
     template_name = "invoices/invoices/confirm_delete.html"
     success_url = reverse_lazy("invoices:list")
 
+def check_invoice_no(request):
+    no = request.GET.get("invoice_no", "").strip()
+    exists = Invoice.objects.filter(invoice_no=no).exists()
+    return JsonResponse({"exists": exists})

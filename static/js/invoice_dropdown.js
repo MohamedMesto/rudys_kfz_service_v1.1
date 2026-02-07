@@ -1,4 +1,5 @@
 // #######################################################
+// static/js/invoice_dropdown.js
 // invoice_dropdown.js
 // Handles ONLY invoice selection + meta/customer loading
 // #######################################################
@@ -52,7 +53,7 @@ $(document).ready(function () {
         // ===============================
         // EXISTING INVOICE SELECTED
         // ===============================
-        fetch(`/invoices/get-invoice-data/${invoiceId}/`)
+        fetch(`/invoices/get_invoice_data/${invoiceId}/`)
             .then(res => res.json())
             .then(data => {
 

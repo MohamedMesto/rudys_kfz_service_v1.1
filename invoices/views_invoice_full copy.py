@@ -1,14 +1,10 @@
 # invoices/views_invoice_full.py
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Invoice, Company, Customer
-from .forms_invoice import InvoiceForm, InvoiceItemFormSet
 from django.contrib import messages
 from django.http import JsonResponse
-from decimal import Decimal
-
-
-
+from .models import Invoice, Company, Customer
+from .forms_invoice import InvoiceForm, InvoiceItemFormSet
 
 @login_required
 def invoice_create_view(request):
@@ -27,16 +23,16 @@ def invoice_create_view(request):
         form = InvoiceForm(request.POST)
         formset = InvoiceItemFormSet(request.POST)
 
-        # if customer chosen in dropdown
-        customer_id = request.POST.get("customer_id")
-        if customer_id:
-            form.instance.invoice_customer_id = customer_id
-
-        # if invoice number typed in create mode
+        # 1) invoice no from "create mode" input if provided
         invoice_no_new = (request.POST.get("invoice_no_new") or "").strip()
         if invoice_no_new:
             form.data = form.data.copy()
             form.data["invoice_no"] = invoice_no_new
+
+        # 2) customer selected from dropdown (hidden input)
+        customer_id = request.POST.get("customer_id")
+        if customer_id:
+            form.instance.invoice_customer_id = customer_id
 
         if form.is_valid() and formset.is_valid():
             invoice = form.save()
@@ -48,18 +44,21 @@ def invoice_create_view(request):
         form = InvoiceForm()
         formset = InvoiceItemFormSet()
 
-    return render(request, "invoices/invoices/full_form.html", {
-        "form": form,
-        "formset": formset,
-        "company": company,
-        "invoices": invoices,
-        "customers": customers,
-    })
+    return render(
+        request,
+        "invoices/invoices/full_form.html",
+        {
+            "form": form,
+            "formset": formset,
+            "company": company,
+            "invoices": invoices,
+            "customers": customers,
+        },
+    )
 
 @login_required
 def get_customer_data(request, pk):
     customer = Customer.objects.get(pk=pk)
-
     return JsonResponse({
         "customer_number": customer.customer_number,
         "customer_name": customer.customer_name,
@@ -71,6 +70,7 @@ def get_customer_data(request, pk):
         "customer_updated_at": customer.customer_updated_at.strftime("%Y-%m-%d"),
     })
 
+ 
     
 @login_required
 def get_invoice_data(request, pk):

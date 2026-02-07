@@ -22,7 +22,7 @@ function loadInvoiceItems(invoiceId) {
 
     clearInvoiceItems();
 
-    fetch(`/invoices/get-invoice-items/${invoiceId}/`)
+    fetch(`/invoices/get_invoice_items/${invoiceId}/`)
         .then(res => res.json())
         .then(data => {
 
@@ -51,11 +51,11 @@ function loadInvoiceItems(invoiceId) {
                 // Initialize Select2 ONCE
                 $(select).select2({ width: '100%' });
 
+
                 // Set other values
-                row.querySelector('input[name$="quantity"]').value = item.quantity;
-                row.querySelector('input[name$="unit_price"]').value = item.unit_price;
-                row.querySelector('.item-total').textContent =
-                    parseFloat(item.line_total).toFixed(2) + ' €';
+                row.querySelector('input[name$="invoice_item_quantity"]').value = item.quantity;
+                row.querySelector('input[name$="invoice_item_unit_price"]').value = item.unit_price;
+                row.querySelector('.item-total').textContent = parseFloat(item.line_total).toFixed(2) + ' €';
             });
 
             totalFormsInput.value = data.items.length;

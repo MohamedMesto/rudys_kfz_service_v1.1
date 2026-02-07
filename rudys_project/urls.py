@@ -15,25 +15,30 @@ Including another URLconf
 """
  
  
-#  rudys_kfz_service_v1.1/rudys_project/urls.py
+# rudys_project/urls.py
 
 from django.contrib import admin
 from django.urls import path, include
 from invoices.views import home_view
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', home_view, name='home'),
-    path('', include('invoices.urls')),
+    path("admin/", admin.site.urls),
 
-    # <--- API endpoints
-    path('api/', include('invoices.api_urls')),  
+    # Homepage
+    path("", home_view, name="home"),
 
-    # optional frontend views
-    path('companies/', include('invoices.urls_companies', namespace='companies')),
-    path('customers/', include('invoices.urls_customers', namespace='customers')),
-    path('diagnoses/', include('invoices.urls_diagnoses', namespace='diagnoses')),
+    # i18n
+    path("i18n/", include("django.conf.urls.i18n")),
+
+    # Invoices app (main)
+    path("", include("invoices.urls")),
+
+    # API
+    path("api/", include("invoices.api_urls")),
+
+    # Feature modules
+    path("companies/", include("invoices.urls_companies", namespace="companies")),
+    path("customers/", include("invoices.urls_customers", namespace="customers")),
+    path("diagnoses/", include("invoices.urls_diagnoses", namespace="diagnoses")),
     path("invoices/", include("invoices.urls_invoices", namespace="invoices")),
-    path('i18n/', include('django.conf.urls.i18n')),   
-    
 ]
