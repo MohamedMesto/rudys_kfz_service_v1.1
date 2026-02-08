@@ -81,3 +81,17 @@ th {
   font-size: 11px;
   color: #222;
 }
+
+.customer-block {
+  margin-top: 6px;
+  line-height: 1.6;
+}
+.customer-block strong {
+  display: inline-block;
+  width: 160px;
+}
+
+tbody tr:last-child td {
+  background: #f0f0f0;
+  font-size: 13px;
+}
