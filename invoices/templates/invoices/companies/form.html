@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<h2>{% if object %}{% trans "Company" %} {% trans "Edit" %} {% else %}Neue {% trans "Company" %}{% endif %}</h2>
+<h2>{% if object %}{% trans "Company" %} {% trans "Edit" %} {% else %} {% trans "New Company" %}{% endif %}</h2>
 
 <form method="post" class="mt-3">
     {% csrf_token %}

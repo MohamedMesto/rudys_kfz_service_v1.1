@@ -15,6 +15,9 @@ from .views_invoice_full import (
     
 )
 
+from .views_invoice_pdf import invoice_pdf
+ 
+
 app_name = "invoices"
 
 urlpatterns = [
@@ -32,5 +35,6 @@ urlpatterns = [
     path("get_invoice_items/<int:pk>/", get_invoice_items, name="get_invoice_items"),
     path("get_customer_data/<int:pk>/", get_customer_data, name="get_customer_data"),
     path("check_invoice_no/", check_invoice_no, name="check_invoice_no"),
-
-]
+    # PDF
+    path("<int:pk>/pdf/", invoice_pdf, name="pdf"),
+    ]

@@ -9,41 +9,32 @@ from decimal import Decimal
 
 
 
-
 @login_required
 def invoice_create_view(request):
     company = Company.objects.first()
     if not company:
-        messages.warning(
-            request,
-            "Bitte legen Sie zuerst eine Firma an, bevor Sie eine Rechnung erstellen."
-        )
+        messages.warning(request, "Bitte legen Sie zuerst eine Firma an.")
         return redirect("companies:create")
 
-    invoices = Invoice.objects.order_by("-id")[:200]
+    invoices = Invoice.objects.select_related("invoice_customer").order_by("-id")[:200]
     customers = Customer.objects.order_by("customer_number")
 
     if request.method == "POST":
         form = InvoiceForm(request.POST)
         formset = InvoiceItemFormSet(request.POST)
 
-        # if customer chosen in dropdown
-        customer_id = request.POST.get("customer_id")
-        if customer_id:
-            form.instance.invoice_customer_id = customer_id
-
-        # if invoice number typed in create mode
-        invoice_no_new = (request.POST.get("invoice_no_new") or "").strip()
-        if invoice_no_new:
-            form.data = form.data.copy()
-            form.data["invoice_no"] = invoice_no_new
-
         if form.is_valid() and formset.is_valid():
-            invoice = form.save()
+            invoice = form.save(commit=False)
+            invoice.invoice_created_by = request.user
+            invoice.save()
+
             formset.instance = invoice
             formset.save()
-            return redirect("invoices:list")
 
+            messages.success(request, "Invoice saved.")
+            return redirect("invoices:full_create")
+        else:
+            messages.error(request, "Please fix the errors below.")
     else:
         form = InvoiceForm()
         formset = InvoiceItemFormSet()

@@ -48,7 +48,14 @@ document.addEventListener("DOMContentLoaded", function () {
       $("#id_invoice_vat_percent").prop("disabled", false);
 
       // clear customer UI
-      $("#customer-select").val(null).trigger("change");
+      // $("#customer-select").val(null).trigger("change");
+      if (typeof $ !== "undefined" && $("#customer-select").data("select2")) {
+      $("#customer-select").val(null).trigger("change.select2");
+              } else {
+                      document.getElementById("customer-select").value = "";
+                      document.getElementById("customer-select").dispatchEvent(new Event("change"));
+              }
+
       $("#customer-id-hidden").val("");
       $("#customer_number, #customer_name, #customer_address, #customer_vehicle, #customer_license_plate, #customer_kilometers, #customer_created_at, #customer_updated_at").text("—");
 

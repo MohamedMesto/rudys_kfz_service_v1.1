@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-06 21:23+0100\n"
+"POT-Creation-Date: 2026-02-08 16:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Arabic\n"
@@ -15,7 +15,217 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: invoices/models.py:12
+msgid "Company name"
+msgstr "اسم الشركة"
+
+#: invoices/models.py:13
+msgid "Company address"
+msgstr "عنوان الشركة"
+
+#: invoices/models.py:14
+msgid "Company phone"
+msgstr "هاتف الشركة"
+
+#: invoices/models.py:15
+msgid "Company email"
+msgstr "البريد الإلكتروني للشركة"
+
+#: invoices/models.py:16
+msgid "Company website"
+msgstr "موقع الشركة الإلكتروني"
+
+#: invoices/models.py:17
+msgid "Company owner"
+msgstr "مالك الشركة"
+
+#: invoices/models.py:18
+msgid "Company IBAN"
+msgstr "آيبان الشركة"
+
+#: invoices/models.py:19
+msgid "Company tax number"
+msgstr "الرقم الضريبي للشركة"
+
+#: invoices/models.py:25 invoices/templates/invoices/companies/form.html:5
+#: invoices/templates/invoices/companies/form.html:9
+msgid "Company"
+msgstr "الشركة"
+
+#: invoices/templates/invoices/companies/list.html:11
+#: invoices/templates/invoices/home.html:38 templates/includes/navbar.html:52
+msgid "Companies"
+msgstr "الشركات"
+
+#: invoices/models.py:39
+msgid "User"
+msgstr "المستخدم"
+
+#: invoices/models.py:41
+msgid "Role"
+msgstr "الدور"
+
+#: invoices/templates/invoices/companies/list.html:27
+msgid "Phone"
+msgstr "الهاتف"
+
+#: invoices/templates/invoices/companies/list.html:25
+msgid "Address"
+msgstr "العنوان"
+
+#: invoices/models.py:44
+msgid "Photo"
+msgstr "صورة"
+
+#: invoices/models.py:50
+msgid "Profile"
+msgstr "الملف الشخصي"
+
+#: invoices/models.py:51 invoices/templates/invoices/home.html:43
+#: templates/includes/navbar.html:71
+msgid "Profiles"
+msgstr "الملفات الشخصية"
+
+#: invoices/models.py:61
+msgid "Customer number"
+msgstr "رقم العميل"
+
+#: invoices/models.py:62
+msgid "Customer name"
+msgstr "اسم العميل"
+
+#: invoices/models.py:63
+msgid "Customer address"
+msgstr "عنوان العميل"
+
+#: invoices/models.py:64
+msgid "Vehicle"
+msgstr "المركبة"
+
+#: invoices/models.py:65
+msgid "License plate number"
+msgstr "رقم لوحة المركبة"
+
+#: invoices/models.py:66
+msgid "Mileage"
+msgstr "عدد الكيلومترات"
+
+#: invoices/models.py:72 invoices/models.py:111
+#: invoices/templates/invoices/customers/form.html:6
+#: invoices/templates/invoices/customers/form.html:10
+
+#: invoices/templates/invoices/invoices/list.html:21
+msgid "Customer"
+msgstr "العميل"
+
+#: invoices/models.py:73 invoices/templates/invoices/customers/list.html:4
+#: invoices/templates/invoices/home.html:23 templates/includes/navbar.html:57
+msgid "Customers"
+msgstr "العملاء"
+
+#: invoices/models.py:84
+msgid "Diagnosis title"
+msgstr "عنوان التشخيص"
+
+#: invoices/models.py:86
+msgid "Default price (€)"
+msgstr "السعر الافتراضي (€)"
+
+#: invoices/models.py:95
+msgid "Diagnosis"
+msgstr "تشخيص"
+
+#: invoices/models.py:96
+msgid "Diagnoses"
+msgstr "التشخيصات"
+
+#: invoices/models.py:106 invoices/templates/invoices/invoices/list.html:20
+msgid "Invoice number"
+msgstr "رقم الفاتورة"
+
+#: invoices/models.py:113 invoices/templates/invoices/invoices/list.html:22
+msgid "Order date"
+msgstr "تاريخ الطلب"
+
+#: invoices/models.py:114 invoices/templates/invoices/invoices/list.html:23
+msgid "Service date"
+msgstr "تاريخ الخدمة"
+
+#: invoices/templates/invoices/invoices/full_form.html:242
+msgid "Subtotal"
+msgstr "المجموع الفرعي"
+
+#: invoices/models.py:117
+msgid "VAT (%)"
+msgstr "ضريبة القيمة المضافة (%)"
+
+#: invoices/models.py:118
+msgid "VAT amount"
+msgstr "قيمة ضريبة القيمة المضافة"
+
+#: invoices/templates/invoices/invoices/full_form.html:254
+msgid "Total"
+msgstr "الإجمالي"
+
+#: invoices/models.py:126
+msgid "Created by"
+msgstr "تم الإنشاء بواسطة"
+
+#: invoices/models.py:128
+msgid "Notes"
+msgstr "ملاحظات"
+
+#: invoices/models.py:134 invoices/models.py:163
+msgid "Invoice"
+msgstr "فاتورة"
+
+#: invoices/models.py:135 invoices/templates/invoices/home.html:28
+#: invoices/templates/invoices/invoices/form.html:4
+#: invoices/templates/invoices/invoices/form.html:8
+: invoices/templates/invoices/invoices/full_form.html:4
+#: invoices/templates/invoices/invoices/list.html:9
+#: templates/includes/navbar.html:67
+msgid "Invoices"
+msgstr "الفواتير"
+
+#: invoices/models.py:166
+msgid "Position"
+msgstr "الترتيب"
+
+#: invoices/templates/invoices/invoices/full_form.html:191
+msgid "Diagnosis / Service"
+msgstr "التشخيص / الخدمة"
+
+#: invoices/models.py:172
+msgid "Select diagnosis from predefined list"
+msgstr "اختر التشخيص من القائمة المحددة مسبقًا"
+
+#: invoices/models.py:176
+msgid "Diagnosis text (snapshot)"
+msgstr "نص التشخيص (نسخة محفوظة)"
+
+#: invoices/templates/invoices/invoices/full_form.html:192
+msgid "Quantity"
+msgstr "الكمية"
+
+#: invoices/models.py:182
+msgid "Unit price (€)"
+msgstr "سعر الوحدة (€)"
+
+#: invoices/models.py:183
+msgid "Line total (€)"
+msgstr "إجمالي السطر (€)"
+
+#: invoices/models.py:190
+msgid "Invoice item"
+msgstr "عنصر فاتورة"
+
+#: invoices/models.py:191
+msgid "Invoice items"
+msgstr "عناصر الفاتورة"
 
 #: invoices/templates/invoices/companies/confirm_delete.html:5
 #: invoices/templates/invoices/companies/confirm_delete.html:9
@@ -41,16 +251,12 @@ msgstr "نعم، احذف"
 #: invoices/templates/invoices/diagnoses/form.html:18
 #: invoices/templates/invoices/invoices/confirm_delete.html:20
 #: invoices/templates/invoices/invoices/form.html:18
+
+#: invoices/templates/invoices/invoices/full_form.html:95
 msgid "Cancel"
 msgstr "إلغاء"
 
-#: invoices/templates/invoices/companies/form.html:5
 #: invoices/templates/invoices/companies/form.html:9
-msgid "Company"
-msgstr "الشركة"
-
-#: invoices/templates/invoices/companies/form.html:9
-#: invoices/templates/invoices/companies/list copy.html:63
 #: invoices/templates/invoices/companies/list.html:67
 #: invoices/templates/invoices/customers/form.html:10
 #: invoices/templates/invoices/customers/list.html:46
@@ -61,88 +267,64 @@ msgstr "الشركة"
 msgid "Edit"
 msgstr "تعديل"
 
-#: invoices/templates/invoices/companies/form.html:16
-#: invoices/templates/invoices/customers/form.html:17
-#: invoices/templates/invoices/diagnoses/form.html:15
-#: invoices/templates/invoices/invoices/form.html:15
-msgid "Save"
-msgstr "حفظ"
-
-#: invoices/templates/invoices/companies/list copy.html:6
-#: invoices/templates/invoices/companies/list.html:5
-msgid "Companies - Rudy's KFZ Service"
-msgstr "الشركات - خدمة رودي للسيارات"
-
-#: invoices/templates/invoices/companies/list copy.html:13
-#: invoices/templates/invoices/companies/list.html:11
-#: invoices/templates/invoices/home.html:38
-#: templates/includes/navbar.html:32
-msgid "Companies"
-msgstr "الشركات"
-
-#: invoices/templates/invoices/companies/list copy.html:16
+#: invoices/templates/invoices/companies/form.html:9
 #: invoices/templates/invoices/companies/list.html:15
 msgid "New Company"
 msgstr "شركة جديدة"
 
-#: invoices/templates/invoices/companies/list copy.html:24
+#: invoices/templates/invoices/companies/form.html:16
+#: invoices/templates/invoices/customers/form.html:17
+#: invoices/templates/invoices/diagnoses/form.html:15
+#: invoices/templates/invoices/invoices/form.html:15
+
+#: invoices/templates/invoices/invoices/full_form.html:263
+msgid "Save"
+msgstr "حفظ"
+
+: invoices/templates/invoices/companies/list.html:5
+msgid "Companies - Rudy's KFZ Service"
+msgstr "الشركات - خدمة رودي للسيارات"
+
 #: invoices/templates/invoices/companies/list.html:23
 msgid "Name"
 msgstr "الاسم"
 
-#: invoices/templates/invoices/companies/list copy.html:25
 #: invoices/templates/invoices/companies/list.html:24
 msgid "Owner"
 msgstr "المالك"
 
-#: invoices/templates/invoices/companies/list copy.html:26
-#: invoices/templates/invoices/companies/list.html:25
-msgid "Address"
-msgstr "العنوان"
-
-#: invoices/templates/invoices/companies/list copy.html:27
 #: invoices/templates/invoices/companies/list.html:26
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
-#: invoices/templates/invoices/companies/list copy.html:28
-#: invoices/templates/invoices/companies/list.html:27
-msgid "Phone"
-msgstr "الهاتف"
-
-#: invoices/templates/invoices/companies/list copy.html:29
 #: invoices/templates/invoices/companies/list.html:28
 msgid "Website"
 msgstr "الموقع الإلكتروني"
 
-#: invoices/templates/invoices/companies/list copy.html:30
 #: invoices/templates/invoices/companies/list.html:29
 msgid "IBAN"
 msgstr "رقم الآيبان"
 
-#: invoices/templates/invoices/companies/list copy.html:31
 #: invoices/templates/invoices/companies/list.html:30
 msgid "Tax ID"
 msgstr "الرقم الضريبي"
 
-#: invoices/templates/invoices/companies/list copy.html:32
 #: invoices/templates/invoices/companies/list.html:31
 msgid "Actions"
 msgstr "الإجراءات"
 
-#: invoices/templates/invoices/companies/list copy.html:68
 #: invoices/templates/invoices/diagnoses/list.html:44
 msgid "delete"
 msgstr "حذف"
 
-#: invoices/templates/invoices/companies/list copy.html:76
 #: invoices/templates/invoices/companies/list.html:81
 msgid "No companies listed."
 msgstr "لا توجد شركات"
 
 #: invoices/templates/invoices/companies/list.html:70
 #: invoices/templates/invoices/customers/list.html:51
-#: invoices/templates/invoices/invoices/full_form.html:156
+
+#: invoices/templates/invoices/invoices/full_form.html:195
 #: invoices/templates/invoices/invoices/list.html:50
 msgid "Delete"
 msgstr "حذف"
@@ -156,22 +338,10 @@ msgstr "حذف العميل"
 msgid "Are you sure you want to delete the Customer"
 msgstr "هل أنت متأكد أنك تريد حذف العميل؟"
 
-#: invoices/templates/invoices/customers/form.html:6
-#: invoices/templates/invoices/customers/form.html:10
-#: invoices/templates/invoices/invoices/list.html:21
-msgid "Customer"
-msgstr "العميل"
-
 #: invoices/templates/invoices/customers/form.html:10
 #: invoices/templates/invoices/customers/list.html:11
 msgid "New Customer"
 msgstr "عميل جديد"
-
-#: invoices/templates/invoices/customers/list.html:4
-#: invoices/templates/invoices/home.html:23
-#: templates/includes/navbar.html:37
-msgid "Customers"
-msgstr "العملاء"
 
 #: invoices/templates/invoices/customers/list.html:19
 msgid "Customer Number "
@@ -227,8 +397,7 @@ msgstr "هل أنت متأكد أنك تريد حذف التشخيص؟"
 #: invoices/templates/invoices/diagnoses/form.html:4
 #: invoices/templates/invoices/diagnoses/form.html:8
 #: invoices/templates/invoices/diagnoses/list.html:9
-#: invoices/templates/invoices/home.html:33
-#: templates/includes/navbar.html:42
+#: invoices/templates/invoices/home.html:33 templates/includes/navbar.html:62
 msgid "Diagnostics"
 msgstr "التشخيصات"
 
@@ -276,24 +445,9 @@ msgstr "مرحبًا بكم في خدمة رودي للسيارات"
 msgid "Bitte wählen Sie eine Option aus"
 msgstr "يرجى اختيار أحد الخيارات"
 
-#: invoices/templates/invoices/home.html:18
-#: templates/includes/navbar.html:55
+#: invoices/templates/invoices/home.html:18 templates/includes/navbar.html:75
 msgid "Complete Invoices"
 msgstr "فواتير كاملة"
-
-#: invoices/templates/invoices/home.html:28
-#: invoices/templates/invoices/invoices/form.html:4
-#: invoices/templates/invoices/invoices/form.html:8
-#: invoices/templates/invoices/invoices/full_form.html:5
-#: invoices/templates/invoices/invoices/list.html:9
-#: templates/includes/navbar.html:47
-msgid "Invoices"
-msgstr "الفواتير"
-
-#: invoices/templates/invoices/home.html:43
-#: templates/includes/navbar.html:51
-msgid "Profiles"
-msgstr "الملفات الشخصية"
 
 #: invoices/templates/invoices/home.html:48
 msgid "Über uns"
@@ -312,130 +466,134 @@ msgstr "هل أنت متأكد أنك تريد حذف الفاتورة؟"
 msgid "New Invoices"
 msgstr "فاتورة جديدة"
 
-#: invoices/templates/invoices/invoices/full_form.html:19
+#: invoices/templates/invoices/invoices/full_form.html:25
 msgid "Company Name:"
 msgstr "اسم الشركة:"
 
-#: invoices/templates/invoices/invoices/full_form.html:20
+#: invoices/templates/invoices/invoices/full_form.html:26
 msgid "Company Adress:"
 msgstr "عنوان الشركة:"
 
-#: invoices/templates/invoices/invoices/full_form.html:23
+#: invoices/templates/invoices/invoices/full_form.html:29
 msgid "Mobile:"
 msgstr "الهاتف المحمول:"
 
-#: invoices/templates/invoices/invoices/full_form.html:25
+#: invoices/templates/invoices/invoices/full_form.html:32
 msgid "Email:"
 msgstr "البريد الإلكتروني:"
 
-#: invoices/templates/invoices/invoices/full_form.html:27
+#: invoices/templates/invoices/invoices/full_form.html:35
 msgid "Website:"
 msgstr "الموقع الإلكتروني:"
 
-#: invoices/templates/invoices/invoices/full_form.html:32
+#: invoices/templates/invoices/invoices/full_form.html:39
 msgid "No company found. "
 msgstr "لم يتم العثور على شركة"
 
-#: invoices/templates/invoices/invoices/full_form.html:38
+#: invoices/templates/invoices/invoices/full_form.html:44
 msgid " Create Company"
 msgstr "إنشاء شركة"
 
-#: invoices/templates/invoices/invoices/full_form.html:41
+#: invoices/templates/invoices/invoices/full_form.html:47
 msgid "Please contact an administrator."
 msgstr "يرجى الاتصال بالمسؤول"
 
-#: invoices/templates/invoices/invoices/full_form.html:50
+#: invoices/templates/invoices/invoices/full_form.html:57
 msgid "Invoice Number:"
 msgstr "رقم الفاتورة:"
 
-#: invoices/templates/invoices/invoices/full_form.html:54
+#: invoices/templates/invoices/invoices/full_form.html:61
+msgid "Select invoice"
+msgstr "اختر الفاتورة"
+
+#: invoices/templates/invoices/invoices/full_form.html:80
 msgid "Order Date:"
 msgstr "تاريخ الطلب:"
 
-#: invoices/templates/invoices/invoices/full_form.html:58
+#: invoices/templates/invoices/invoices/full_form.html:84
 msgid " Service Date:"
 msgstr "تاريخ الخدمة:"
 
-#: invoices/templates/invoices/invoices/full_form.html:63
+#: invoices/templates/invoices/invoices/full_form.html:91
 msgid "+ New Invoice"
 msgstr "+ فاتورة جديدة"
 
-#: invoices/templates/invoices/invoices/full_form.html:73
+#: invoices/templates/invoices/invoices/full_form.html:111
 msgid "Customer Details"
 msgstr "تفاصيل العميل"
 
-#: invoices/templates/invoices/invoices/full_form.html:78
+#: invoices/templates/invoices/invoices/full_form.html:118
+msgid "Select Customer"
+msgstr "اختر العميل"
+
+#: invoices/templates/invoices/invoices/full_form.html:122
+msgid "Choose customer..."
+msgstr "اختر عميلًا..."
+
+#: invoices/templates/invoices/invoices/full_form.html:134
 msgid "Customer Number:"
 msgstr "رقم العميل:"
 
-#: invoices/templates/invoices/invoices/full_form.html:85
+#: invoices/templates/invoices/invoices/full_form.html:139
 msgid "Name:"
 msgstr "الاسم:"
 
-#: invoices/templates/invoices/invoices/full_form.html:92
+#: invoices/templates/invoices/invoices/full_form.html:144
 msgid "Adress"
 msgstr "العنوان"
 
-#: invoices/templates/invoices/invoices/full_form.html:99
+#: invoices/templates/invoices/invoices/full_form.html:149
 msgid "Vehicle:"
 msgstr "المركبة:"
 
-#: invoices/templates/invoices/invoices/full_form.html:106
+#: invoices/templates/invoices/invoices/full_form.html:154
 msgid "License Plate Number:"
 msgstr "رقم اللوحة:"
 
-#: invoices/templates/invoices/invoices/full_form.html:113
+#: invoices/templates/invoices/invoices/full_form.html:159
 msgid "Mileage:"
 msgstr "عدد الكيلومترات:"
 
-#: invoices/templates/invoices/invoices/full_form.html:122
+#: invoices/templates/invoices/invoices/full_form.html:166
 msgid "Created on:"
 msgstr "تاريخ الإنشاء:"
 
-#: invoices/templates/invoices/invoices/full_form.html:129
+#: invoices/templates/invoices/invoices/full_form.html:171
 msgid "Updated on:"
 msgstr "آخر تحديث:"
 
-#: invoices/templates/invoices/invoices/full_form.html:143
+#: invoices/templates/invoices/invoices/full_form.html:182
 msgid "Invoice Items"
 msgstr "عناصر الفاتورة"
 
-#: invoices/templates/invoices/invoices/full_form.html:152
-msgid "Diagnosis / Service"
-msgstr "التشخيص / الخدمة"
-
-#: invoices/templates/invoices/invoices/full_form.html:153
-msgid "Quantity"
-msgstr "الكمية"
-
-#: invoices/templates/invoices/invoices/full_form.html:154
+#: invoices/templates/invoices/invoices/full_form.html:193
 msgid "Unit Price (€)"
 msgstr "سعر الوحدة (€)"
 
-#: invoices/templates/invoices/invoices/full_form.html:155
+#: invoices/templates/invoices/invoices/full_form.html:194
 msgid "Total (€)"
 msgstr "الإجمالي (€)"
 
-#: invoices/templates/invoices/invoices/full_form.html:206
+#: invoices/templates/invoices/invoices/full_form.html:231
 msgid "Add Item"
 msgstr "إضافة عنصر"
 
-#: invoices/templates/invoices/invoices/full_form.html:218
-msgid "Subtotal"
-msgstr "المجموع الفرعي"
-
-#: invoices/templates/invoices/invoices/full_form.html:222
-#, python-format
-msgid "VAT (%%)"
-msgstr "ضريبة القيمة المضافة (٪)"
-
-#: invoices/templates/invoices/invoices/full_form.html:226
+#: invoices/templates/invoices/invoices/full_form.html:250
 msgid "VAT Amount"
 msgstr "قيمة الضريبة"
 
-#: invoices/templates/invoices/invoices/full_form.html:230
-msgid "Total"
-msgstr "الإجمالي"
+#: invoices/templates/invoices/invoices/full_form.html:40
+msgid "Please create a new company first to be able to create an invoice!"
+msgstr "يرجى إنشاء شركة جديدة أولاً حتى تتمكن من إنشاء فاتورة!"
+
+#: invoices/templates/invoices/invoices/full_form.html:73
+msgid "Enter new invoice number"
+msgstr "أدخل رقم فاتورة جديد"
+
+#: invoices/templates/invoices/invoices/full_form.html:246
+#, python-format
+msgid "VAT (%%)"
+msgstr "ضريبة القيمة المضافة (٪)"
 
 #: invoices/templates/invoices/invoices/list.html:4
 msgid "Invoices - Rudy's KFZ Service"
@@ -445,18 +603,6 @@ msgstr "الفواتير - خدمة رودي للسيارات"
 msgid "Create new invoice"
 msgstr "إنشاء فاتورة جديدة"
 
-#: invoices/templates/invoices/invoices/list.html:20
-msgid "Invoice number"
-msgstr "رقم الفاتورة"
-
-#: invoices/templates/invoices/invoices/list.html:22
-msgid "Order date"
-msgstr "تاريخ الطلب"
-
-#: invoices/templates/invoices/invoices/list.html:23
-msgid "Service date"
-msgstr "تاريخ الخدمة"
-
 #: invoices/templates/invoices/invoices/list.html:24
 msgid "Total amount (€)"
 msgstr "المبلغ الإجمالي (€)"
@@ -465,27 +611,23 @@ msgstr "المبلغ الإجمالي (€)"
 msgid "No invoices found."
 msgstr "لا توجد فواتير"
 
-#: rudys_project/settings.py:160
-msgid "English"
-msgstr "الإنجليزية"
-
-#: rudys_project/settings.py:161
-msgid "Deutsch"
-msgstr "الألمانية"
-
-#: rudys_project/settings.py:162
-msgid "العربية"
-msgstr "العربية"
-
-#: templates/base.html:16
-#: templates/includes/navbar.html:18
+#: templates/base.html:16 templates/includes/navbar.html:38
 msgid "Rudy's Auto Service"
 msgstr "خدمة رودي للسيارات"
 
-#: templates/includes/navbar.html:62
+#: templates/includes/navbar.html:82
 msgid "User is authenticated"
 msgstr "المستخدم مسجل الدخول"
 
-#: templates/includes/navbar.html:66
+#: templates/includes/navbar.html:86
 msgid "User is not authenticated"
 msgstr "المستخدم غير مسجل الدخول"
+
+#~ msgid "English"
+#~ msgstr "الإنجليزية"
+
+#~ msgid "Deutsch"
+#~ msgstr "الألمانية"
+
+#~ msgid "العربية"
+#~ msgstr "العربية"

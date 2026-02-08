@@ -1,0 +1,83 @@
+/* static/css/invoice_pdf.css */
+
+/* IMPORTANT for WeasyPrint footer */
+@page {
+  size: A4;
+  margin: 18mm 14mm 30mm 14mm; /* bottom أكبر للفوتر */
+}
+
+body {
+  font-family: sans-serif;
+  font-size: 12px;
+}
+
+/* Wrap all content (except footer) inside .content */
+.content {
+  padding-bottom: 35mm; /* يمنع المحتوى من النزول تحت الفوتر */
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.right {
+  text-align: right;
+}
+
+hr {
+  margin: 12px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+th,
+td {
+  border: 1px solid #333;
+  padding: 6px;
+}
+
+th {
+  background: #eee;
+}
+
+/* ✅ Fixed footer always at bottom */
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  border-top: 1px solid #333;
+  padding: 8mm 14mm;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.footer-left,
+.footer-right {
+  width: 42%;
+}
+
+.footer-qr {
+  width: 16%;
+  text-align: right;
+}
+
+.footer-qr img {
+  width: 90px;
+  height: 90px;
+}
+
+.small {
+  font-size: 11px;
+  color: #222;
+}

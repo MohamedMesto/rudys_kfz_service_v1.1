@@ -1,0 +1,109 @@
+{% comment %}  /invoices/templates/invoices/invoices/invoice_pdf.html {% endcomment %}
+
+<!doctype html>
+{% load i18n %}
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="{% static 'css/invoice_pdf.css' %}">
+</head>
+<body>
+
+  <div class="row">
+    <div>
+      <h2>{{ company.company_name }}</h2>
+      <div>{{ company.company_address }}</div>
+      {% if company.company_phone %}<div>{{ company.company_phone }}</div>{% endif %}
+      {% if company.company_email %}<div>{{ company.company_email }}</div>{% endif %}
+    </div>
+
+    <div class="right">
+      <h2>{% trans "Invoice" %} {{ invoice.invoice_no }}</h2>
+      <div>{% trans "Order" %}: {{ invoice.invoice_order_date }}</div>
+      <div>{% trans "Service" %}: {{ invoice.invoice_service_date }}</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h3>{% trans "Customer" %}</h3>
+  <div>{{ customer.customer_name }} ({{ customer.customer_number }})</div>
+  <div>{{ customer.customer_address }}</div>
+  <div>{{ customer.customer_vehicle }} — {{ customer.customer_license_plate }}</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>{% trans "Diagnosis / Service" %}</th>
+        <th class="right">{% trans "Qty" %}</th>
+        <th class="right">{% trans "Unit" %}</th>
+        <th class="right">{% trans "Total" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+      <tr>
+        <td>{{ it.invoice_item_diagnosis_text }}</td>
+        <td class="right">{{ it.invoice_item_quantity }}</td>
+        <td class="right">{{ it.invoice_item_unit_price }}</td>
+        <td class="right">{{ it.invoice_item_line_total }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="right" style="margin-top: 10px;">
+    <div>{% trans "Subtotal" %}: {{ invoice.invoice_subtotal }}</div>
+    <div>
+      {% trans "VAT" %} ({{ invoice.invoice_vat_percent }}%): {{ invoice.invoice_vat_amount }}
+    </div>
+    <div><strong>{% trans "Total" %}: {{ invoice.invoice_total }}</strong></div>
+  </div>
+<!-- FOOTER -->
+<div class="footer">
+  <!-- LEFT: COMPANY INFO (FROM DB) -->
+  <div class="footer-left small">
+    <div><strong>{{ company.company_name }}</strong></div>
+
+    {% if company.company_address %}
+      <div>{{ company.company_address }}</div>
+    {% endif %}
+
+    {% if company.company_phone %}
+      <div>{% trans "Phone" %}: {{ company.company_phone }}</div>
+    {% endif %}
+
+    {% if company.company_email %}
+      <div>{% trans "Email" %}: {{ company.company_email }}</div>
+    {% endif %}
+  </div>
+
+  <!-- RIGHT: LEGAL / BANK INFO -->
+  <div class="footer-right small">
+    {% if company.company_iban %}
+      <div><strong>IBAN:</strong> {{ company.company_iban }}</div>
+    {% endif %}
+
+    {% if company.company_owner %}
+      <div><strong>{% trans "Owner" %}:</strong> {{ company.company_owner }}</div>
+    {% endif %}
+
+    {% if company.company_tax_number %}
+      <div><strong>{% trans "Tax ID" %}:</strong> {{ company.company_tax_number }}</div>
+    {% endif %}
+  </div>
+
+  <!-- QR CODE -->
+  <div class="footer-qr">
+    {% if qr_data_uri %}
+      <img src="{{ qr_data_uri }}" alt="QR">
+    {% endif %}
+  </div>
+</div>
+
+
+</body>
+</html>

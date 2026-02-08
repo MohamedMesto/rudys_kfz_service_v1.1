@@ -1,23 +1,16 @@
 // #######################################################
 // static/js/invoice_dropdown.js
-//
 // Handles invoice selection:
 // - loads invoice meta + customer info
 // - loads invoice items
-// - locks/unlocks fields
-// - disables customer select for existing invoices
-// - updates PDF button URL
+// - updates PDF button url
 // #######################################################
 
 $(document).ready(function () {
   console.log("invoice_dropdown.js loaded ✅");
 
   const pdfBtn = document.getElementById("pdf-btn");
-  const customerSelect = $("#customer-select");
 
-  // -----------------------------------------------------
-  // PDF button handler
-  // -----------------------------------------------------
   function setPdfButton(invoiceId) {
     if (!pdfBtn) return;
 
@@ -31,47 +24,28 @@ $(document).ready(function () {
     pdfBtn.href = `/invoices/${invoiceId}/pdf/`;
   }
 
-  // -----------------------------------------------------
   // Lock/unlock invoice meta fields
-  // -----------------------------------------------------
   function lockInvoiceFields(lock) {
     $("#id_invoice_order_date").prop("disabled", lock);
     $("#id_invoice_service_date").prop("disabled", lock);
   }
 
-  // -----------------------------------------------------
-  // Enable / disable customer selection
-  // -----------------------------------------------------
-  function lockCustomerSelect(lock) {
-    customerSelect.prop("disabled", lock);
-
-    // if Select2 is active, update UI state too
-    if (customerSelect.data("select2")) {
-      customerSelect.trigger("change.select2");
-    }
-  }
-
-  // -----------------------------------------------------
   // Activate Select2 for invoice dropdown
-  // -----------------------------------------------------
   $("#invoice-select").select2({
     placeholder: "Rechnung auswählen",
     allowClear: true,
     width: "100%",
   });
 
-  // -----------------------------------------------------
-  // Invoice selection change
-  // -----------------------------------------------------
+  // When invoice selection changes
   $("#invoice-select").on("change", function () {
     const invoiceId = $(this).val();
 
     // ===============================
-    // CLEARED SELECTION → NEW INVOICE
+    // CLEARED SELECTION
     // ===============================
     if (!invoiceId) {
       lockInvoiceFields(false);
-      lockCustomerSelect(false);
 
       if (typeof clearInvoiceItems === "function") clearInvoiceItems();
       if (typeof lockInvoiceItems === "function") lockInvoiceItems(false);
@@ -82,34 +56,33 @@ $(document).ready(function () {
       $("#id_invoice_order_date").val("");
       $("#id_invoice_service_date").val("");
 
-      // clear customer display
-      $("#customer_number, #customer_name, #customer_address, #customer_vehicle, \
-        #customer_license_plate, #customer_kilometers, #customer_created_at, \
-        #customer_updated_at").text("—");
+      // clear customer labels
+      $("#customer_number, #customer_name, #customer_address, #customer_vehicle, #customer_license_plate, #customer_kilometers, #customer_created_at, #customer_updated_at").text("—");
 
       $("#add-item").show();
 
+      // disable pdf button
       setPdfButton(null);
       return;
     }
 
+    // enable pdf button
+    setPdfButton(invoiceId);
+
     // ===============================
     // EXISTING INVOICE SELECTED
     // ===============================
-    setPdfButton(invoiceId);
-    lockCustomerSelect(true);
-
     fetch(`/invoices/get_invoice_data/${invoiceId}/`)
       .then((res) => res.json())
       .then((data) => {
-        // lock invoice meta
+        // Lock invoice meta fields
         lockInvoiceFields(true);
 
-        // fill invoice dates
+        // Fill invoice dates
         $("#id_invoice_order_date").val(data.invoice_order_date);
         $("#id_invoice_service_date").val(data.invoice_service_date);
 
-        // fill customer display (READ ONLY)
+        // Fill customer display
         $("#customer_number").text(data.customer_number);
         $("#customer_name").text(data.customer_name);
         $("#customer_address").text(data.customer_address);
@@ -119,21 +92,14 @@ $(document).ready(function () {
         $("#customer_created_at").text(data.customer_created_at);
         $("#customer_updated_at").text(data.customer_updated_at);
 
-        // load invoice items
-        if (typeof loadInvoiceItems === "function") {
-          loadInvoiceItems(invoiceId);
-        }
+        // Load invoice items (AJAX)
+        if (typeof loadInvoiceItems === "function") loadInvoiceItems(invoiceId);
 
-        // hide add-row button (read-only)
+        // Hide add-row button (read-only mode)
         $("#add-item").hide();
-      })
-      .catch((err) => {
-        console.error("Failed to load invoice data", err);
       });
   });
 
-  // -----------------------------------------------------
-  // Initial state on page load
-  // -----------------------------------------------------
+  // initial state
   setPdfButton(null);
 });
