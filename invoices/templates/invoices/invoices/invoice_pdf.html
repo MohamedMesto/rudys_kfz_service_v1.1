@@ -2,11 +2,14 @@
 <!doctype html>
 {% load i18n %}
 {% load static %}
-<html>
+<html lang="{{ LANGUAGE_CODE }}"
+      dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}"
+      class="{% if LANGUAGE_CODE == 'ar' %}rtl{% endif %}">
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="{% static 'css/invoice_pdf.css' %}">
 </head>
+
 
 <body>
 
@@ -22,9 +25,9 @@
       </div>
 
       <div class="right">
-        <h2>{% trans "Invoice" %} {{ invoice.invoice_no }}</h2>
-        <div>{% trans "Order" %}: {{ invoice.invoice_order_date }}</div>
-        <div>{% trans "Service" %}: {{ invoice.invoice_service_date }}</div>
+        <h2>{% trans "Invoice" %} {{ invoice.invoice_no|default:"—" }}</h2>
+        <div>{% trans "Order date" %}: {{ invoice.invoice_order_date |default:"—"}}</div>
+        <div>{% trans "Service Date" %}: {{ invoice.invoice_service_date|default:"—" }}</div>
       </div>
     </div>
 
@@ -78,7 +81,7 @@
     <tr>
       <th>{% trans "Diagnosis / Service" %}</th>
       <th class="right">{% trans "Qty" %}</th>
-      <th class="right">{% trans "Unit" %}</th>
+      <th class="right">{% trans "Unit price" %}</th>
       <th class="right">{% trans "Total" %}</th>
     </tr>
   </thead>
@@ -128,11 +131,12 @@
       {% endif %}
 
       {% if company.company_phone %}
-        <div>{% trans "Phone" %}: {{ company.company_phone }}</div>
+        <div><strong>{% trans "Phone" %}:</strong> 
+          {{ company.company_phone }}</div>
       {% endif %}
 
       {% if company.company_email %}
-        <div>{% trans "Email" %}: {{ company.company_email }}</div>
+        <div><strong>{% trans "Email" %}: </strong>{{ company.company_email }}</div>
       {% endif %}
     </div>
 

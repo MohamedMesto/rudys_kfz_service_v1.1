@@ -77,11 +77,11 @@
         </tr>
 
         <tr>
-          <th class="text-end">{% trans "Order Date:" %}</th>
+          <th class="text-end">{% trans "Order Date" %}:</th>
           <td>{{ form.invoice_order_date }}</td>
         </tr>
         <tr>
-          <th class="text-end">{% trans " Service Date:" %}</th>
+          <th class="text-end">{% trans "Service Date" %}:</th>
           <td>{{ form.invoice_service_date }}</td>
         </tr>
       </table>
@@ -128,6 +128,8 @@
           </select>
         </div>
       </div>
+
+      <input type="hidden" name="customer_id" id="customer-id-hidden" />
 
       <!-- Customer details display -->
       <div class="row mb-2">
@@ -243,7 +245,7 @@
           <td class="text-end" id="subtotal">0.00 €</td>
         </tr>
         <tr>
-          <th>{% trans "VAT (%)" %}</th>
+          <th>{% trans "VAT" %} %</th>
           <td class="text-end">{{ form.invoice_vat_percent }}</td>
         </tr>
         <tr>
@@ -260,7 +262,7 @@
 
   <!-- SAVE BUTTON -->
   <div class="d-flex justify-content-end mt-3">
-    <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+    <button type="submit" class="btn btn-primary"  id="save-btn" >{% trans "Save" %}</button>
   </div>
 
 </form>

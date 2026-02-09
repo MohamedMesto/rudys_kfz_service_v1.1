@@ -95,3 +95,39 @@ tbody tr:last-child td {
   background: #f0f0f0;
   font-size: 13px;
 }
+
+
+
+/* ===== RTL support (Arabic) ===== */
+html.rtl, html[dir="rtl"] body {
+  direction: rtl;
+}
+
+html.rtl .row {
+  flex-direction: row-reverse; /* company block on the right, invoice block on the left */
+}
+
+html.rtl .right {
+  text-align: left; /* in RTL, "right column" becomes visually left */
+}
+
+/* Make tables RTL-friendly */
+html.rtl table {
+  direction: rtl;
+}
+
+/* numeric columns should still align nicely */
+html.rtl .right,
+html.rtl td.right,
+html.rtl th.right {
+  text-align: left;
+}
+
+/* Footer order for RTL */
+html.rtl .footer {
+  flex-direction: row-reverse;
+}
+
+html.rtl .footer-qr {
+  text-align: left;
+}

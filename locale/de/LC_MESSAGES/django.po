@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-08 17:22+0100\n"
+"POT-Creation-Date: 2026-02-09 11:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: German\n"
@@ -18,52 +18,36 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: invoices/models.py:12
-#, fuzzy
-#| msgid "Company Name:"
 msgid "Company name"
 msgstr "Firmenname:"
 
 #: invoices/models.py:13
-#, fuzzy
-#| msgid "Company Adress:"
 msgid "Company address"
 msgstr "Firmenadresse:"
 
 #: invoices/models.py:14
-#, fuzzy
-#| msgid "Company"
 msgid "Company phone"
-msgstr "Firma"
+msgstr "Firma Phone"
 
 #: invoices/models.py:15
-#, fuzzy
-#| msgid "Company Delete"
 msgid "Company email"
-msgstr "Firma löschen"
+msgstr "Firma Email"
 
 #: invoices/models.py:16
-#, fuzzy
-#| msgid "Company Delete"
 msgid "Company website"
-msgstr "Firma löschen"
+msgstr "Firma Webseite"
 
 #: invoices/models.py:17
-#, fuzzy
-#| msgid "Company"
 msgid "Company owner"
-msgstr "Firma"
+msgstr "Inhaber"
 
 #: invoices/models.py:18
-#, fuzzy
-#| msgid "Company"
 msgid "Company IBAN"
-msgstr "Firma"
+msgstr "IBAN"
 
 #: invoices/models.py:19
-#, fuzzy
-#| msgid "Company Name:"
 msgid "Company tax number"
-msgstr "Firmenname:"
+msgstr "Steuernummer"
 
 #: invoices/models.py:25 invoices/templates/invoices/companies/form.html:5
 #: invoices/templates/invoices/companies/form.html:9
@@ -72,20 +56,21 @@ msgstr "Firma"
 
 #: invoices/models.py:26 invoices/templates/invoices/companies/list
 #: copy.html:13 invoices/templates/invoices/companies/list.html:11
-#: invoices/templates/invoices/home.html:38 templates/includes/navbar.html:52
+#: invoices/templates/invoices/home.html:30 templates/includes/navbar.html:52
 msgid "Companies"
 msgstr "Firmen"
 
 #: invoices/models.py:39
 msgid "User"
-msgstr ""
+msgstr "Benutzer"
 
 #: invoices/models.py:41
 msgid "Role"
-msgstr ""
+msgstr "Rolle"
 
 #: invoices/models.py:42 invoices/templates/invoices/companies/list
 #: copy.html:28 invoices/templates/invoices/companies/list.html:27
+#: invoices/templates/invoices/invoices/invoice_pdf.html:136
 msgid "Phone"
 msgstr "Telefon"
 
@@ -96,88 +81,67 @@ msgstr "Adresse"
 
 #: invoices/models.py:44
 msgid "Photo"
-msgstr ""
+msgstr "Photo"
 
 #: invoices/models.py:50
-#, fuzzy
-#| msgid "Profiles"
 msgid "Profile"
-msgstr "Profile"
+msgstr "Profil"
 
-#: invoices/models.py:51 invoices/templates/invoices/home.html:43
+#: invoices/models.py:51 invoices/templates/invoices/home.html:41
 #: templates/includes/navbar.html:71
 msgid "Profiles"
 msgstr "Profile"
 
 #: invoices/models.py:61
-#, fuzzy
-#| msgid "Customer Number "
 msgid "Customer number"
 msgstr "Kundennummer"
 
 #: invoices/models.py:62
-#, fuzzy
-#| msgid "Customer Name "
 msgid "Customer name"
 msgstr "Kundenname"
 
 #: invoices/models.py:63
-#, fuzzy
-#| msgid "Customer Address "
 msgid "Customer address"
 msgstr "Kundenadresse"
 
 #: invoices/models.py:64
-#, fuzzy
-#| msgid "Vehicle "
 msgid "Vehicle"
 msgstr "Fahrzeug"
 
 #: invoices/models.py:65
-#, fuzzy
-#| msgid "License Plate Number "
 msgid "License plate number"
 msgstr "Kennzeichen"
 
 #: invoices/models.py:66
-#, fuzzy
-#| msgid "Mileage:"
 msgid "Mileage"
-msgstr "Kilometerstand:"
+msgstr "Kilometerstand"
 
 #: invoices/models.py:72 invoices/models.py:111
 #: invoices/templates/invoices/customers/form.html:6
 #: invoices/templates/invoices/customers/form.html:10
+#: invoices/templates/invoices/invoices/invoice_pdf.html:37
 #: invoices/templates/invoices/invoices/list.html:21
 msgid "Customer"
 msgstr "Kunde"
 
 #: invoices/models.py:73 invoices/templates/invoices/customers/list.html:4
-#: invoices/templates/invoices/home.html:23 templates/includes/navbar.html:57
+#: invoices/templates/invoices/home.html:14 templates/includes/navbar.html:57
 msgid "Customers"
 msgstr "Kunden"
 
 #: invoices/models.py:84
-#, fuzzy
-#| msgid "Diagnostics Delete"
 msgid "Diagnosis title"
-msgstr "Diagnose löschen"
+msgstr "Diagnosetitel"
 
 #: invoices/models.py:86
-#, fuzzy
-#| msgid "Unit Price (€)"
 msgid "Default price (€)"
-msgstr "Stückpreis (€)"
+msgstr "Standardpreis (€)"
 
 #: invoices/models.py:95
-#, fuzzy
-#| msgid "Diagnostics"
 msgid "Diagnosis"
-msgstr "Diagnosen"
+msgstr "Diagnose"
 
 #: invoices/models.py:96
-#, fuzzy
-#| msgid "Diagnostics"
 msgid "Diagnoses"
 msgstr "Diagnosen"
 
@@ -185,51 +149,55 @@ msgstr "Diagnosen"
 msgid "Invoice number"
 msgstr "Rechnungsnummer"
 
-#: invoices/models.py:113 invoices/templates/invoices/invoices/list.html:22
-msgid "Order date"
+#: invoices/models.py:113
+#: invoices/templates/invoices/invoices/full_form.html:80
+msgid "Order Date"
 msgstr "Bestelldatum"
 
-#: invoices/models.py:114 invoices/templates/invoices/invoices/list.html:23
-msgid "Service date"
-msgstr "Servicedatum"
+#: invoices/models.py:114
+#: invoices/templates/invoices/invoices/full_form.html:84
+#: invoices/templates/invoices/invoices/invoice_pdf.html:31
+#: invoices/templates/invoices/invoices/list.html:23
+msgid "Service Date"
+msgstr "Leistungsdatum"
 
 #: invoices/models.py:116
 #: invoices/templates/invoices/invoices/full_form.html:242
+#: invoices/templates/invoices/invoices/invoice_pdf.html:103
 msgid "Subtotal"
 msgstr "Zwischensumme"
 
 #: invoices/models.py:117
-msgid "VAT (%)"
-msgstr "MwSt. (%)"
+#: invoices/templates/invoices/invoices/full_form.html:246
+#: invoices/templates/invoices/invoices/invoice_pdf.html:110
+msgid "VAT"
+msgstr "MwSt."
 
 #: invoices/models.py:118
-#, fuzzy
-#| msgid "VAT Amount"
 msgid "VAT amount"
 msgstr "MwSt.-Betrag"
 
 #: invoices/models.py:119
 #: invoices/templates/invoices/invoices/full_form.html:254
+#: invoices/templates/invoices/invoices/invoice_pdf.html:87
+#: invoices/templates/invoices/invoices/invoice_pdf.html:117
 msgid "Total"
 msgstr "Gesamt"
 
 #: invoices/models.py:126
-#, fuzzy
-#| msgid "Created on "
 msgid "Created by"
-msgstr "Erstellt am"
+msgstr "Erstellt von"
 
 #: invoices/models.py:128
 msgid "Notes"
-msgstr ""
+msgstr "Anmerkungen"
 
 #: invoices/models.py:134 invoices/models.py:163
-#, fuzzy
-#| msgid "Invoices"
+#: invoices/templates/invoices/invoices/invoice_pdf.html:29
 msgid "Invoice"
-msgstr "Rechnungen"
+msgstr "Rechnung"
 
-#: invoices/models.py:135 invoices/templates/invoices/home.html:28
+#: invoices/models.py:135 invoices/templates/invoices/home.html:20
 #: invoices/templates/invoices/invoices/form.html:4
 #: invoices/templates/invoices/invoices/form.html:8
 #: invoices/templates/invoices/invoices/full_form.html:4
@@ -239,23 +207,22 @@ msgid "Invoices"
 msgstr "Rechnungen"
 
 #: invoices/models.py:166
-#, fuzzy
-#| msgid "Promotions "
 msgid "Position"
-msgstr "Aktionen"
+msgstr "Position"
 
 #: invoices/models.py:171
 #: invoices/templates/invoices/invoices/full_form.html:191
+#: invoices/templates/invoices/invoices/invoice_pdf.html:84
 msgid "Diagnosis / Service"
-msgstr "Diagnose / Service"
+msgstr "Diagnose /Leistung"
 
 #: invoices/models.py:172
 msgid "Select diagnosis from predefined list"
-msgstr ""
+msgstr "Wählen Sie eine Diagnose aus der vordefinierten Liste aus."
 
 #: invoices/models.py:176
 msgid "Diagnosis text (snapshot)"
-msgstr ""
+msgstr "Diagnosetext (Schnappschuss)"
 
 #: invoices/models.py:181
 #: invoices/templates/invoices/invoices/full_form.html:192
@@ -263,26 +230,18 @@ msgid "Quantity"
 msgstr "Menge"
 
 #: invoices/models.py:182
-#, fuzzy
-#| msgid "Unit Price (€)"
 msgid "Unit price (€)"
 msgstr "Stückpreis (€)"
 
 #: invoices/models.py:183
-#, fuzzy
-#| msgid "Total (€)"
 msgid "Line total (€)"
-msgstr "Gesamt (€)"
+msgstr "Zeilensumme (€)"
 
 #: invoices/models.py:190
-#, fuzzy
-#| msgid "Invoice Items"
 msgid "Invoice item"
-msgstr "Rechnungspositionen"
+msgstr "Rechnungsposition"
 
 #: invoices/models.py:191
-#, fuzzy
-#| msgid "Invoice Items"
 msgid "Invoice items"
 msgstr "Rechnungspositionen"
 
@@ -352,11 +311,13 @@ msgstr "Name"
 
 #: invoices/templates/invoices/companies/list copy.html:25
 #: invoices/templates/invoices/companies/list.html:24
+#: invoices/templates/invoices/invoices/invoice_pdf.html:160
 msgid "Owner"
 msgstr "Inhaber"
 
 #: invoices/templates/invoices/companies/list copy.html:27
 #: invoices/templates/invoices/companies/list.html:26
+#: invoices/templates/invoices/invoices/invoice_pdf.html:141
 msgid "Email"
 msgstr "E-Mail"
 
@@ -367,11 +328,13 @@ msgstr "Webseite"
 
 #: invoices/templates/invoices/companies/list copy.html:30
 #: invoices/templates/invoices/companies/list.html:29
+#: invoices/templates/invoices/invoices/invoice_pdf.html:156
 msgid "IBAN"
 msgstr "IBAN"
 
 #: invoices/templates/invoices/companies/list copy.html:31
 #: invoices/templates/invoices/companies/list.html:30
+#: invoices/templates/invoices/invoices/invoice_pdf.html:164
 msgid "Tax ID"
 msgstr "Steuernummer"
 
@@ -465,7 +428,7 @@ msgstr "Sind Sie sicher, dass Sie die Diagnose löschen möchten?"
 #: invoices/templates/invoices/diagnoses/form.html:4
 #: invoices/templates/invoices/diagnoses/form.html:8
 #: invoices/templates/invoices/diagnoses/list.html:9
-#: invoices/templates/invoices/home.html:33 templates/includes/navbar.html:62
+#: invoices/templates/invoices/home.html:25 templates/includes/navbar.html:62
 msgid "Diagnostics"
 msgstr "Diagnosen"
 
@@ -501,24 +464,32 @@ msgstr "Aktionen"
 msgid "No diagnoses found."
 msgstr "Keine Diagnosen gefunden."
 
-#: invoices/templates/invoices/home.html:6
+#: invoices/templates/invoices/home.html:3
 msgid "Homepage - Rudy's Auto Service"
 msgstr "Startseite - Rudy's Auto Service"
 
-#: invoices/templates/invoices/home.html:11
-msgid "Willkommen bei Rudy's KFZ Service"
+#: invoices/templates/invoices/home.html:7
+msgid "Welcome to Rudy's Car Service"
 msgstr "Willkommen bei Rudy's KFZ Service"
 
-#: invoices/templates/invoices/home.html:12
-msgid "Bitte wählen Sie eine Option aus"
+#: invoices/templates/invoices/home.html:8
+msgid "Please select an option"
 msgstr "Bitte wählen Sie eine Option aus"
 
-#: invoices/templates/invoices/home.html:18 templates/includes/navbar.html:75
+#: invoices/templates/invoices/home.html:35 templates/includes/navbar.html:75
 msgid "Complete Invoices"
 msgstr "Vollständige Rechnungen"
 
-#: invoices/templates/invoices/home.html:48
-msgid "Über uns"
+#: invoices/templates/invoices/home.html:49
+msgid "Developed by"
+msgstr "Entwickelt von"
+
+#: invoices/templates/invoices/home.html:57
+msgid "Reports"
+msgstr "Berichte"
+
+#: invoices/templates/invoices/home.html:62
+msgid "About Us"
 msgstr "Über uns"
 
 #: invoices/templates/invoices/invoices/confirm_delete.html:4
@@ -560,7 +531,7 @@ msgstr "Keine Firma gefunden."
 
 #: invoices/templates/invoices/invoices/full_form.html:40
 msgid "Please create a new company first to be able to create an invoice!"
-msgstr ""
+msgstr "Bitte erstellen Sie zuerst ein neues Unternehmen, um eine Rechnung erstellen zu können!"
 
 #: invoices/templates/invoices/invoices/full_form.html:44
 msgid " Create Company"
@@ -575,24 +546,12 @@ msgid "Invoice Number:"
 msgstr "Rechnungsnummer:"
 
 #: invoices/templates/invoices/invoices/full_form.html:61
-#, fuzzy
-#| msgid "Complete Invoices"
 msgid "Select invoice"
-msgstr "Vollständige Rechnungen"
+msgstr "Rechnung auswählen"
 
 #: invoices/templates/invoices/invoices/full_form.html:73
-#, fuzzy
-#| msgid "Invoice number"
 msgid "Enter new invoice number"
-msgstr "Rechnungsnummer"
-
-#: invoices/templates/invoices/invoices/full_form.html:80
-msgid "Order Date:"
-msgstr "Bestelldatum:"
-
-#: invoices/templates/invoices/invoices/full_form.html:84
-msgid " Service Date:"
-msgstr "Leistungsdatum:"
+msgstr "Neue Rechnungsnummer eingeben"
 
 #: invoices/templates/invoices/invoices/full_form.html:91
 msgid "+ New Invoice"
@@ -603,38 +562,40 @@ msgid "Customer Details"
 msgstr "Kundendaten"
 
 #: invoices/templates/invoices/invoices/full_form.html:118
-#, fuzzy
-#| msgid "New Customer"
 msgid "Select Customer"
-msgstr "Neuer Kunde"
+msgstr "Kunde auswählen"
 
 #: invoices/templates/invoices/invoices/full_form.html:122
-#, fuzzy
-#| msgid "Customer"
 msgid "Choose customer..."
-msgstr "Kunde"
+msgstr "Kunde wählen..."
 
 #: invoices/templates/invoices/invoices/full_form.html:134
+#: invoices/templates/invoices/invoices/invoice_pdf.html:40
 msgid "Customer Number:"
 msgstr "Kundennummer:"
 
 #: invoices/templates/invoices/invoices/full_form.html:139
+#: invoices/templates/invoices/invoices/invoice_pdf.html:41
 msgid "Name:"
 msgstr "Name:"
 
 #: invoices/templates/invoices/invoices/full_form.html:144
+#: invoices/templates/invoices/invoices/invoice_pdf.html:42
 msgid "Adress"
 msgstr "Adresse"
 
 #: invoices/templates/invoices/invoices/full_form.html:149
+#: invoices/templates/invoices/invoices/invoice_pdf.html:43
 msgid "Vehicle:"
 msgstr "Fahrzeug:"
 
 #: invoices/templates/invoices/invoices/full_form.html:154
+#: invoices/templates/invoices/invoices/invoice_pdf.html:44
 msgid "License Plate Number:"
 msgstr "Kennzeichen:"
 
 #: invoices/templates/invoices/invoices/full_form.html:159
+#: invoices/templates/invoices/invoices/invoice_pdf.html:45
 msgid "Mileage:"
 msgstr "Kilometerstand:"
 
@@ -662,15 +623,26 @@ msgstr "Gesamt (€)"
 msgid "Add Item"
 msgstr "Position hinzufügen"
 
-#: invoices/templates/invoices/invoices/full_form.html:246
-#, fuzzy, python-format
-#| msgid "VAT (%)"
-msgid "VAT (%%)"
-msgstr "MwSt. (%)"
-
 #: invoices/templates/invoices/invoices/full_form.html:250
 msgid "VAT Amount"
 msgstr "MwSt.-Betrag"
+
+#: invoices/templates/invoices/invoices/invoice_pdf.html:30
+#: invoices/templates/invoices/invoices/list.html:22
+msgid "Order date"
+msgstr "Bestelldatum"
+
+#: invoices/templates/invoices/invoices/invoice_pdf.html:80
+msgid "We thank you for the order and invoice the following items:"
+msgstr "wir bedanken uns für den Auftrag und stellen Ihnen folgende Positionen in Rechnung:"
+
+#: invoices/templates/invoices/invoices/invoice_pdf.html:85
+msgid "Qty"
+msgstr "Menge"
+
+#: invoices/templates/invoices/invoices/invoice_pdf.html:86
+msgid "Unit price"
+msgstr "Einzelpreis "
 
 #: invoices/templates/invoices/invoices/list.html:4
 msgid "Invoices - Rudy's KFZ Service"
@@ -700,16 +672,5 @@ msgstr "Benutzer ist angemeldet"
 msgid "User is not authenticated"
 msgstr "Benutzer ist nicht angemeldet"
 
-#, fuzzy, python-format
-#~| msgid "VAT (%)"
-#~ msgid "VAT (%%%%)"
-#~ msgstr "MwSt. (%)"
-
-#~ msgid "English"
-#~ msgstr "Englisch"
-
-#~ msgid "Deutsch"
-#~ msgstr "Deutsch"
-
-#~ msgid "العربية"
-#~ msgstr "Arabisch"
+#~ msgid "Bitte wählen Sie eine Option aus"
+#~ msgstr "Please select an option"

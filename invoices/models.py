@@ -110,11 +110,11 @@ class Invoice(models.Model):
         related_name="invoices",
         verbose_name=_("Customer"),
     )
-    invoice_order_date = models.DateField(_("Order date"), default=timezone.now)
-    invoice_service_date = models.DateField(_("Service date"), default=timezone.now)
+    invoice_order_date = models.DateField(_("Order Date"), default=timezone.now)
+    invoice_service_date = models.DateField(_("Service Date"), default=timezone.now)
 
     invoice_subtotal = models.DecimalField(_("Subtotal"), max_digits=12, decimal_places=2, default=0.00)
-    invoice_vat_percent = models.DecimalField(_("VAT (%)"), max_digits=5, decimal_places=2, default=19.00)
+    invoice_vat_percent = models.DecimalField(_("VAT"), max_digits=5, decimal_places=2, default=19.00)
     invoice_vat_amount = models.DecimalField(_("VAT amount"), max_digits=12, decimal_places=2, default=0.00)
     invoice_total = models.DecimalField(_("Total"), max_digits=12, decimal_places=2, default=0.00)
 
