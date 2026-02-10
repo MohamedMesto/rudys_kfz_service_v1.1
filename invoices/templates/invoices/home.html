@@ -1,16 +1,21 @@
 {% extends 'base.html' %} 
-{% load i18n %} {% block title %} 
-{% trans "Homepage - Rudy's Auto Service" %}
+{% load i18n %} 
+{% block title %}
+ {% trans "Homepage - Rudy's Auto Service" %} 
  {% endblock %} 
  {% block content %}
 <div class="text-center mt-5 mb-5">
   <h1>{% trans "Welcome to Rudy's Car Service" %}</h1>
-  <p class="text-muted"><strong>{% trans "Please select an option" %}</strong></p>
+  <p class="text-muted">
+    <strong>{% trans "Please select an option" %}</strong>
+  </p>
 </div>
+
 {% if user.is_authenticated %}
-  <div class="alert alert-success">
-    {% trans "Welcome" %}, <strong>{{ user.get_full_name|default:user.username }}</strong> 👋
-  </div>
+<div class="alert alert-success">
+  {% trans "Welcome" %},
+  <strong>{{ user.get_full_name|default:user.username }}</strong> 👋
+</div>
 {% endif %}
 
 <div class="row g-4">
@@ -21,57 +26,86 @@
   </div>
 
   <div class="col-md-4">
-    <a href="{% url 'invoices:list' %}" class="btn  btn-outline-danger w-100 py-5 btn-lg">
+    <a
+      href="{% url 'invoices:list' %}"
+      class="btn btn-outline-danger w-100 py-5 btn-lg"
+    >
       <i class="bi bi-receipt me-2"></i><strong>{% trans "Invoices" %}</strong>
     </a>
   </div>
   <div class="col-md-4">
-    <a href="{% url 'diagnoses:list' %}" class="btn btn-success w-100 py-5 btn-lg">
+    <a
+      href="{% url 'diagnoses:list' %}"
+      class="btn btn-success w-100 py-5 btn-lg"
+    >
       <i class="bi bi-tools me-2"></i><strong>{% trans "Diagnostics" %}</strong>
     </a>
   </div>
   <div class="col-md-4">
-    <a href="{% url 'companies:list' %}" class="btn btn-warning   w-100 py-5 btn-lg">
-      <i class="bi bi-building me-2"></i> <strong>{% trans "Companies" %}</strong>
+    <a
+      href="{% url 'companies:list' %}"
+      class="btn btn-warning w-100 py-5 btn-lg"
+    >
+      <i class="bi bi-building me-2"></i>
+      <strong>{% trans "Companies" %}</strong>
     </a>
   </div>
   <div class="col-md-4">
-    <a href="/invoices/full-create/" class="btn  btn-outline-success   w-100 py-5 btn-lg">
-      <i class="bi bi-receipt me-2"></i> <strong>{% trans "Complete Invoices" %}</strong>
+    <a
+      href="/invoices/full-create/"
+      class="btn btn-outline-success w-100 py-5 btn-lg"
+    >
+      <i class="bi bi-receipt me-2"></i>
+      <strong>{% trans "Complete Invoices" %}</strong>
     </a>
   </div>
 
   <div class="col-md-4">
-    <a href="" class="btn  w-100 py-5 btn-primary btn-lg ">
+    <a href="" class="btn w-100 py-5 btn-primary btn-lg">
       <i class="bi bi-people me-2"></i><strong> {% trans "Profiles" %}</strong>
     </a>
   </div>
 
   <div class="col-md-4">
-  <a href="https://un2050.de"
-     target="_blank"
-     class="btn btn-danger w-100 py-3 border btn-lg">
-    <i class="bi bi-stars me-2"></i>    <strong>   {% trans "Developed by" %}</strong>
-    <div><strong> UN2050 IT Kreativ & Handel Solutions</strong> </div>
-    <div class="btn "><strong>un2050.de</strong></div>
-  </a>
-</div>
-  <div class="col-md-4">
-    <a href="#" class="btn  btn-outline-primary  w-100 py-5 btn-lg">
-      <i class="bi bi-bar-chart-line me-2"></i>
-     <strong> {% trans "Reports" %}</strong>
-    </a>
-  </div>
-    <div class="col-md-4">
     <a href="" class="btn btn-danger w-100 py-5 btn-lg">
-      <i class="bi bi-info-circle me-2"></i> <strong>{% trans "About Us" %}</strong>
+      <i class="bi bi-info-circle me-2"></i>
+      <strong>{% trans "About Us" %}</strong>
     </a>
   </div>
-  
+
+  <div class="col-md-4">
+    <a href="#" class="btn btn-outline-primary w-100 py-5 btn-lg">
+      <i class="bi bi-bar-chart-line me-2"></i>
+      <strong> {% trans "Reports" %}</strong>
+    </a>
+  </div>
+
+  {% if user.is_authenticated and user.is_staff %}
+  <div class="col-md-4">
+    <a href="/admin/auth/user/" class="btn btn-danger w-100 py-5">
+      <i class="bi bi-person-gear me-2"></i>
+      {% trans "Manage Users" %}
+    </a>
+  </div>
+  {% endif %}
+    <div class="col-md-4">
+        {% comment %} empty {% endcomment %}
+  </div>
+
+
+  <div class="col-md-4">
+    <a
+      href="https://un2050.de"
+      target="_blank"
+      class="btn btn-danger w-100 py-3 border btn-lg"
+    >
+      <i class="bi bi-stars me-2"></i>
+      <strong> {% trans "Developed by" %}</strong>
+      <div><strong> UN2050 IT Kreativ & Handel Solutions</strong></div>
+      <div class="btn"><strong>un2050.de</strong></div>
+    </a>
+  </div>
+ 
 </div>
 
 {% endblock %}
-
-
-
-

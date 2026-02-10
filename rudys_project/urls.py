@@ -31,7 +31,11 @@ urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
 
     # Invoices app (main)
-    path("", include("invoices.urls")),
+    path("", include("invoices.urls")),   
+
+    path("auth/", include("invoices.urls_auth", namespace="auth")),
+    path("users/", include("invoices.urls_users", namespace="users")),
+
 
     # API
     path("api/", include("invoices.api_urls")),
@@ -45,5 +49,6 @@ urlpatterns = [
 
     # auth urls (new)
     path("accounts/", include("invoices.urls_auth", namespace="auth")),
+
 
 ]

@@ -1,3 +1,4 @@
+# invoices/urls_auth.py
 from django.urls import path
 from .views_auth import register_view, login_view, logout_view, profile_view
 

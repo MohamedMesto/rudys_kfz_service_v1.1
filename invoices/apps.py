@@ -1,5 +1,5 @@
+# invoices/apps.py
 from django.apps import AppConfig
-
 
 class InvoicesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
@@ -7,3 +7,5 @@ class InvoicesConfig(AppConfig):
 
     def ready(self):
         import invoices.signals
+
+

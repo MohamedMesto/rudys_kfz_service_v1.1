@@ -8,7 +8,29 @@ from .models import (
     Diagnosis,
     Invoice,
     InvoiceItem,
-)
+) 
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
+
+ 
+
+User = get_user_model()
+
+
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    fk_name = "profile_user_id"
+    can_delete = False
+    extra = 0
+
+
+# unregister and re-register user admin with inline
+admin.site.unregister(User)
+
+@admin.register(User)
+class UserAdmin(DjangoUserAdmin):
+    inlines = [ProfileInline]
+
 
 
 # -----------------------------
@@ -78,11 +100,11 @@ class CompanyAdmin(admin.ModelAdmin):
 # -----------------------------
 # Profile Admin
 # -----------------------------
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("profile_user_id", "profile_role", "profile_phone")
-    search_fields = ("profile_user_id__username", "profile_role")
-    readonly_fields = ("profile_created_at", "profile_updated_at")
+# @admin.register(Profile)
+# class ProfileAdmin(admin.ModelAdmin):
+#     list_display = ("profile_user_id", "profile_role", "profile_phone")
+#     search_fields = ("profile_user_id__username", "profile_role")
+#     readonly_fields = ("profile_created_at", "profile_updated_at")
 
 
 # -----------------------------
