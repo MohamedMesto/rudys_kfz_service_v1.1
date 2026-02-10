@@ -21,17 +21,43 @@ def _make_qr_data_uri(payload: str) -> str:
     return f"data:image/png;base64,{b64}"
 
 
+def _build_sepa_qr(company: Company, invoice: Invoice) -> str:
+    """
+    EPC / SEPA QR payload (European Payments Council).
+    Banking apps expect this format, not plain text.
+    """
+    bic = (getattr(company, "company_bic", "") or "").strip()          # e.g. BELADEBEXXX
+    name = (getattr(company, "company_owner", "") or "").strip()      # account holder
+    iban = (getattr(company, "company_iban", "") or "").replace(" ", "").strip()
+
+    # Amount must be like EUR123.45 (dot as decimal separator)
+    amount = f"{invoice.invoice_total:.2f}".replace(",", ".")
+
+    # Remittance info (short + safe)
+    remittance = f"Invoice {invoice.invoice_no}"
+
+    return "\n".join([
+        "BCD",        # service tag
+        "001",        # version
+        "1",          # character set (UTF-8)
+        "SCT",        # SEPA credit transfer
+        bic,
+        name,
+        iban,
+        f"EUR{amount}",
+        "",           # purpose (optional)
+        remittance,   # remittance information
+        "",           # information (optional)
+    ])
+
+
 def _build_invoice_pdf_context(invoice: Invoice, company: Company, language_code: str) -> dict:
     customer = invoice.invoice_customer
     items = invoice.items.all()
 
-    qr_payload = (
-        f"IBAN:{getattr(company, 'company_iban', '') or ''}\n"
-        f"OWNER:{getattr(company, 'company_owner', '') or ''}\n"
-        f"INVOICE:{invoice.invoice_no}\n"
-        f"TOTAL:{invoice.invoice_total}"
-    )
-    qr_data_uri = _make_qr_data_uri(qr_payload) if company else ""
+    # ✅ SEPA QR (bank-scan friendly)
+    qr_payload = _build_sepa_qr(company, invoice) if company else ""
+    qr_data_uri = _make_qr_data_uri(qr_payload) if qr_payload else ""
 
     return {
         "invoice": invoice,
@@ -39,7 +65,7 @@ def _build_invoice_pdf_context(invoice: Invoice, company: Company, language_code
         "customer": customer,
         "items": items,
         "qr_data_uri": qr_data_uri,
-        "LANGUAGE_CODE": language_code,  # ✅ REQUIRED for RTL switching in template
+        "LANGUAGE_CODE": language_code,  # required for RTL in template
     }
 
 

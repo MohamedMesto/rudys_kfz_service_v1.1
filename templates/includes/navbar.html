@@ -1,92 +1,127 @@
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 
-<form action="{% url 'set_language' %}" method="post" class="d-flex gap-1">
+<!-- Language Buttons -->
+<form action="{% url 'set_language' %}" method="post" class="d-flex gap-1 mb-2">
   {% csrf_token %}
   <input type="hidden" name="next" value="{{ request.get_full_path }}">
 
-  <button
-    type="submit"
-    name="language"
-    value="en"
+  <button type="submit" name="language" value="en"
     class="btn btn-sm {% if LANGUAGE_CODE == 'en' %}btn-light{% else %}btn-outline-light{% endif %}">
     🇬🇧 EN
   </button>
 
-  <button
-    type="submit"
-    name="language"
-    value="de"
+  <button type="submit" name="language" value="de"
     class="btn btn-sm {% if LANGUAGE_CODE == 'de' %}btn-light{% else %}btn-outline-light{% endif %}">
     🇩🇪 DE
   </button>
 
-  <button
-    type="submit"
-    name="language"
-    value="ar"
+  <button type="submit" name="language" value="ar"
     class="btn btn-sm {% if LANGUAGE_CODE == 'ar' %}btn-light{% else %}btn-outline-light{% endif %}">
     🇸🇦 AR
   </button>
 </form>
 
-
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'home' %}"
-      >{% trans "Rudy's Auto Service" %}
+
+    <a class="navbar-brand" href="{% url 'home' %}">
+      {% trans "Rudy's Auto Service" %}
     </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-    >
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNav">
+
+      <!-- LEFT LINKS -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'companies:list' %}"
-            >{% trans "Companies" %}</a
-          >
+          <a class="nav-link" href="{% url 'companies:list' %}">{% trans "Companies" %}</a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'customers:list' %}"
-            >{% trans "Customers" %}</a
-          >
+          <a class="nav-link" href="{% url 'customers:list' %}">{% trans "Customers" %}</a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'diagnoses:list' %}"
-            >{% trans "Diagnostics" %}</a
-          >
+          <a class="nav-link" href="{% url 'diagnoses:list' %}">{% trans "Diagnostics" %}</a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'invoices:list' %}"
-            >{% trans "Invoices" %}</a
-          >
+          <a class="nav-link" href="{% url 'invoices:list' %}">{% trans "Invoices" %}</a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="#">{% trans "Profiles" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/invoices/full-create/"
-            >{% trans "Complete Invoices" %}</a
-          >
+          <a class="nav-link" href="/invoices/full-create/">{% trans "Complete Invoices" %}</a>
         </li>
       </ul>
-      <ul class="navbar-nav ms-auto">
-        {% if user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="#">{% trans "User is authenticated" %} </a>
-        </li>
-        {% else %}
-        <li class="nav-item">
-          <a class="nav-link" href="#">{% trans "User is not authenticated" %}</a>
-        </li>
-        {% endif %}
-      </ul>
+              <!-- RIGHT LINKS -->
+
+              
+
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2
+                    {% if LANGUAGE_CODE == 'ar' %}text-end{% endif %}">
+
+            {% if user.is_authenticated %}
+              <li class="nav-item d-flex align-items-center gap-2">
+
+                <!-- ✅ Profile photo (optional) -->
+                {% if user.profile.profile_photo %}
+                  <img src="{{ user.profile.profile_photo.url }}"
+                      class="rounded-circle"
+                      width="28" height="28"
+                      style="object-fit:cover;"
+                      alt="profile">
+                {% endif %}
+
+                <!-- ✅ Name -->
+                <span class="navbar-text text-white fw-semibold">
+                  {{ user.get_full_name|default:user.username }}
+                </span>
+
+                <!-- ✅ Role badge -->
+                {% if user.profile.profile_role %}
+                  <span class="badge bg-info text-dark">
+                    {{ user.profile.profile_role }}
+                  </span>
+                {% endif %}
+
+                <!-- ✅ Last login -->
+                {% if user.last_login %}
+              <small class="text-white-50 d-none d-lg-inline">
+                {% trans "Last login" %}: {{ user.last_login|date:"d.m.Y H:i" }}
+              </small>
+
+                {% endif %}
+
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'auth:profile' %}">
+                  {% trans "Profile" %}
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'auth:logout' %}">
+                  {% trans "Logout" %}
+                </a>
+              </li>
+
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'auth:login' %}">{% trans "Login" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'auth:register' %}">{% trans "Register" %}</a>
+              </li>
+            {% endif %}
+          </ul>
+
     </div>
   </div>
 </nav>

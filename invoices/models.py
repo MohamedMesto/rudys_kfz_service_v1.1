@@ -16,6 +16,7 @@ class Company(models.Model):
     company_website = models.CharField(_("Company website"), max_length=255, blank=True, null=True)
     company_owner = models.CharField(_("Company owner"), max_length=255, blank=True, null=True)
     company_iban = models.CharField(_("Company IBAN"), max_length=64, blank=True, null=True)
+    company_bic = models.CharField(_("BIC"), max_length=11, blank=True, null=True)
     company_tax_number = models.CharField(_("Company tax number"), max_length=64, blank=True, null=True)
 
     company_created_at = models.DateTimeField(auto_now_add=True)
@@ -33,12 +34,28 @@ class Company(models.Model):
 # Profile Table
 # -----------------------
 class Profile(models.Model):
+    # Selecting “account type” (Admin / Mechanic / Accountant)
+    ROLE_ADMIN = "Admin"
+    ROLE_MECHANIC = "Mechanic"
+    ROLE_ACCOUNTANT = "Accountant"
+
+    ROLE_CHOICES = [
+        (ROLE_ADMIN, _("Admin")),
+        (ROLE_MECHANIC, _("Mechanic")),
+        (ROLE_ACCOUNTANT, _("Accountant")),
+    ]
+
     profile_user_id = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         verbose_name=_("User"),
     )
-    profile_role = models.CharField(_("Role"), max_length=32)  # Admin, Mechanic, Accountant
+    profile_role = models.CharField(
+        _("Role"),
+        max_length=32,
+        choices=ROLE_CHOICES,
+        default=ROLE_MECHANIC,   # ✅ important so it never becomes NULL/empty
+    )
     profile_phone = models.CharField(_("Phone"), max_length=32, blank=True, null=True)
     profile_address = models.TextField(_("Address"), blank=True, null=True)
     profile_photo = models.ImageField(_("Photo"), upload_to="profile_photos/", blank=True, null=True)
@@ -52,6 +69,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.profile_user_id.username} ({self.profile_role})"
+
 
 
 # -----------------------
@@ -210,3 +228,4 @@ class InvoiceItem(models.Model):
 
         # Recalculate invoice totals AFTER saving item
         self.invoice_item_invoice.recalc_totals()
+

@@ -24,3 +24,71 @@ td {
 [dir="rtl"] .container {
     direction: rtl;
 }
+
+/* RTL navbar fixes */
+html[dir="rtl"] .navbar .ms-auto {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+html[dir="rtl"] .navbar .me-auto {
+  margin-right: 0 !important;
+  margin-left: auto !important;
+}
+
+/* spacing for RTL */
+html[dir="rtl"] .navbar-nav {
+  padding-right: 0;
+}
+
+td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ============================
+   RTL (Arabic) – Bootstrap Fixes
+   ============================ */
+
+html[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Navbar + containers */
+html[dir="rtl"] .navbar,
+html[dir="rtl"] .container,
+html[dir="rtl"] .container-fluid {
+  direction: rtl;
+}
+
+/* Flip Bootstrap auto margins */
+html[dir="rtl"] .ms-auto {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+html[dir="rtl"] .me-auto {
+  margin-right: 0 !important;
+  margin-left: auto !important;
+}
+
+/* Neutralize spacing utilities (icons, buttons, etc.) */
+html[dir="rtl"] .ms-1,
+html[dir="rtl"] .ms-2,
+html[dir="rtl"] .ms-3,
+html[dir="rtl"] .ms-4,
+html[dir="rtl"] .ms-5 {
+  margin-left: 0 !important;
+}
+
+html[dir="rtl"] .me-1,
+html[dir="rtl"] .me-2,
+html[dir="rtl"] .me-3,
+html[dir="rtl"] .me-4,
+html[dir="rtl"] .me-5 {
+  margin-right: 0 !important;
+}
+
+/* Icon spacing fix (bi icons, fa icons, etc.) */
+html[dir="rtl"] .me-2 {
+  margin-right: 0 !important;
+  margin-left: .5rem !important;
+}

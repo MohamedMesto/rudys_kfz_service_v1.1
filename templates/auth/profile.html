@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="card p-4">
+  <h3>{% trans "Profile" %}</h3>
+  <hr>
+
+  <p><strong>{% trans "Username" %}:</strong> {{ request.user.username }}</p>
+  <p><strong>{% trans "Role" %}:</strong> {{ profile.profile_role }}</p>
+
+  {% if profile.profile_phone %}
+    <p><strong>{% trans "Phone" %}:</strong> {{ profile.profile_phone }}</p>
+  {% endif %}
+
+  <a class="btn btn-outline-secondary" href="{% url 'auth:logout' %}">
+    {% trans "Logout" %}
+  </a>
+</div>
+{% endblock %}

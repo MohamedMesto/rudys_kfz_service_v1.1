@@ -7,6 +7,11 @@
   <h1>{% trans "Welcome to Rudy's Car Service" %}</h1>
   <p class="text-muted"><strong>{% trans "Please select an option" %}</strong></p>
 </div>
+{% if user.is_authenticated %}
+  <div class="alert alert-success">
+    {% trans "Welcome" %}, <strong>{{ user.get_full_name|default:user.username }}</strong> 👋
+  </div>
+{% endif %}
 
 <div class="row g-4">
   <div class="col-md-4">
@@ -66,3 +71,7 @@
 </div>
 
 {% endblock %}
+
+
+
+
