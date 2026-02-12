@@ -15,8 +15,9 @@ from .views_invoice_full import (
     
 )
 
-from .views_invoice_pdf import invoice_pdf
- 
+from .views_invoice_pdf_reportlab import invoice_pdf_reportlab
+from .views_invoice_pdf import invoice_pdf  # (WeasyPrint - only on Ubuntu HTML2PDF)
+
 
 app_name = "invoices"
 
@@ -36,5 +37,8 @@ urlpatterns = [
     path("get_customer_data/<int:pk>/", get_customer_data, name="get_customer_data"),
     path("check_invoice_no/", check_invoice_no, name="check_invoice_no"),
     # PDF
-    path("<int:pk>/pdf/", invoice_pdf, name="pdf"),
+    path("<int:pk>/pdf/", invoice_pdf, name="pdf"),  # (WeasyPrint - only on Ubuntu HTML2PDF)
+    path("<int:pk>/pdf-rl/", invoice_pdf_reportlab, name="pdf_rl"),  #  (ReportLab on Ubuntu ans Windows - HTML2PDF)
+
     ]
+ 
