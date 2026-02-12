@@ -47,8 +47,8 @@ urlpatterns = [
     path("invoices/", include("invoices.urls_invoices", namespace="invoices")),
 
 
-    # auth urls (new)
-    path("accounts/", include("invoices.urls_auth", namespace="auth")),
+    # # auth urls (new)
+    # path("accounts/", include("invoices.urls_auth", namespace="auth")),
 
 
 ]

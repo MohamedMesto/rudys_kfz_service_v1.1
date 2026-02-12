@@ -195,7 +195,13 @@ class InvoiceItem(models.Model):
         max_length=255,
         editable=False,
     )
-
+    invoice_item_custom_text = models.CharField(
+    _("Custom diagnosis text"),
+    max_length=255,
+    blank=True,
+    null=True,
+    help_text=_("If you enter custom text, it will be used instead of selecting from list."),
+    )
     invoice_item_quantity = models.PositiveIntegerField(_("Quantity"), default=1)
     invoice_item_unit_price = models.DecimalField(_("Unit price (€)"), max_digits=10, decimal_places=2)
     invoice_item_line_total = models.DecimalField(_("Line total (€)"), max_digits=10, decimal_places=2)
@@ -218,14 +224,36 @@ class InvoiceItem(models.Model):
             )
             self.invoice_item_pos = (last_pos or 0) + 1
 
-        # Snapshot diagnosis text
-        self.invoice_item_diagnosis_text = self.invoice_item_diagnosis.diagnosis_title
+        # ✅ Decide diagnosis text snapshot
+        if self.invoice_item_custom_text:
+            self.invoice_item_diagnosis_text = self.invoice_item_custom_text.strip()
+        else:
+            self.invoice_item_diagnosis_text = self.invoice_item_diagnosis.diagnosis_title
 
         # Calculate line total
         self.invoice_item_line_total = self.invoice_item_quantity * self.invoice_item_unit_price
 
         super().save(*args, **kwargs)
-
-        # Recalculate invoice totals AFTER saving item
         self.invoice_item_invoice.recalc_totals()
+
+    # def save(self, *args, **kwargs):
+    #     # Auto position per invoice
+    #     if not self.invoice_item_pos:
+    #         last_pos = (
+    #             InvoiceItem.objects.filter(invoice_item_invoice=self.invoice_item_invoice)
+    #             .aggregate(models.Max("invoice_item_pos"))
+    #             .get("invoice_item_pos__max")
+    #         )
+    #         self.invoice_item_pos = (last_pos or 0) + 1
+
+    #     # Snapshot diagnosis text
+    #     self.invoice_item_diagnosis_text = self.invoice_item_diagnosis.diagnosis_title
+
+    #     # Calculate line total
+    #     self.invoice_item_line_total = self.invoice_item_quantity * self.invoice_item_unit_price
+
+    #     super().save(*args, **kwargs)
+
+    #     # Recalculate invoice totals AFTER saving item
+    #     self.invoice_item_invoice.recalc_totals()
 

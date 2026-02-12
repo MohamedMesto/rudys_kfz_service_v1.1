@@ -36,31 +36,32 @@ document.addEventListener("DOMContentLoaded", function () {
   // Validate last row before adding a new one
   // Prevents creating empty invoice items
   // -----------------------------------------------------
-  function lastRowIsValid() {
-    const rows = tableBody.querySelectorAll(".invoice-item-row");
-    if (rows.length === 0) return true;
+function lastRowIsValid() {
+  const rows = tableBody.querySelectorAll(".invoice-item-row");
+  if (rows.length === 0) return true;
 
-    const lastRow = rows[rows.length - 1];
+  const lastRow = rows[rows.length - 1];
 
-    const diagnosis = lastRow.querySelector(
-      'select[name$="invoice_item_diagnosis"]'
-    );
-    const quantity = lastRow.querySelector(
-      'input[name$="invoice_item_quantity"]'
-    );
-    const price = lastRow.querySelector(
-      'input[name$="invoice_item_unit_price"]'
-    );
+  const diagnosis = lastRow.querySelector('select[name$="invoice_item_diagnosis"]');
+  const custom = lastRow.querySelector('input[name$="invoice_item_custom_text"]');
+  const quantity = lastRow.querySelector('input[name$="invoice_item_quantity"]');
+  const price = lastRow.querySelector('input[name$="invoice_item_unit_price"]');
 
-    // If inputs are missing (edge case), do not block user
-    if (!diagnosis || !quantity || !price) return true;
+  // If inputs missing, don't block user
+  if (!quantity || !price) return true;
 
-    return (
-      diagnosis.value !== "" &&
-      parseFloat(quantity.value) > 0 &&
-      parseFloat(price.value) > 0
-    );
-  }
+  const hasDiagnosis =
+    (diagnosis && diagnosis.value && diagnosis.value !== "") ||
+    (custom && custom.value.trim() !== "");
+
+  return (
+    hasDiagnosis &&
+    parseFloat(quantity.value) > 0 &&
+    parseFloat(price.value) > 0
+  );
+}
+
+
 
   // -----------------------------------------------------
   // Initialize Select2 for diagnosis dropdowns

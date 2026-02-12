@@ -1,170 +1,207 @@
-{% comment %} /invoices/templates/invoices/invoices/invoice_pdf.html {% endcomment %}
+{% comment %} /invoices/templates/invoices/invoices/invoice_pdf.html {%
+endcomment %}
 <!doctype html>
-{% load i18n %}
-{% load static %}
-<html lang="{{ LANGUAGE_CODE }}"
-      dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}"
-      class="{% if LANGUAGE_CODE == 'ar' %}rtl{% endif %}">
-<head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="{% static 'css/invoice_pdf.css' %}">
-</head>
+{% load i18n %} {% load static %}
+<html
+  lang="{{ LANGUAGE_CODE }}"
+  dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}"
+  class="{% if LANGUAGE_CODE == 'ar' %}rtl{% endif %}"
+>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="{% static 'css/invoice_pdf.css' %}" />
+  </head>
 
+  <body>
+    <!-- ✅ CONTENT WRAPPER -->
+    <div class="content">
+      <div class="row">
+        <div>
+          <h2>{{ company.company_name }}</h2>
+          <div>{{ company.company_address }}</div>
+          {% if company.company_phone %}
+          <div>{{ company.company_phone }}</div>
+          {% endif %} {% if company.company_email %}
+          <div>{{ company.company_email }}</div>
+          {% endif %}
+        </div>
 
-<body>
+        <div class="right">
+          <h2>{% trans "Invoice" %} {{ invoice.invoice_no|default:"—" }}</h2>
+          <div>
+            {% trans "Order date" %}: {{ invoice.invoice_order_date
+            |default:"—"}}
+          </div>
+          <div>
+            {% trans "Service Date" %}: {{
+            invoice.invoice_service_date|default:"—" }}
+          </div>
+        </div>
+      </div>
 
-  <!-- ✅ CONTENT WRAPPER -->
-  <div class="content">
+      <hr />
 
-    <div class="row">
+      <h3>{% trans "Customer" %}</h3>
+
+      <div class="customer-block">
+        <div>
+          <strong>{% trans "Customer Number:" %}</strong> {{
+          customer.customer_number|default:"—" }}
+        </div>
+        <div>
+          <strong>{% trans "Name:" %}</strong> {{
+          customer.customer_name|default:"—" }}
+        </div>
+        <div>
+          <strong>{% trans "Adress" %}</strong> {{
+          customer.customer_address|default:"—" }}
+        </div>
+        <div>
+          <strong>{% trans "Vehicle:" %}</strong> {{
+          customer.customer_vehicle|default:"—" }}
+        </div>
+        <div>
+          <strong>{% trans "License Plate Number:" %}</strong> {{
+          customer.customer_license_plate|default:"—" }}
+        </div>
+        <div>
+          <strong>{% trans "Mileage:" %}</strong> {{
+          customer.customer_kilometers|default:"—" }}
+        </div>
+      </div>
+      {% comment %}
+      <h3>{% trans "Customer" %}</h3>
+
+      <table style="width: 100%; border-collapse: collapse; margin-top: 6px">
+        <tbody>
+          <tr>
+            <td><strong>{% trans "Customer Number:" %}</strong></td>
+            <td>{{ customer.customer_number|default:"—" }}</td>
+            <td><strong>{% trans "Name:" %}</strong></td>
+            <td>{{ customer.customer_name|default:"—" }}</td>
+          </tr>
+
+          <tr>
+            <td><strong>{% trans "Adress" %}</strong></td>
+            <td colspan="3">{{ customer.customer_address|default:"—" }}</td>
+          </tr>
+
+          <tr>
+            <td><strong>{% trans "Vehicle:" %}</strong></td>
+            <td>{{ customer.customer_vehicle|default:"—" }}</td>
+            <td><strong>{% trans "License Plate Number:" %}</strong></td>
+            <td>{{ customer.customer_license_plate|default:"—" }}</td>
+          </tr>
+
+          <tr>
+            <td><strong>{% trans "Mileage:" %}</strong></td>
+            <td colspan="3">{{ customer.customer_kilometers|default:"—" }}</td>
+          </tr>
+        </tbody>
+      </table>
+      {% endcomment %}
+
+      <p style="margin: 12px 0 6px 0">
+        {% trans "We thank you for the order and invoice the following items:"
+        %}
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>{% trans "Diagnosis / Service" %}</th>
+            <th class="right">{% trans "Qty" %}</th>
+            <th class="right">{% trans "Unit price" %}</th>
+            <th class="right">{% trans "Total" %}</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for it in items %}
+          <tr>
+            <td>{{ it.invoice_item_diagnosis_text }}</td>
+            <td class="right">{{ it.invoice_item_quantity }}</td>
+            <td class="right">{{ it.invoice_item_unit_price }}</td>
+            <td class="right">{{ it.invoice_item_line_total }}</td>
+          </tr>
+          {% endfor %}
+
+          <!-- SUBTOTAL -->
+          <tr>
+            <td colspan="3" class="right">
+              <strong>{% trans "Subtotal" %}</strong>
+            </td>
+            <td class="right">{{ invoice.invoice_subtotal }}</td>
+          </tr>
+
+          <!-- VAT -->
+          <tr>
+            <td colspan="3" class="right">
+              <strong
+                >{% trans "VAT" %} ({{ invoice.invoice_vat_percent }}%)</strong
+              >
+            </td>
+            <td class="right">{{ invoice.invoice_vat_amount }}</td>
+          </tr>
+
+          <!-- GRAND TOTAL -->
+          <tr>
+            <td colspan="3" class="right">
+              <strong>{% trans "Total" %}</strong>
+            </td>
+            <td class="right"><strong>{{ invoice.invoice_total }}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- ✅ END CONTENT WRAPPER -->
+
+    <!-- ✅ FOOTER (fixed bottom) -->
+
+    <div class="footer">
       <div>
-        <h2>{{ company.company_name }}</h2>
-        <div>{{ company.company_address }}</div>
-        {% if company.company_phone %}<div>{{ company.company_phone }}</div>{% endif %}
-        {% if company.company_email %}<div>{{ company.company_email }}</div>{% endif %}
+        <!-- <strong>{% trans "Best Regards" %}:</strong><br>{{ company.company_owner }}<br> -->
+        <strong>{% trans "Best Regards" %}:</strong><br />{{
+        company.company_owner }}<br />
       </div>
 
-      <div class="right">
-        <h2>{% trans "Invoice" %} {{ invoice.invoice_no|default:"—" }}</h2>
-        <div>{% trans "Order date" %}: {{ invoice.invoice_order_date |default:"—"}}</div>
-        <div>{% trans "Service Date" %}: {{ invoice.invoice_service_date|default:"—" }}</div>
+      <div class="footer-left small">
+        <div><strong>{{ company.company_name }}</strong></div>
+
+        {% if company.company_address %}
+        <div>{{ company.company_address }}</div>
+        {% endif %} {% if company.company_phone %}
+        <div>
+          <strong>{% trans "Phone" %}:</strong> {{ company.company_phone }}
+        </div>
+        {% endif %} {% if company.company_email %}
+        <div>
+          <strong>{% trans "Email" %}: </strong>{{ company.company_email }}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="footer-qr">
+        {% if qr_data_uri %}
+        <img src="{{ qr_data_uri }}" alt="QR" />
+        {% endif %}
+      </div>
+
+      <div class="footer-right small">
+        {% if company.company_iban %}
+        <div>
+          <strong>{% trans "IBAN" %}:</strong> {{ company.company_iban }}
+        </div>
+        {% endif %} {% if company.company_owner %}
+        <div>
+          <strong>{% trans "Owner" %}:</strong> {{ company.company_owner }}
+        </div>
+        {% endif %} {% if company.company_tax_number %}
+        <div>
+          <strong>{% trans "Tax ID" %}:</strong> {{ company.company_tax_number
+          }}
+        </div>
+        {% endif %}
       </div>
     </div>
-
-    <hr>
-
-    <h3>{% trans "Customer" %}</h3>
-
-<div class="customer-block">
-  <div><strong>{% trans "Customer Number:" %}</strong> {{ customer.customer_number|default:"—" }}</div>
-  <div><strong>{% trans "Name:" %}</strong> {{ customer.customer_name|default:"—" }}</div>
-  <div><strong>{% trans "Adress" %}</strong> {{ customer.customer_address|default:"—" }}</div>
-  <div><strong>{% trans "Vehicle:" %}</strong> {{ customer.customer_vehicle|default:"—" }}</div>
-  <div><strong>{% trans "License Plate Number:" %}</strong> {{ customer.customer_license_plate|default:"—" }}</div>
-  <div><strong>{% trans "Mileage:" %}</strong> {{ customer.customer_kilometers|default:"—" }}</div>
-</div>
-{% comment %} 
-<h3>{% trans "Customer" %}</h3>
-
-<table style="width:100%; border-collapse: collapse; margin-top: 6px;">
-  <tbody>
-    <tr>
-      <td><strong>{% trans "Customer Number:" %}</strong></td>
-      <td>{{ customer.customer_number|default:"—" }}</td>
-      <td><strong>{% trans "Name:" %}</strong></td>
-      <td>{{ customer.customer_name|default:"—" }}</td>
-    </tr>
-
-    <tr>
-      <td><strong>{% trans "Adress" %}</strong></td>
-      <td colspan="3">{{ customer.customer_address|default:"—" }}</td>
-    </tr>
-
-    <tr>
-      <td><strong>{% trans "Vehicle:" %}</strong></td>
-      <td>{{ customer.customer_vehicle|default:"—" }}</td>
-      <td><strong>{% trans "License Plate Number:" %}</strong></td>
-      <td>{{ customer.customer_license_plate|default:"—" }}</td>
-    </tr>
-
-    <tr>
-      <td><strong>{% trans "Mileage:" %}</strong></td>
-      <td colspan="3">{{ customer.customer_kilometers|default:"—" }}</td>
-    </tr>
-  </tbody>
-</table> {% endcomment %}
-
-<p style="margin: 12px 0 6px 0;">
-  {% trans "We thank you for the order and invoice the following items:" %}
-</p><table>
-  <thead>
-    <tr>
-      <th>{% trans "Diagnosis / Service" %}</th>
-      <th class="right">{% trans "Qty" %}</th>
-      <th class="right">{% trans "Unit price" %}</th>
-      <th class="right">{% trans "Total" %}</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    {% for it in items %}
-    <tr>
-      <td>{{ it.invoice_item_diagnosis_text }}</td>
-      <td class="right">{{ it.invoice_item_quantity }}</td>
-      <td class="right">{{ it.invoice_item_unit_price }}</td>
-      <td class="right">{{ it.invoice_item_line_total }}</td>
-    </tr>
-    {% endfor %}
-
-    <!-- SUBTOTAL -->
-    <tr>
-      <td colspan="3" class="right"><strong>{% trans "Subtotal" %}</strong></td>
-      <td class="right">{{ invoice.invoice_subtotal }}</td>
-    </tr>
-
-    <!-- VAT -->
-    <tr>
-      <td colspan="3" class="right">
-        <strong>{% trans "VAT" %} ({{ invoice.invoice_vat_percent }}%)</strong>
-      </td>
-      <td class="right">{{ invoice.invoice_vat_amount }}</td>
-    </tr>
-
-    <!-- GRAND TOTAL -->
-    <tr>
-      <td colspan="3" class="right"><strong>{% trans "Total" %}</strong></td>
-      <td class="right"><strong>{{ invoice.invoice_total }}</strong></td>
-    </tr>
-  </tbody>
-</table>
-
-  </div>
-  <!-- ✅ END CONTENT WRAPPER -->
-
-  <!-- ✅ FOOTER (fixed bottom) -->
-  <div class="footer">
-    <div class="footer-left small">
-      <div><strong>{{ company.company_name }}</strong></div>
-
-      {% if company.company_address %}
-        <div>{{ company.company_address }}</div>
-      {% endif %}
-
-      {% if company.company_phone %}
-        <div><strong>{% trans "Phone" %}:</strong> 
-          {{ company.company_phone }}</div>
-      {% endif %}
-
-      {% if company.company_email %}
-        <div><strong>{% trans "Email" %}: </strong>{{ company.company_email }}</div>
-      {% endif %}
-    </div>
-
-
-
-    <div class="footer-qr">
-      {% if qr_data_uri %}
-        <img src="{{ qr_data_uri }}" alt="QR">
-      {% endif %}
-    </div>
-
-
-    <div class="footer-right small">
-      {% if company.company_iban %}
-        <div><strong>{% trans "IBAN" %}:</strong> {{ company.company_iban }}</div>
-      {% endif %}
-
-      {% if company.company_owner %}
-        <div><strong>{% trans "Owner" %}:</strong> {{ company.company_owner }}</div>
-      {% endif %}
-
-      {% if company.company_tax_number %}
-        <div><strong>{% trans "Tax ID" %}:</strong> {{ company.company_tax_number }}</div>
-      {% endif %}
-    </div>
-
-
-  </div>
-
-</body>
+  </body>
 </html>

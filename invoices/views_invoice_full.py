@@ -1,40 +1,57 @@
 # invoices/views_invoice_full.py
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Invoice, Company, Customer
-from .forms_invoice import InvoiceForm, InvoiceItemFormSet
 from django.contrib import messages
 from django.http import JsonResponse
-from decimal import Decimal
-
-
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from .models import Invoice, Company, Customer, Diagnosis
+from .forms_invoice import InvoiceForm, InvoiceItemFormSet
 
 @login_required
 def invoice_create_view(request):
     company = Company.objects.first()
-    if not company:
-        messages.warning(request, "Bitte legen Sie zuerst eine Firma an.")
-        return redirect("companies:create")
-
-    invoices = Invoice.objects.select_related("invoice_customer").order_by("-id")[:200]
-    customers = Customer.objects.order_by("customer_number")
+    invoices = Invoice.objects.all().order_by("-id")
+    customers = Customer.objects.all().order_by("customer_name")
 
     if request.method == "POST":
         form = InvoiceForm(request.POST)
         formset = InvoiceItemFormSet(request.POST)
 
         if form.is_valid() and formset.is_valid():
-            invoice = form.save(commit=False)
-            invoice.invoice_created_by = request.user
-            invoice.save()
+            with transaction.atomic():
+                invoice = form.save(commit=False)
+                invoice.invoice_created_by = request.user
+                invoice.save()
 
-            formset.instance = invoice
-            formset.save()
+                # ✅ IMPORTANT: attach the invoice to the formset
+                formset.instance = invoice
 
-            messages.success(request, "Invoice saved.")
-            return redirect("invoices:full_create")
-        else:
-            messages.error(request, "Please fix the errors below.")
+                # ✅ handle items manually so we can create Diagnosis if needed
+                items = formset.save(commit=False)
+
+                # Delete removed rows
+                for obj in formset.deleted_objects:
+                    obj.delete()
+
+                for it in items:
+                    txt = (it.invoice_item_custom_text or "").strip()
+
+                    if txt and not it.invoice_item_diagnosis_id:
+                        diag, _ = Diagnosis.objects.get_or_create(
+                            diagnosis_title=txt,
+                            defaults={"diagnosis_default_price": it.invoice_item_unit_price or 0},
+                        )
+                        it.invoice_item_diagnosis = diag
+
+                    it.invoice_item_invoice = invoice
+                    it.save()
+
+
+                # (no m2m needed usually, but safe)
+                formset.save_m2m()
+
+            return redirect("invoices:full-create")
+
     else:
         form = InvoiceForm()
         formset = InvoiceItemFormSet()
@@ -47,6 +64,46 @@ def invoice_create_view(request):
         "customers": customers,
     })
 
+
+# @login_required
+# def invoice_create_view(request):
+#     company = Company.objects.first()
+#     if not company:
+#         messages.warning(request, "Please create a company first.")
+#         return redirect("companies:create")
+
+    
+#     invoices = Invoice.objects.select_related("invoice_customer").order_by("-id")[:200]
+#     customers = Customer.objects.order_by("customer_number")
+
+#     if request.method == "POST":
+#         form = InvoiceForm(request.POST)
+#         formset = InvoiceItemFormSet(request.POST)
+
+#         if form.is_valid() and formset.is_valid():
+#             invoice = form.save(commit=False)
+#             invoice.invoice_created_by = request.user
+#             invoice.save()
+
+#             formset.instance = invoice
+#             formset.save()
+
+#             messages.success(request, "Invoice saved.")
+#             return redirect("invoices:full_create")
+#         else:
+#             messages.error(request, "Please fix the errors below.")
+#     else:
+#         form = InvoiceForm()
+#         formset = InvoiceItemFormSet()
+
+#     return render(request, "invoices/invoices/full_form.html", {
+#         "form": form,
+#         "formset": formset,
+#         "company": company,
+#         "invoices": invoices,
+#         "customers": customers,
+#     })
+    
 @login_required
 def get_customer_data(request, pk):
     customer = Customer.objects.get(pk=pk)

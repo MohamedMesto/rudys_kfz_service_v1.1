@@ -17,8 +17,7 @@ from .views_invoice_full import (
 
 from .views_invoice_pdf_reportlab import invoice_pdf_reportlab
 from .views_invoice_pdf import invoice_pdf  # (WeasyPrint - only on Ubuntu HTML2PDF)
-
-
+ 
 app_name = "invoices"
 
 urlpatterns = [
@@ -28,9 +27,8 @@ urlpatterns = [
     path("<int:pk>/delete/", InvoiceDeleteView.as_view(), name="delete"),
 
     # Full invoice UI
-    path("full-create/", invoice_create_view, name="full_create"),
+    path("full-create/", invoice_create_view, name="full-create"),
 
- 
     # AJAX (keep underscore style to match your existing working links)
     path("get_invoice_data/<int:pk>/", get_invoice_data, name="get_invoice_data"),
     path("get_invoice_items/<int:pk>/", get_invoice_items, name="get_invoice_items"),

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+
 {% block title %}{% trans "Invoices" %}{% endblock %}
 {% block content %}
 
@@ -94,26 +95,7 @@
         <button type="button" class="btn btn-sm btn-outline-secondary d-none" id="cancel-new-invoice-btn">
           {% trans "Cancel" %}
         </button>
-
-        <!-- PDF button (enabled only when invoice selected) -->
-        {% comment %} <a id="pdf-btn" class="btn btn-sm btn-danger  disabled " href="#" target="_blank">
-          PDF
-        </a> {% endcomment %}
-          {% comment %} {% if invoice and invoice.id %}
-          <div class="d-flex gap-2 justify-content-end mt-2">
-          <a class="btn btn-sm btn-outline-secondary"
-          href="{% url 'invoices:pdf' invoice.id %}"
-          target="_blank">
-          PDF (HTML)
-          </a>
-
-          <a class="btn btn-sm btn-outline-primary"
-          href="{% url 'invoices:pdf_rl' invoice.id %}"
-          target="_blank">
-          PDF (Windows)
-          </a>
-          </div>
-          {% endif %} {% endcomment %}
+ 
    
                     <!-- PDF buttons (enabeld only when invoice selected) -->
           <a id="pdf-btn-html" class="btn btn-sm btn-danger disabled" href="#" target="_blank">
@@ -226,7 +208,12 @@
         <tbody id="invoice-items-body">
           {% for item_form in formset %}
             <tr class="invoice-item-row">
-              <td>{{ item_form.invoice_item_diagnosis }}</td>
+              {% comment %} <td>{{ item_form.invoice_item_diagnosis }}</td> {% endcomment %}
+              <td>  {{ item_form.invoice_item_diagnosis }}<div class="mt-2">
+                  {{ item_form.invoice_item_custom_text }}
+                </div>
+              </td>
+
               <td class="text-center">{{ item_form.invoice_item_quantity }}</td>
               <td class="text-end">{{ item_form.invoice_item_unit_price }}</td>
               <td class="text-end item-total">0.00 €</td>
@@ -244,7 +231,12 @@
   <table style="display:none">
     <tbody>
       <tr id="empty-form-row" class="invoice-item-row d-none">
-        <td>{{ formset.empty_form.invoice_item_diagnosis }}</td>
+        {% comment %} <td>{{ formset.empty_form.invoice_item_diagnosis }}</td> {% endcomment %}
+       <td>  {{ formset.empty_form.invoice_item_diagnosis }}  <div class="mt-2">
+            {{ formset.empty_form.invoice_item_custom_text }}
+          </div>
+        </td>
+
         <td class="text-center">{{ formset.empty_form.invoice_item_quantity }}</td>
         <td class="text-end">{{ formset.empty_form.invoice_item_unit_price }}</td>
         <td class="text-end item-total">0.00 €</td>

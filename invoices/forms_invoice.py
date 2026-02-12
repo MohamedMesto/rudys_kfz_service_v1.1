@@ -1,37 +1,62 @@
-# # invoices/forms_invoice.py
-# from django import forms
-# from django.forms import inlineformset_factory
-# from .models import Invoice, InvoiceItem, Diagnosis
- 
-
 # invoices/forms_invoice.py
 from django import forms
 from django.forms import inlineformset_factory
 from .models import Invoice, InvoiceItem
 
 
-# ---------------------------------------------------------
-# Invoice Item Form (one line in the invoice)
-# ---------------------------------------------------------
 class InvoiceItemForm(forms.ModelForm):
     class Meta:
         model = InvoiceItem
         fields = [
             "invoice_item_diagnosis",
+            "invoice_item_custom_text",   # ✅ NEW
             "invoice_item_quantity",
             "invoice_item_unit_price",
         ]
         widgets = {
-            "invoice_item_diagnosis": forms.Select(
-                attrs={"class": "form-select diagnosis-select"}
-            ),
-            "invoice_item_quantity": forms.NumberInput(
-                attrs={"class": "form-control", "min": "1"}
-            ),
-            "invoice_item_unit_price": forms.NumberInput(
-                attrs={"class": "form-control", "step": "0.01"}
-            ),
+            "invoice_item_diagnosis": forms.Select(attrs={'class': 'form-select diagnosis-select'}),
+            "invoice_item_custom_text": forms.TextInput(attrs={
+                "class": "form-control mt-2",
+                "placeholder": "…oder neuen Text schreiben"
+            }),
+            "invoice_item_quantity": forms.NumberInput(attrs={'class': 'form-control'}),
+            "invoice_item_unit_price": forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # ✅ IMPORTANT: allow empty dropdown (because user might type custom text)
+        self.fields["invoice_item_diagnosis"].required = False
+
+    def clean(self):
+        cleaned = super().clean()
+
+        diag = cleaned.get("invoice_item_diagnosis")
+        txt = (cleaned.get("invoice_item_custom_text") or "").strip()
+
+        # ✅ require at least one
+        if not diag and not txt:
+            raise forms.ValidationError(
+                "Please select a diagnosis OR type a new one."
+            )
+
+        return cleaned
+
+
+InvoiceItemFormSet = inlineformset_factory(
+    Invoice,
+    InvoiceItem,
+    form=InvoiceItemForm,
+    fields=[
+        "invoice_item_diagnosis",
+        "invoice_item_custom_text",   # ✅ NEW
+        "invoice_item_quantity",
+        "invoice_item_unit_price",
+    ],
+    extra=1,
+    can_delete=True
+)
 
 
 # ---------------------------------------------------------
@@ -90,83 +115,43 @@ class InvoiceForm(forms.ModelForm):
         return value
 
 
-# ---------------------------------------------------------
-# Inline Formset for invoice items
-# ---------------------------------------------------------
-InvoiceItemFormSet = inlineformset_factory(
-    parent_model=Invoice,
-    model=InvoiceItem,
-    form=InvoiceItemForm,
-    fk_name="invoice_item_invoice",   # ✅ CRITICAL for your model
-    extra=1,
-    can_delete=True,
-)
+# # invoices/forms_invoice.py
+# from django import forms
+# from django.forms import inlineformset_factory
+# from .models import Invoice, InvoiceItem, Diagnosis
 
 
+# # ---------------------------------------------------------
+# # Invoice Item Form (one line in the invoice)
+# # ---------------------------------------------------------
 # class InvoiceItemForm(forms.ModelForm):
 #     class Meta:
 #         model = InvoiceItem
 #         fields = [
 #             "invoice_item_diagnosis",
+#             "invoice_item_custom_text",   # ✅ NEW
 #             "invoice_item_quantity",
 #             "invoice_item_unit_price",
 #         ]
 #         widgets = {
 #             "invoice_item_diagnosis": forms.Select(attrs={'class': 'form-select diagnosis-select'}),
+#             "invoice_item_custom_text": forms.TextInput(attrs={
+#                 'class': 'form-control',
+#                 'placeholder': 'Oder neuen Text eingeben…'
+#             }),
 #             "invoice_item_quantity": forms.NumberInput(attrs={'class': 'form-control'}),
 #             "invoice_item_unit_price": forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
 #         }
 
-#     # -------------------------
-#     # Make invoice_no a dropdown
-#     # -------------------------
-# class InvoiceForm(forms.ModelForm):
-#     invoice_no = forms.ModelChoiceField(
-#         queryset=Invoice.objects.all(),
-#         empty_label="Rechnung auswählen",
-#         required=False,
-#         widget=forms.Select(attrs={
-#             "id": "invoice-select",
-#             "class": "form-select"
-#         })
-#     )
 
-#     class Meta:
-#         model = Invoice
-#         fields = [
-#             "invoice_no",
-#             "invoice_customer",
-#             "invoice_order_date",
-#             "invoice_service_date",
-#             "invoice_vat_percent",
-#             "invoice_notes",
-#             "invoice_created_by",
-#         ]
-#         widgets = {
-#             "invoice_order_date": forms.DateInput(attrs={
-#                 "type": "date",
-#                 "class": "form-control"
-#             }),
-#             "invoice_service_date": forms.DateInput(attrs={
-#                 "type": "date",
-#                 "class": "form-control"
-#             }),
-#         }
-
-# # -------------------------
-# # Inline Formset for items
-# # -------------------------
+# # ---------------------------------------------------------
+# # Inline Formset for invoice items
+# # ---------------------------------------------------------
 # InvoiceItemFormSet = inlineformset_factory(
-#     Invoice,
-#     InvoiceItem,
-#     form=InvoiceItemForm,   # ✅ THIS IS THE KEY
-#     fields=[
-#         "invoice_item_diagnosis",
-#         "invoice_item_quantity",
-#         "invoice_item_unit_price",
-#     ],
+#     parent_model=Invoice,
+#     model=InvoiceItem,
+#     form=InvoiceItemForm,
+#     fk_name="invoice_item_invoice",   # ✅ CRITICAL for your model
 #     extra=1,
-#     can_delete=True
+#     can_delete=True,
 # )
-
-

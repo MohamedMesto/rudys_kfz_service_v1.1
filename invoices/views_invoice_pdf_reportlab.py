@@ -19,7 +19,7 @@ from .models import Invoice, Company
 
 from reportlab.lib.utils import ImageReader
 import qrcode
- 
+from django.utils.translation import gettext as _
 
 
 # def _make_qr_png_bytes(payload: str) -> bytes:
@@ -133,7 +133,7 @@ def _header_footer(c: canvas.Canvas, doc, company: Company, invoice: Invoice):
     yR -= 5 * mm
     c.drawRightString(xR, yR, f"{_('Order date')}: {invoice.invoice_order_date}")
     yR -= 4 * mm
-    c.drawRightString(xR, yR, f"{_('Service date')}: {invoice.invoice_service_date}")
+    c.drawRightString(xR, yR, f"{_('Service Date')}: {invoice.invoice_service_date}")
 
     # header separator line
     c.setLineWidth(0.5)
@@ -249,8 +249,15 @@ def invoice_pdf_reportlab(request, pk):
     story.append(Paragraph(f"{_('Mileage')}: {customer.customer_kilometers or '—'}", styles["Normal"]))
     story.append(Spacer(1, 6 * mm))
 
-    # Intro text before table
-    story.append(Paragraph(_("We thank you for your order and invoice the following items."), styles["Italic"]))
+    # Intro text before table  
+    
+
+    story.append(
+        Paragraph(
+            _("We thank you for your order and invoice the following items."),
+            styles["Italic"]
+        )
+    )
     story.append(Spacer(1, 4 * mm))
 
     # Items table + totals included
@@ -288,6 +295,45 @@ def invoice_pdf_reportlab(request, pk):
     ]))
 
     story.append(tbl)
+
+    # Space before signature
+    story.append(Spacer(1, 12 * mm))
+
+    # Horizontal line
+    line_data = [[""]]
+    line_table = Table(line_data, colWidths=[doc.width])
+    line_table.setStyle(TableStyle([
+        ("LINEABOVE", (0,0), (-1,-1), 0.5, colors.black),
+    ]))
+    story.append(line_table)
+
+    story.append(Spacer(1, 4 * mm))
+
+
+
+    # Mit freundlichen Grüßen text
+    story.append(
+        Paragraph(
+            f"<b>{_('Mit freundlichen Grüßen')}</b>",
+            styles["Normal"]
+        )
+    )
+
+    # # Best regards text
+    # story.append(
+    #     Paragraph(
+    #         f"<b>{_('Best regards')}</b>",
+    #         styles["Normal"]
+    #     )
+    # )
+
+    # Company owner name
+    if company and company.company_owner:
+        story.append(
+            Paragraph(company.company_owner, styles["Normal"])
+        )
+
+
 
     doc.build(
         story,
