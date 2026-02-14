@@ -130,6 +130,7 @@ LANGUAGES = [
     ("en", "English"),
     ("de", "Deutsch"),
     ("ar", "العربية"),
+    ("tr", "Türkçe"),
 ]
 
 
