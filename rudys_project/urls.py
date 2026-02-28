@@ -26,16 +26,18 @@ urlpatterns = [
 
     # Homepage
     path("", home_view, name="home"),
+    # path("", include("invoices.urls_home")),  # home
 
     # i18n
     path("i18n/", include("django.conf.urls.i18n")),
 
     # Invoices app (main)
-    path("", include("invoices.urls")),   
+    # path("", include("invoices.urls")),   
 
-    path("auth/", include("invoices.urls_auth", namespace="auth")),
-    path("users/", include("invoices.urls_users", namespace="users")),
-
+    # login/register/logout/profile  
+    path("auth/", include("invoices.urls_auth", namespace="auth")),  
+    # ✅ if you created it
+    path("users/", include("invoices.urls_users", namespace="users")), 
 
     # API
     path("api/", include("invoices.api_urls")),
@@ -46,9 +48,13 @@ urlpatterns = [
     path("diagnoses/", include("invoices.urls_diagnoses", namespace="diagnoses")),
     path("invoices/", include("invoices.urls_invoices", namespace="invoices")),
 
-
-    # # auth urls (new)
-    # path("accounts/", include("invoices.urls_auth", namespace="auth")),
-
+   
+     
 
 ]
+
+# rudys_project/urls.py
+from invoices.views_errors import custom_404, custom_500
+
+handler404 = custom_404
+handler500 = custom_500
