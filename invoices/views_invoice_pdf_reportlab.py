@@ -14,7 +14,7 @@ from reportlab.lib import colors
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
-
+ 
 from .models import Invoice, Company
 
 from reportlab.lib.utils import ImageReader
@@ -22,50 +22,18 @@ import qrcode
 from django.utils.translation import gettext as _
 
 
-# def _make_qr_png_bytes(payload: str) -> bytes:
-#     img = qrcode.make(payload)
-#     buf = BytesIO()
-#     img.save(buf, format="PNG")
-#     return buf.getvalue()
+# for the bold style
+
+styles = getSampleStyleSheet()
+
+from reportlab.lib.styles import ParagraphStyle
 
 
-# def _build_sepa_payload(company: Company, invoice: Invoice) -> str:
-#     """
-#     EPC / SEPA QR format (يدعمه تطبيقات البنوك الألمانية عادةً)
-#     """
-#     bic = (getattr(company, "company_bic", "") or "").strip()
-#     iban = (company.company_iban or "").replace(" ", "")
-#     name = (company.company_owner or company.company_name or "").strip()
-#     amount = f"{Decimal(invoice.invoice_total):.2f}"
-#     remittance = f"RE {invoice.invoice_no}"
-
-#     # EPC069-12 standard
-#     # Lines:
-#     # 1: BCD
-#     # 2: Version (001)
-#     # 3: Character set (1 = UTF-8)
-#     # 4: Identification (SCT)
-#     # 5: BIC (optional but many scanners like it)
-#     # 6: Name
-#     # 7: IBAN
-#     # 8: Amount (EUR)
-#     # 9: Purpose (optional)
-#     # 10: Remittance
-#     # 11: Information (optional)
-#     lines = [
-#         "BCD",
-#         "001",
-#         "1",
-#         "SCT",
-#         bic,
-#         name,
-#         iban,
-#         f"EUR{amount}",
-#         "",
-#         remittance,
-#         "",
-#     ]
-#     return "\n".join(lines)
+bold_style = ParagraphStyle(
+    name="BoldNormal",
+    parent=styles["Normal"],
+    fontName="Helvetica-Bold",
+)
 
 
 def _build_sepa_payload(company, invoice):
@@ -311,21 +279,13 @@ def invoice_pdf_reportlab(request, pk):
 
 
 
-    # Mit freundlichen Grüßen text
-    story.append(
-        Paragraph(
-            f"<b>{_('Mit freundlichen Grüßen')}</b>",
-            styles["Normal"]
-        )
-    )
 
-    # # Best regards text
-    # story.append(
-    #     Paragraph(
-    #         f"<b>{_('Best regards')}</b>",
-    #         styles["Normal"]
-    #     )
-    # )
+    story.append(Spacer(1, 12))
+    story.append(
+        Paragraph(_("Best Regards."), bold_style)
+    )
+    story.append(Spacer(1, 6))
+ 
 
     # Company owner name
     if company and company.company_owner:

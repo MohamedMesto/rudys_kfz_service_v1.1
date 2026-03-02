@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+###############################################################################
+##### fix_po.py path/to/ar.po [--keep-fuzzy]###################################
+###############################################################################
+# fix_po.py [-h] [--remove-fuzzy] [--fix-wrong] [--force] po_file
+###############################################################################
+# python3 fix_po.py de/LC_MESSAGES/django.po --remove-fuzzy --fix-wrong --force
+#
+# python3 fix_po.py ar/LC_MESSAGES/django.po --remove-fuzzy --fix-wrong --force
+#
+# python3 fix_po.py tr/LC_MESSAGES/django.po --remove-fuzzy --fix-wrong --force
+###############################################################################
+###############################################################################
+
+# How to use
+
+# 1) Only fill empty msgstr (safe):
+
+# python3 fix_po.py django.po --lang de
+
+# 2) Fill empty msgstr + remove fuzzy markers:
+
+# python3 fix_po.py django.po --lang de/LC_MESSAGES/django.po --remove-fuzzy
+
+# 3) Also fix known wrong translations (recommended for your file):
+
+# python3 fix_po.py de/LC_MESSAGES/django.po --lang de --remove-fuzzy --fix-wrong
+
+#############################################################################
+
+import re
+import sys
+from pathlib import Path
+
+# Fill only these known strings (safe + UI-common)
+FILL_MAP = {
+    "BIC": "رمز السويفت (BIC)",
+    "Admin": "مسؤول",
+    "Mechanic": "ميكانيكي",
+    "Accountant": "محاسب",
+    "Best Regards": "مع أطيب التحيات",
+    "Server Error": "خطأ في الخادم",
+    "Something went wrong.": "حدث خطأ ما.",
+    "The page you requested was not found.": "الصفحة التي طلبتها غير موجودة.",
+    "Back to home": "العودة إلى الصفحة الرئيسية",
+    "Back to Homepage": "العودة إلى الصفحة الرئيسية",
+    "Manage Users": "إدارة المستخدمين",
+    "Password confirmation": "تأكيد كلمة المرور",
+    "Create account": "إنشاء حساب",
+    "Admin dashboard": "لوحة تحكم المسؤول",
+    "Username": "اسم المستخدم",
+    "Users": "المستخدمون",
+    "Add user": "إضافة مستخدم",
+    "First name": "الاسم الأول",
+    "Last name": "اسم العائلة",
+    "Custom diagnosis text": "نص تشخيص مخصص",
+    "If you enter custom text, it will be used instead of selecting from list.": "إذا أدخلت نصًا مخصصًا فسيتم استخدامه بدلاً من الاختيار من القائمة.",
+    "We thank you for your order and invoice the following items.": "نشكر لكم طلبكم ونُدرج البنود التالية في هذه الفاتورة.",
+    "Page not found": "الصفحة غير موجودة",
+    "The page you requested was not found.": "الصفحة التي طلبتها غير موجودة.",
+}
+
+# Multi-line msgid special case in your file (broken into two lines in the po)
+MULTILINE_MSGID = (
+    "An unexpected server error occurred. Please try again later or contact the "
+    "administrator if the problem persists."
+)
+FILL_MAP[MULTILINE_MSGID] = (
+    "حدث خطأ غير متوقع في الخادم. يرجى المحاولة لاحقًا أو التواصل مع المسؤول إذا استمرت المشكلة."
+)
+
+def read_po(path: Path) -> str:
+    return path.read_text(encoding="utf-8")
+
+def write_po(path: Path, content: str) -> None:
+    path.write_text(content, encoding="utf-8")
+
+def extract_msgid(block: str) -> str:
+    # Collect msgid lines (supports multiline msgid "..." "\n" "...")
+    m = re.search(r'\nmsgid\s+"(.*?)"\nmsgstr', block, flags=re.S)
+    if not m:
+        return ""
+    msgid_part = m.group(1)
+
+    # If msgid continues with extra quoted lines before msgstr
+    # Example:
+    # msgid ""
+    # "line1 "
+    # "line2"
+    if msgid_part == "":
+        # grab following quoted lines until msgstr
+        lines = re.findall(r'\nmsgid\s+""\n((?:".*"\n)+)msgstr', block, flags=re.S)
+        if lines:
+            quoted = lines[0].splitlines()
+            msgid_full = "".join([q.strip()[1:-1] for q in quoted if q.strip().startswith('"')])
+            return msgid_full
+    return msgid_part
+
+def replace_msgstr(block: str, new_str: str) -> str:
+    # Replace msgstr "" (possibly multiline) with msgstr "new_str"
+    # Keep formatting simple and safe (single line).
+    block = re.sub(r'\nmsgstr\s+""(?:\n".*")*', f'\nmsgstr "{new_str}"', block, flags=re.S)
+    return block
+
+def remove_fuzzy_flag(block: str) -> str:
+    # Remove fuzzy marker line only
+    block = re.sub(r'^\s*#,\s*fuzzy\s*\n', "", block, flags=re.M)
+    # Also remove “#| msgid …” previous msgid hints (optional)
+    block = re.sub(r'^\s*#\|\s*msgid\s+".*"\s*\n', "", block, flags=re.M)
+    return block
+
+def fix_po(content: str, remove_fuzzy: bool = True) -> str:
+    # Split into blocks separated by blank line(s), but keep header as one block too
+    blocks = re.split(r'\n{2,}', content)
+    fixed_blocks = []
+
+    for blk in blocks:
+        b = blk
+
+        # Work only on translation blocks that have msgid/msgstr
+        if "msgid" in b and "msgstr" in b:
+            msgid = extract_msgid("\n" + b + "\n")
+            if remove_fuzzy:
+                b = remove_fuzzy_flag(b)
+
+            # Fill empty msgstr if we have a mapping
+            if re.search(r'\nmsgstr\s+""(\n|$)', "\n" + b + "\n"):
+                if msgid in FILL_MAP:
+                    b = replace_msgstr("\n" + b + "\n", FILL_MAP[msgid]).strip("\n")
+
+        fixed_blocks.append(b)
+
+    # Re-join with double newlines
+    return "\n\n".join(fixed_blocks).rstrip() + "\n"
+
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: fix_po.py path/to/ar.po [--keep-fuzzy]")
+        sys.exit(1)
+
+    path = Path(sys.argv[1])
+    keep_fuzzy = "--keep-fuzzy" in sys.argv
+    content = read_po(path)
+    fixed = fix_po(content, remove_fuzzy=not keep_fuzzy)
+
+    out_path = path.with_suffix(".fixed.po")
+    write_po(out_path, fixed)
+    print(f"Written: {out_path}")
+
+if __name__ == "__main__":
+    main()
