@@ -131,3 +131,23 @@ html.rtl .footer {
 html.rtl .footer-qr {
   text-align: left;
 }
+
+
+/* ============================= */
+/* SIGNATURE BLOCK               */
+/* ============================= */
+
+.signature-block{
+    margin-top:180px;
+    margin-bottom:20px;
+}
+
+.signature-line{
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+.signature-owner{
+    font-size:14px;
+    font-weight:bold;
+}

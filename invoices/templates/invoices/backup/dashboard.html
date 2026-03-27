@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Database Backup" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+      <strong>{% trans "Database Backup" %}</strong>
+    </div>
+
+    <div class="card-body">
+      <p class="text-muted">
+        {% trans "Create and download PostgreSQL backups of the current system data." %}
+      </p>
+
+      <form method="post" action="{% url 'backup:create' %}" class="mb-4">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-database-down me-2"></i>
+          {% trans "Create Backup" %}
+        </button>
+      </form>
+
+      <h5 class="mb-3">{% trans "Available Backups" %}</h5>
+
+      {% if files %}
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>{% trans "Filename" %}</th>
+                <th>{% trans "Size" %}</th>
+                <th>{% trans "Action" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for f in files %}
+                <tr>
+                  <td>{{ f.name }}</td>
+                  <td>{{ f.stat.st_size|filesizeformat }}</td>
+                  <td>
+                    <a href="{% url 'backup:download' f.name %}" class="btn btn-sm btn-success">
+                      <i class="bi bi-download me-1"></i>
+                      {% trans "Download" %}
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">{% trans "No backups found." %}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

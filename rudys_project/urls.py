@@ -16,7 +16,8 @@ Including another URLconf
  
  
 # rudys_project/urls.py
-
+ 
+from invoices.views_errors import custom_404, custom_500
 from django.contrib import admin
 from django.urls import path, include
 from invoices.views import home_view
@@ -47,14 +48,13 @@ urlpatterns = [
     path("customers/", include("invoices.urls_customers", namespace="customers")),
     path("diagnoses/", include("invoices.urls_diagnoses", namespace="diagnoses")),
     path("invoices/", include("invoices.urls_invoices", namespace="invoices")),
-
+    path("backup/", include("invoices.urls_backup", namespace="backup")),
    
      
 
 ]
 
-# rudys_project/urls.py
-from invoices.views_errors import custom_404, custom_500
+
 
 handler404 = custom_404
 handler500 = custom_500
